@@ -1,0 +1,17 @@
+Universe =  vanilla
+
+Log = experiments/pipe_$(Cluster)_$(Process).log
+Output = experiments/pipe_$(Cluster)_$(Process).out
+Error = experiments/pipe_$(Cluster)_$(Process).err
+Notification = Error
+
+#Should_Transfer_Files = Yes
+When_To_transfer_Output = ON_EXIT
+
+Transfer_Excutable = True
+Executable = extraction.sh
+
+#Transfer_Input_Files = extra_nlp.py, BD_v5.parquet, cui-semtypes.db, database_backend.flag, language.flag, umls-simstring.db
+#Transfer_Output_Files = datos_procesados_extraccion.csv
+#max_idle = 100
+Queue 1

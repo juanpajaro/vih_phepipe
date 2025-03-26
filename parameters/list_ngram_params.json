@@ -1,0 +1,52 @@
+[
+{
+  "vectorize_technique": "n-gram",
+  "NGRAM_RANGE": [
+  1,
+  2
+  ],
+  "TOP_K": 100,
+  "TOKEN_MODE": "word",
+  "MIN_DOCUMENT_FREQUENCY": 3
+},
+{
+  "vectorize_technique": "n-gram",
+  "NGRAM_RANGE": [
+  1,
+  2
+  ],
+  "TOP_K": 200,
+  "TOKEN_MODE": "word",
+  "MIN_DOCUMENT_FREQUENCY": 3
+},
+{
+  "vectorize_technique": "n-gram",
+  "NGRAM_RANGE": [
+  1,
+  2
+  ],
+  "TOP_K": 300,
+  "TOKEN_MODE": "word",
+  "MIN_DOCUMENT_FREQUENCY": 3
+},
+{
+  "vectorize_technique": "n-gram",
+  "NGRAM_RANGE": [
+  1,
+  2
+  ],
+  "TOP_K": 500,
+  "TOKEN_MODE": "word",
+  "MIN_DOCUMENT_FREQUENCY": 3
+},
+{
+  "vectorize_technique": "n-gram",
+  "NGRAM_RANGE": [
+  1,
+  2
+  ],
+  "TOP_K": 20000,
+  "TOKEN_MODE": "word",
+  "MIN_DOCUMENT_FREQUENCY": 2
+}
+]

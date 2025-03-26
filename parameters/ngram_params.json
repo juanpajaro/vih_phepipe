@@ -1,0 +1,10 @@
+{
+  "vectorize_technique": "n-gram",
+  "NGRAM_RANGE": [
+  1,
+  2
+  ],
+  "TOP_K": 5000,
+  "TOKEN_MODE": "word",
+  "MIN_DOCUMENT_FREQUENCY": 3
+}

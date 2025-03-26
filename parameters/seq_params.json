@@ -1,0 +1,5 @@
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 20000,
+  "MAX_SEQUENCE_LENGTH": 300
+}

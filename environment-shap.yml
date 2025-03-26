@@ -1,0 +1,26 @@
+name: phepi_v2_shap
+channels:
+  - conda-forge
+  - defaults
+  - anaconda
+  - sfe1ed40
+dependencies:
+  - python=3.10
+  - click
+  - ipython
+  - keras
+  - matplotlib
+  - numpy==1.24.2
+  - pandas
+  - pydantic>2
+  - pydantic-settings
+  - pysimstring
+  - scikit-learn
+  - scipy
+  - seaborn
+  - spacy
+  - wheel
+  - pip
+  - pip:
+    - tensorflow==2.15.0
+    - shap

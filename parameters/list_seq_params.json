@@ -1,0 +1,78 @@
+[
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 100,
+  "MAX_SEQUENCE_LENGTH": 10
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 200,
+  "MAX_SEQUENCE_LENGTH": 10
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 300,
+  "MAX_SEQUENCE_LENGTH": 10
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 400,
+  "MAX_SEQUENCE_LENGTH": 10
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 500,
+  "MAX_SEQUENCE_LENGTH": 10
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 100,
+  "MAX_SEQUENCE_LENGTH": 30
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 200,
+  "MAX_SEQUENCE_LENGTH": 30
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 300,
+  "MAX_SEQUENCE_LENGTH": 30
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 400,
+  "MAX_SEQUENCE_LENGTH": 30
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 500,
+  "MAX_SEQUENCE_LENGTH": 30
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 300,
+  "MAX_SEQUENCE_LENGTH": 50
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 500,
+  "MAX_SEQUENCE_LENGTH": 50
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 1000,
+  "MAX_SEQUENCE_LENGTH": 50
+},
+
+{
+"vectorize_technique": "sequence",
+  "TOP_K": 10000,
+  "MAX_SEQUENCE_LENGTH": 100
+},
+{
+  "vectorize_technique": "sequence",
+  "TOP_K": 20000,
+  "MAX_SEQUENCE_LENGTH": 200
+}
+]
