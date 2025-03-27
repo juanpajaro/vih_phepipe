@@ -16,6 +16,10 @@ from spacy.tokens import Span
 print("5 quinta estacion")
 from medspacy.context import ConTextRule
 print("6 final del viacruciz")
+import nltk
+print("7 llegamos a la septima estacion")
+nltk.download("stopwords")
+print("8 octava estacion")
 
 #function to transform the dictionay ssequence patient data into strigns
 def extract_sequence_from_dictionary(data, name_col_sequence, value_diagnostic, value_clinical_note, name_col_id_patient):
