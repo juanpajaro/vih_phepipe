@@ -22,4 +22,4 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 mkdir -p logs
 
 # Ejecutar script Python
-srun python pipe_clinicalExt.py
+srun python /zine/data/salud/compu_Pipe_V3/pipe_clinicalExt.py

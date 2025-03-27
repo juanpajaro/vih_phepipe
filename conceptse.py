@@ -5,17 +5,11 @@ print("mas adelante...")
 #import utils_general_porpose
 import os
 import utils_split_dataset
-import nltk
-print("importando nltk")
+#import nltk
+#print("importando nltk")
 #nltk.download("stopwords")
-print("descargamos stropwords")
+#print("descargamos stropwords")
 
-# Descarga segura de recursos NLTK
-try:
-    nltk.data.find("corpora/stopwords")
-except LookupError:
-    nltk.download("stopwords")
-    
 class ClinicalExtraction:
     def __new__(cls, *args, **kwargs):
         print("ClinicalConceptsExtraction object created")
