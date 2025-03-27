@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import spacy
 from multiprocessing import Pool, cpu_count
 from conceptse import ClinicalExtraction
 
