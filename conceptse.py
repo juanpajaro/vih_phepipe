@@ -53,6 +53,12 @@ class ClinicalExtraction:
     def run_pipe_ec(self):        
         
         self.patient_seq, self.dictionary_entities = utils_clinical_concept_extraction.extract_clinical_concepts(self.patients_maxLength, self.clinical_pipe)
+
+        return print("clinical concepts extraction process finished")
+    
+    def save_data(self):
+    
+    #save the dataset
         path_save = self.current_path + "/concepts/"
         path_save = utils_general_porpose.create_directory(path_save)
 
@@ -72,7 +78,7 @@ class ClinicalExtraction:
             utils_general_porpose.save_json(self.dictionary_entities, path_entities)
 
         
-        return print("clinical concepts extraction process finished")
+        
     
     
 #python3

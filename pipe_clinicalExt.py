@@ -14,6 +14,9 @@ def ejecutar_extraccion(worker_id):
     extraction.run_pipe_ec()
     return f"Worker {worker_id} completado."
 
+def save_data():
+    extraction.save_data()
+
 if __name__ == "__main__":
     n_workers = cpu_count()
     print(f"Usando {n_workers} workers...")
@@ -22,5 +25,6 @@ if __name__ == "__main__":
         results = pool.map(ejecutar_extraccion, range(n_workers))
     for r in results:
         print(r)
+    save_data()
 
 print("concept extraction ended...")
