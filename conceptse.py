@@ -21,6 +21,9 @@ class ClinicalExtraction:
         #self.directory_name = directory_name
         self.current_path = None
         #self.data = None
+        self.patients_maxLength = None
+        self.clinical_pipe = None
+
         self.patients = None
         self.patient_seq = None
         self.dictionary_entities = None
@@ -28,27 +31,28 @@ class ClinicalExtraction:
 
     def __repr__(self):        
         return "filter_name: {}, p_data_train: {}, p_data_test: {}, path_umlstoicd: {}, path_qumls: {}".format(type(self).__name__, self.path_data_train, self.path_data_test, self.umlstoicd_path, self.qumls_path)
-
-    def run_pipe_ec(self):
-
+    
+    def load_data(self):
         #_list_path_save = ["/concepts/train/", "/concepts/test/"]
         #_name_data = ["train", "test"]
 
         self.current_path = utils_general_porpose.get_current_path()
-        self.data_train = utils_general_porpose.load_json(self.current_path, self.path_data_train)
+        data_train = utils_general_porpose.load_json(self.current_path, self.path_data_train)
         #self.data_test = utils_general_porpose.load_json(self.current_path, self.path_data_test)
 
         #self.patients = utils_clinical_concept_extraction.send_patient_info(self.data[:10])
 
-        patients = utils_split_dataset.send_patient_info(self.data_train)
-        patients_maxLength = utils_split_dataset.make_patient_list_with_maxlength(patients, 1000000)
+        patients = utils_split_dataset.send_patient_info(data_train[:2])
+        self.patients_maxLength = utils_split_dataset.make_patient_list_with_maxlength(patients, 1000000)
 
         lista_example_umls_icd = utils_general_porpose.load_mapping_icd(self.current_path, self.umlstoicd_path)
         lista_NoIdentificados, lista_identificados = utils_clinical_concept_extraction.list_codes_identified(lista_example_umls_icd)
         target_rules = utils_clinical_concept_extraction.load_target_rules(lista_identificados)
-        clinical_pipe = utils_clinical_concept_extraction.load_clinical_NLPpipe(self.current_path, self.qumls_path, target_rules)
+        self.clinical_pipe = utils_clinical_concept_extraction.load_clinical_NLPpipe(self.current_path, self.qumls_path, target_rules)
+
+    def run_pipe_ec(self):        
         
-        self.patient_seq, self.dictionary_entities = utils_clinical_concept_extraction.extract_clinical_concepts(patients_maxLength[:2], clinical_pipe)
+        self.patient_seq, self.dictionary_entities = utils_clinical_concept_extraction.extract_clinical_concepts(self.patients_maxLength, self.clinical_pipe)
         path_save = self.current_path + "/concepts/"
         path_save = utils_general_porpose.create_directory(path_save)
 

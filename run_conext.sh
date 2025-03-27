@@ -19,4 +19,4 @@ conda activate phepi_v3
 mkdir -p logs
 
 # Ejecutar script Python
-srun pipe_clinicalExt.py
+srun python pipe_clinicalExt.py
