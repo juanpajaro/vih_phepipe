@@ -14,6 +14,7 @@ export PATH="/zine/apps/anaconda_salud/bin:$PATH"
 conda init
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 # Crear carpeta de logs si no existe
 mkdir -p logs
