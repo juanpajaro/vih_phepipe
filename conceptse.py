@@ -7,7 +7,7 @@ import os
 import utils_split_dataset
 import nltk
 print("importando nltk")
-nltk.download("stopwords")
+nltk.download()
 print("descargamos stropwords")
 
 class ClinicalExtraction:
