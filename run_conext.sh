@@ -13,7 +13,7 @@ export PATH="/zine/apps/anaconda_salud/bin:$PATH"
 # Iniciamos CONDA
 conda init
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
-conda activate phepi_v3
+conda activate 1cphe
 
 # Crear carpeta de logs si no existe
 mkdir -p logs
