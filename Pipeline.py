@@ -15,8 +15,9 @@ dataset_transformation = DatasetTransformation(path_data, name_poli_data, name_s
 dataset_transformation
 dataset_transformation.run_transformation_pipe()
 
-name_data = "/early_data/early_prediction_data1.json"
 
+
+name_data = "/early_data/early_prediction_data1.json"
 extraction = ClinicalExtraction(name_data, "/map/map_icd10_umls.csv", "/destination_umls_es")
 extraction.run_pipe_ec()
 print("concept extraction ended...")
