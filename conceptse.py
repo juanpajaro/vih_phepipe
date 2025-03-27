@@ -5,6 +5,10 @@ print("mas adelante...")
 #import utils_general_porpose
 import os
 import utils_split_dataset
+import nltk
+print("importando nltk")
+nltk.download("stopwords")
+print("descargamos stropwords")
 
 class ClinicalExtraction:
     def __new__(cls, *args, **kwargs):
