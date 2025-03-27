@@ -8,15 +8,14 @@
 #SBATCH --mem=8G
 
 # Creamos vaiables de entorno
-export PATH="/zine/apps/anaconda_salud/bin:$PATH"
+#export PATH="/zine/apps/anaconda_salud/bin:$PATH"
 
 # Iniciamos CONDA
-conda init
+#conda init
+
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
-
-eval "$(conda shell.bash hook)"
-
 conda activate 1cphe
+
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 # Crear carpeta de logs si no existe
