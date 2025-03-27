@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 print("1. estamos aqui")
 import pandas as pd
 print("2. segunda llegada")
