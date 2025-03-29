@@ -3,7 +3,7 @@
 #SBATCH --output=logs/out_%j.txt
 #SBATCH --error=logs/err_%j.txt
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8     # Ajusta este valor si es necesario
+#SBATCH --cpus-per-task=16     # Ajusta este valor si es necesario
 ##SBATCH --time=00:30:00
 #SBATCH --mem=8G
 
