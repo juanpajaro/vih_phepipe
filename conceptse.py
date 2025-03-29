@@ -46,7 +46,7 @@ class ClinicalExtraction:
 
         #self.patients = utils_clinical_concept_extraction.send_patient_info(self.data[:10])
 
-        patients = utils_split_dataset.send_patient_info(data_train[:2])
+        patients = utils_split_dataset.send_patient_info(data_train)
         self.patients_maxLength = utils_split_dataset.make_patient_list_with_maxlength(patients, 1000000)
 
         lista_example_umls_icd = utils_general_porpose.load_mapping_icd(self.current_path, self.umlstoicd_path)
