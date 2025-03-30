@@ -5,7 +5,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16     # Ajusta este valor si es necesario
 ##SBATCH --time=00:30:00
-#SBATCH --mem=8G
+##SBATCH --mem=8G
 
 # Creamos vaiables de entorno
 #export PATH="/zine/apps/anaconda_salud/bin:$PATH"
