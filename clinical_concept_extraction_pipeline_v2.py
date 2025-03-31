@@ -4,22 +4,23 @@ import os
 import multiprocessing
 import utils_clinical_concept_extraction
 import utils_general_porpose
+import utils_split_dataset
 
 # Global clinical pipeline
 clinical_pipe = None
 
 def load_data(path_data_train, current_path, umlstoicd_path, qumls_path):
     # Load the data
-    data_train = utils_clinical_concept_extraction.load_json(current_path, path_data_train)
+    data_train = utils_general_porpose.load_json(current_path, path_data_train)
     
     # Extract patient information
-    patients = utils_clinical_concept_extraction.send_patient_info(data_train[:10])
+    patients = utils_split_dataset.send_patient_info(data_train[:10])
     
     # Create a list of patients with a maximum length
-    patients_maxLength = utils_clinical_concept_extraction.make_patient_list_with_maxlength(patients, 1000000)
+    patients_maxLength = utils_split_dataset.make_patient_list_with_maxlength(patients, 1000000)
     
     # Load mapping and clinical NLP pipeline
-    lista_example_umls_icd = utils_clinical_concept_extraction.load_mapping_icd(current_path, umlstoicd_path)
+    lista_example_umls_icd = utils_general_porpose.load_mapping_icd(current_path, umlstoicd_path)
     lista_NoIdentificados, lista_identificados = utils_clinical_concept_extraction.list_codes_identified(lista_example_umls_icd)
     target_rules = utils_clinical_concept_extraction.load_target_rules(lista_identificados)
 
