@@ -111,6 +111,8 @@ if __name__ == "__main__":
     print("Data loaded.")
     # Split the data into chunks for parallel processing
     chunk_size = len(patients_maxLength) // n_workers
+    print(f"Chunk size: {chunk_size}")
+    print(f"Number patienst: {len(patients_maxLength)}")
     chunks = [patients_maxLength[i:i + chunk_size] for i in range(0, len(patients_maxLength), chunk_size)]
     # If there are any remaining patients, add them to the last chunk
     if len(patients_maxLength) % n_workers != 0:
