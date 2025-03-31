@@ -25,4 +25,4 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction_pipeline.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES
+srun python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES
