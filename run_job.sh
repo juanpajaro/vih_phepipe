@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=clinical_extraction
-#SBATCH --output=clinical_extraction_%j.out
-#SBATCH --error=clinical_extraction_%j.err
+#SBATCH --output=logs/clinical_extraction_%j.out
+#SBATCH --error=logs/clinical_extraction_%j.err
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
@@ -18,6 +18,11 @@ CURRENT_PATH="/zine/data/salud/compu_Pipe_V3"
 UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
+
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
+
+# Crear carpeta de logs si no existe
+mkdir -p logs
 
 # Run the pipeline
 srun python3 clinical_concept_extraction_pipeline.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES
