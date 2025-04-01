@@ -191,17 +191,24 @@ class DatasetTransformation:
         data = data[data["label_apnea"] < 3]
         print("patients with label 3 removed")
 
-        """#Get a big string with all patients before create a yaml file
-        all_patients_string = get_string_dataset(data, "secuencia_recortada")
-        print("big string with all patients before create a yaml file created")
-        patients_prueba_yaml = yaml.safe_load_all("\n".join(all_patients_string))
-        print("yaml file created")"""
+        #current directory for save the dataset and json file
+        current_path = os.getcwd()
 
+        #Make a code to save the dataset
+        directory_name = "/dataframes/"
+        path_frame_directory = current_path + directory_name
+        path_frame_directory = utils_general_porpose.create_directory(path_frame_directory)
+        #save the dataset
+        data.to_csv(path_frame_directory + "dataset.csv", index = False)
+        print("dataset saved in csv format")
+
+
+        #save the dataset as json file
         data  = utils_early_disease.make_listDictionary_patients(data)
         print("data transformed into list of dictionaries")
 
         #The directory exists or not?
-        current_path = os.getcwd()
+        
         path_save = current_path + "/early_data/"
         path_save = utils_general_porpose.create_directory(path_save)
 
