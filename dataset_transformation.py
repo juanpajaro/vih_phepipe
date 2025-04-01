@@ -253,7 +253,7 @@ class DatasetTransformation:
 
 #print("module dataset transformation imported")
 
-""""path_data = "./raw_data/"
+""""path_data = "/zine/data/salud/computational_pipe_v2/raw_data"
 name_ehr_data = "Vista_Minable_3636.csv"
 name_poli_data = "fecha_cedula_clinica_suenio_may 31 2023.csv"
 name_sleepS_data = "base principal ajustada 11mayo2021.csv"
