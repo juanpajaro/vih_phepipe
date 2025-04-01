@@ -109,18 +109,22 @@ if __name__ == "__main__":
     # Load data
     patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path)
     print("Data loaded.")
+
     # Split the data into chunks for parallel processing
     chunk_size = len(patients_maxLength) // n_workers
     print(f"Chunk size: {chunk_size}")
     print(f"Number patienst: {len(patients_maxLength)}")
     chunks = [patients_maxLength[i:i + chunk_size] for i in range(0, len(patients_maxLength), chunk_size)]
+
     # If there are any remaining patients, add them to the last chunk
     if len(patients_maxLength) % n_workers != 0:
         chunks[-1].extend(patients_maxLength[len(chunks) * chunk_size:])
+
     # Run parallel extraction
     print("Running parallel extraction...")
     with multiprocessing.Pool(processes=n_workers) as pool:
         results = pool.map(extract_concepts, chunks)
+
     # Merging results from multiprocessing
     patient_seq = []
     dictionary_entities = {}
@@ -129,8 +133,9 @@ if __name__ == "__main__":
             seq, entities = result[0], result[1]
             patient_seq.extend(seq)
             dictionary_entities.update(entities)
+            
     # Save data
     print("Saving data...")
     save_data(patient_seq, dictionary_entities, current_path)
-    print("Pipeline execution completed.")
+    print("Extraction clinical concept execution completed.")
 
