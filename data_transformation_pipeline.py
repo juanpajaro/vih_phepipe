@@ -121,6 +121,10 @@ def save_dataset(data, directory, filename_prefix):
     csv_path = os.path.join(directory, f"{filename_prefix}_{timestamp}.csv")
     data.to_csv(csv_path, index=False)
     print(f"Dataset saved in CSV format: {csv_path}")
+
+    #save the dataset as json file
+    data  = utils_early_disease.make_listDictionary_patients(data)
+    print("data transformed into list of dictionaries")
     
     json_path = os.path.join(directory, f"{filename_prefix}_{timestamp}.json")
     utils_general_porpose.save_json(data, json_path)
