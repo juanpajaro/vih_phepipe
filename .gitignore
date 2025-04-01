@@ -75,3 +75,4 @@ conda/
 cache/
 envs_case_analysis/
 dataframes/
+!colab_case.ipynb
