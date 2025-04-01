@@ -344,3 +344,21 @@ def review_patient_info(patient_list):
             print("fecha: {}, diagnosticos: {}, texto: {}".format(values.get("fecha"), values.get("diagnosticos"), values.get("texto")))
     return None
 
+def imprimir_fechas_consulta(secuencia_paciente):    
+    fecha_consulta = []
+    for i in secuencia_paciente:        
+        fecha_consulta.append(i.get("FechaConsulta"))
+
+    return fecha_consulta
+
+def view_cut_patient(data, id_patient, num_dias):
+    sample_data = data.loc[data["IdCliente"] == id_patient]    
+    fecha_poli = sample_data["fecha_poli"].iloc[0] 
+    fecha_menos_seis_meses = calcular_fecha_antes_poli(fecha_poli, num_dias)
+    fecha_menos_seis_meses = fecha_poli - datetime.timedelta(days = num_dias)
+    secuencia_paciente = sample_data["dic_datos_consulta"].iloc[0]    
+    lista_consultas = imprimir_fechas_consulta(secuencia_paciente)
+    secuencia_recortada = sample_data["secuencia_recortada"].iloc[0]    
+    lista_recorte = imprimir_fechas_consulta(secuencia_recortada)
+       
+    return fecha_poli, fecha_menos_seis_meses, lista_consultas, lista_recorte

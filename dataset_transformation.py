@@ -6,6 +6,7 @@ import os
 #import utils_train_models
 import utils_general_porpose
 #import yaml
+import pandas as pd
 
 class DatasetTransformation:
     def __new__(cls, *args, **kwargs):
@@ -202,6 +203,24 @@ class DatasetTransformation:
         data.to_csv(path_frame_directory + "dataset.csv", index = False)
         print("dataset saved in csv format")
 
+        # Function to calculate the id_patient, diagnosis date, prediction window start, diag_predict and diag_total for all patients
+        def calculate_dates(data):    
+        # Iterate over all patients
+        # Create a new dataframe to store the results
+            new_data = pd.DataFrame(columns=["id_patient", "diagnosis date", "prediction window start", "diag_predict", "diag_total"])
+            # Iterate over all patients
+            for id_patient in data["IdCliente"]:
+                fecha_poli, fecha_menos_seis_meses, lista_consultas, lista_recorte = utils_early_disease.view_cut_patient(data, id_patient, self.num_dias)
+                # Append the new row to the dataframe
+                print("id_patient: {}, diagnosis date {}, prediction window start: {}, diag_predict {}, diag_total {}".format(id_patient, fecha_poli, fecha_menos_seis_meses, len(lista_recorte), len(lista_consultas)))        
+                new_row = {"id_patient": id_patient, "diagnosis date": fecha_poli, "prediction window start": fecha_menos_seis_meses, "diag_predict": len(lista_recorte), "diag_total": len(lista_consultas)}
+                new_data = pd.concat([new_data, pd.DataFrame([new_row])], ignore_index=True)  
+
+            return new_data
+        
+        new_data = calculate_dates(data)
+        # Save the dataframe to a csv file
+        new_data.to_csv(current_path + "/dataframes/dataset_with_dates.csv", index=False)
 
         #save the dataset as json file
         data  = utils_early_disease.make_listDictionary_patients(data)
