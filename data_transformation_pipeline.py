@@ -153,6 +153,9 @@ def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, 
 
 # Ejecución del pipeline
 if __name__ == "__main__":
+    if len(sys.argv) != 8:
+        print("Usage: python data_transformation_pipeline.py <path_data> <name_poli_data> <name_sleepS_data> <name_idcc> <name_ehr_data> <days_pw> <days_ow>")
+        sys.exit(1)
 
     path_data = sys.argv[1]
     name_poli_data = sys.argv[2]
