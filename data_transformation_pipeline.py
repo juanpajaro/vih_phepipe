@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import time
 import os
+import time
 import pandas as pd
 from datetime import datetime
 import utils_early_disease
@@ -164,8 +164,7 @@ if __name__ == "__main__":
     name_ehr_data = sys.argv[5]
     days_pw = int(sys.argv[6])
     days_ow = int(sys.argv[7])
-
-    
+        
     #path_data = "./raw_data/"
     #name_poli_data = "fecha_cedula_clinica_suenio_may 31 2023.csv"
     #name_sleepS_data = "base principal ajustada 11mayo2021.csv"

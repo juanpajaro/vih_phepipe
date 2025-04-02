@@ -7,8 +7,8 @@
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
 
-source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
-conda activate 1cphe
+#source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
+#conda activate 1cphe
 
 echo "Starting cases control definition job..."
 
@@ -21,8 +21,12 @@ NAME_EHR_DATA="Vista_Minable_3636.csv"
 DAYSPW=180
 DAYSOW=730
 
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
+
 #Create folder for logs if it doesn't exist
 mkdir -p logs
 
 # Run the pipeline
-srun python3 data_transformation_pipeline.py $PATH_DATA $NAME_POLI_DATA $NAME_SLEEP_DATA $NAME_IDCC $NAME_EHR_DATA $DAYSPW $DAYSOW
+srun python3 data_transformation_pipeline.py "$PATH_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW
+#echo PATH_DATA $PATH_DATA
+#python data_transformation_pipeline.py "$PATH_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW
