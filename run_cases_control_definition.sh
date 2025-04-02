@@ -13,7 +13,7 @@
 echo "Starting cases control definition job..."
 
 # Define paths
-PATH_DATA="./raw_data/"
+PATH_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
 NAME_POLI_DATA="fecha_cedula_clinica_suenio_may 31 2023.csv"
 NAME_SLEEP_DATA="base principal ajustada 11mayo2021.csv"
 NAME_IDCC="3636_idClientes.csv"
