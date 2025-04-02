@@ -15,14 +15,15 @@ def calcular_fecha_antes_poli(fecha_poli, num_dias):
     return fecha_menos_seis_meses
 
 #Funcion para recortar una lista de fecha seis meses atras de la fecha de entrada
-def recortar_historia(secuencia_paciente, fecha_poli, num_dias):
+def recortar_historia(secuencia_paciente, fecha_poli, days_pw, days_ow):
     secuencia_recortada = {}
     lista_secuencia = []    
-    fecha_antes_poli = calcular_fecha_antes_poli(fecha_poli, num_dias)
+    fecha_antes_poli = calcular_fecha_antes_poli(fecha_poli, days_pw)
+    fecha_max_dos_anios = fecha_antes_poli - datetime.timedelta(days = days_ow)
     #for index, value in secuencia_paciente.items():
     for i in secuencia_paciente:
         fecha = i.get("FechaConsulta")
-        if fecha < fecha_antes_poli:
+        if fecha > fecha_max_dos_anios and fecha < fecha_antes_poli:
             diagnosticos = i.get("Diagnosticos_Consulta")
             texto = i.get("DesPlanYConcepto")
             fecha_menor = i.get("FechaConsulta")
@@ -354,11 +355,24 @@ def imprimir_fechas_consulta(secuencia_paciente):
 def view_cut_patient(data, id_patient, num_dias):
     sample_data = data.loc[data["IdCliente"] == id_patient]    
     fecha_poli = sample_data["fecha_poli"].iloc[0] 
-    fecha_menos_seis_meses = calcular_fecha_antes_poli(fecha_poli, num_dias)
-    fecha_menos_seis_meses = fecha_poli - datetime.timedelta(days = num_dias)
+    fecha_menos_seis_meses = calcular_fecha_antes_poli(fecha_poli, num_dias)    
     secuencia_paciente = sample_data["dic_datos_consulta"].iloc[0]    
     lista_consultas = imprimir_fechas_consulta(secuencia_paciente)
-    secuencia_recortada = sample_data["secuencia_recortada"].iloc[0]    
+    ultima_consulta = lista_consultas[-1]
+    secuencia_recortada = sample_data["secuencia_recortada"].iloc[0]            
     lista_recorte = imprimir_fechas_consulta(secuencia_recortada)
+    obs_window = lista_recorte[0]
        
-    return fecha_poli, fecha_menos_seis_meses, lista_consultas, lista_recorte
+    return fecha_poli, fecha_menos_seis_meses, lista_consultas, lista_recorte, ultima_consulta, obs_window
+
+def calculate_info_dates(data, num_dias):
+    new_data = pd.DataFrame(columns=["IdCliente", "last_appointment","prediction_window_start", "end_observation_window", "num_app_included", "total_app", "lista_consultas", "lista_recorte"])
+    for id_patient in data["IdCliente"]:
+        fecha_poli, fecha_menos_seis_meses, lista_consultas, lista_recorte, ultima_consulta, obs_window = view_cut_patient(data, id_patient, num_dias)
+        new_row = {"IdCliente": id_patient, "last_appointment":ultima_consulta, "prediction_window_start": fecha_menos_seis_meses, "end_observation_window": obs_window, "num_app_included": len(lista_recorte), "total_app": len(lista_consultas), "lista_consultas": lista_consultas, "lista_recorte": lista_recorte}
+        new_data = pd.concat([new_data, pd.DataFrame([new_row])], ignore_index=True)
+
+    return new_data
+
+
+        

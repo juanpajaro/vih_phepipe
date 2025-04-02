@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import time
 import os
 import pandas as pd
@@ -71,7 +72,7 @@ def load_and_merge_idcc_data(path, filename, data):
     
     return data
 
-def process_ehr_data(path, filename, data, num_dias):
+def process_ehr_data(path, filename, data, days_pw, days_ow):
     """Procesa los datos de EHR y los une con el dataset principal."""
     start_time = time.time()
     data_ehr = utils_early_disease.load_ehr_data(path, filename)
@@ -101,8 +102,9 @@ def process_ehr_data(path, filename, data, num_dias):
     data["edad_poli"] = data.apply(lambda x: utils_early_disease.edad_dia_poli(x["FecNacimiento"], x["fecha_poli"]).years * -1, axis=1)
     print("Date of birth transformed into age according to the date of the polisomnography")
     
-    data["secuencia_recortada"] = data.apply(lambda x: utils_early_disease.recortar_historia(x["dic_datos_consulta"], x["fecha_poli"], num_dias), axis=1)
-    print(f"Patients records cut: {num_dias} days")
+    data["secuencia_recortada"] = data.apply(lambda x: utils_early_disease.recortar_historia(x["dic_datos_consulta"], x["fecha_poli"], days_pw, days_ow), axis=1)
+    print(f"Patients records cut: {days_pw} days, which is when prediction window starts")
+    print(f"Patients records cut: {days_ow} days, which is when observation window ends")
     
     data["vacios_poli"] = data["secuencia_recortada"].apply(lambda x: "not empty" if len(x) > 0 else "empty")
     data = data[data["vacios_poli"] == "not empty"]
@@ -110,8 +112,15 @@ def process_ehr_data(path, filename, data, num_dias):
     
     data = data[data["label_apnea"] < 3]
     print("Patients with label 3 removed")
+
+    new_data = utils_early_disease.calculate_info_dates(data, days_pw)
+    data = utils_early_disease.mergue_datasets([data, new_data], "IdCliente")
+    #data = data[data["num_app_included"] > 1]
+    print("prediction_window_start, number of appointments to included, total appointments were added to the dataset")
+
+    #TODO: es importante hacer una comparación entre las variables que se usan normalmente en Fenotipado computacional y las que se cargan o usan para el modelo
     
-    return data
+    return data, data_ehr
 
 def save_dataset(data, directory, filename_prefix):
     """Guarda el dataset en formato CSV y JSON con versionado por fecha y hora."""
@@ -119,10 +128,12 @@ def save_dataset(data, directory, filename_prefix):
     directory = utils_general_porpose.create_directory(directory)
     
     csv_path = os.path.join(directory, f"{filename_prefix}_{timestamp}.csv")
-    data.to_csv(csv_path, index=False)
+    data_save = data[["IdCliente", "IAH", "Sexo", "Cantidad_Atenciones", "fecha_poli", "label_apnea", "edad_poli", "last_appointment","prediction_window_start", "end_observation_window", "num_app_included", "total_app", "lista_consultas", "lista_recorte"]]
+    data_save.to_csv(csv_path, index=False)
     print(f"Dataset saved in CSV format: {csv_path}")
 
-    #save the dataset as json file
+    #convert dataset as list of dictionary to save in json file
+    
     data  = utils_early_disease.make_listDictionary_patients(data)
     print("data transformed into list of dictionaries")
     
@@ -130,22 +141,34 @@ def save_dataset(data, directory, filename_prefix):
     utils_general_porpose.save_json(data, json_path)
     print(f"Dataset saved in JSON format: {json_path}")
 
-def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, num_dias):
+def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow):
     """Pipeline principal para transformar los datos."""
     data_poli = load_and_process_polisomnography_data(path_data, name_poli_data)
     data_sleep = load_and_process_sleep_study_data(path_data, name_sleepS_data)
     data = merge_and_clean_data(data_poli, data_sleep)
     data = load_and_merge_idcc_data(path_data, name_idcc, data)
-    data = process_ehr_data(path_data, name_ehr_data, data, num_dias)
-    save_dataset(data, "./dataframes", "dataset")
+    data, data_ehr = process_ehr_data(path_data, name_ehr_data, data, days_pw, days_ow)
+    save_dataset(data, "./cases_controls", "cases_controls")
+    print("Cases_controls step finished successfully")
 
 # Ejecución del pipeline
 if __name__ == "__main__":
-    path_data = "/zine/data/salud/computational_pipe_v2/raw_data/"
-    name_poli_data = "fecha_cedula_clinica_suenio_may 31 2023.csv"
-    name_sleepS_data = "base principal ajustada 11mayo2021.csv"
-    name_idcc = "3636_idClientes.csv"
-    name_ehr_data = "Vista_Minable_3636.csv"
-    num_dias = 180
+
+    path_data = sys.argv[1]
+    name_poli_data = sys.argv[2]
+    name_sleepS_data = sys.argv[3]
+    name_idcc = sys.argv[4]
+    name_ehr_data = sys.argv[5]
+    days_pw = int(sys.argv[6])
+    days_ow = int(sys.argv[7])
+
     
-    main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, num_dias)
+    #path_data = "./raw_data/"
+    #name_poli_data = "fecha_cedula_clinica_suenio_may 31 2023.csv"
+    #name_sleepS_data = "base principal ajustada 11mayo2021.csv"
+    #name_idcc = "3636_idClientes.csv"
+    #name_ehr_data = "Vista_Minable_3636.csv"
+    #days_pw = 180
+    #days_ow = 730
+    
+    main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow)
