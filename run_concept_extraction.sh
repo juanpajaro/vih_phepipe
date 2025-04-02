@@ -13,7 +13,7 @@ conda activate 1cphe
 echo "Starting clinical concept extraction job..."
 
 # Define paths
-PATH_DATA_TRAIN="/case_controls/cases_controls_20250402_150855.json"
+PATH_DATA_TRAIN="cases_controls/cases_controls_20250402_150855.json"
 CURRENT_PATH="/zine/data/salud/compu_Pipe_V3/"
 UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
