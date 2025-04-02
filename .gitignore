@@ -77,3 +77,4 @@ envs_case_analysis/
 dataframes/
 !colab_case.ipynb
 cases_controls/
+p_date.sh

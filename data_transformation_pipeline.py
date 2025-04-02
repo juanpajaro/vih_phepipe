@@ -122,9 +122,9 @@ def process_ehr_data(path, filename, data, days_pw, days_ow):
     
     return data, data_ehr
 
-def save_dataset(data, directory, filename_prefix):
+def save_dataset(data, directory, filename_prefix, timestamp):
     """Guarda el dataset en formato CSV y JSON con versionado por fecha y hora."""
-    timestamp = get_timestamp()
+    #timestamp = get_timestamp()
     directory = utils_general_porpose.create_directory(directory)
     
     csv_path = os.path.join(directory, f"{filename_prefix}_{timestamp}.csv")
@@ -148,12 +148,12 @@ def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, 
     data = merge_and_clean_data(data_poli, data_sleep)
     data = load_and_merge_idcc_data(path_data, name_idcc, data)
     data, data_ehr = process_ehr_data(path_data, name_ehr_data, data, days_pw, days_ow)
-    save_dataset(data, "./cases_controls", "cases_controls")
+    save_dataset(data, "./cases_controls", "cases_controls", timestamp)
     print("Cases_controls step finished successfully")
 
 # Ejecución del pipeline
 if __name__ == "__main__":
-    if len(sys.argv) != 8:
+    if len(sys.argv) != 9:
         print("Usage: python data_transformation_pipeline.py <path_data> <name_poli_data> <name_sleepS_data> <name_idcc> <name_ehr_data> <days_pw> <days_ow>")
         sys.exit(1)
 
@@ -164,6 +164,7 @@ if __name__ == "__main__":
     name_ehr_data = sys.argv[5]
     days_pw = int(sys.argv[6])
     days_ow = int(sys.argv[7])
+    timestamp = sys.argv[8]
         
     #path_data = "./raw_data/"
     #name_poli_data = "fecha_cedula_clinica_suenio_may 31 2023.csv"

@@ -72,7 +72,7 @@ def extract_concepts(patients_list):
     #print("clinical concepts extracted")
     return patients_seq, dictionary_entities
     
-def save_data(patients_seq, dictionary_entities, current_path):
+def save_data(patients_seq, dictionary_entities, current_path, timestamp):
 #save the dataset
     path_save = current_path + "/concepts/"
     path_save = utils_general_porpose.create_directory(path_save)
@@ -85,15 +85,15 @@ def save_data(patients_seq, dictionary_entities, current_path):
         #get the number of the new version
         version = str(utils_general_porpose.counter_version(last_version))
         #save the dataset
-        path_version = path_save + "clinical_concepts" + version + ".json"
+        path_version = path_save + "clinical_concepts_" + timestamp + ".json"
         #data.to_csv(path_version, index = False)
         utils_general_porpose.save_json(patients_seq, path_version)
         #save the dictionary of entities
-        path_entities = path_save + "dictionary_concepts" + version + ".json"
+        path_entities = path_save + "dictionary_concepts_" + timestamp + ".json"
         utils_general_porpose.save_json(dictionary_entities, path_entities)
         
 if __name__ == "__main__":
-    if len(sys.argv) != 6:
+    if len(sys.argv) != 7:
         print("Usage: python clinical_concept_extraction_pipeline.py <path_data_train> <current_path> <umlstoicd_path> <qumls_path> <num_processes>")
         sys.exit(1)
 
@@ -102,6 +102,7 @@ if __name__ == "__main__":
     umlstoicd_path = sys.argv[3]
     qumls_path = sys.argv[4]
     num_processes = int(sys.argv[5])
+    timestamp = sys.argv[6]
 
     n_workers = multiprocessing.cpu_count()
     print(f"Using {n_workers} workers...")
@@ -136,6 +137,6 @@ if __name__ == "__main__":
             
     # Save data
     print("Saving data...")
-    save_data(patient_seq, dictionary_entities, current_path)
+    save_data(patient_seq, dictionary_entities, current_path, timestamp)
     print("Extraction clinical concept execution completed.")
 

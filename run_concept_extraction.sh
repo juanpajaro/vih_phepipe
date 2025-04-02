@@ -12,6 +12,9 @@ conda activate 1cphe
 
 echo "Starting clinical concept extraction job..."
 
+CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
+echo "Current date: $CURRENT_DATE"
+
 # Define paths
 PATH_DATA_TRAIN="cases_controls/cases_controls_20250402_150855.json"
 CURRENT_PATH="/zine/data/salud/compu_Pipe_V3/"
@@ -25,4 +28,4 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES
+srun python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE"
