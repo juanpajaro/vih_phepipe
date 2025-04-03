@@ -1,12 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=computational_phenotyping
-#SBATCH --output=logs/cp_%j.txt
-#SBATCH --error=logs/cp_%j.err
+#SBATCH --job-name=cp
+#SBATCH --output=logs/cp_out_%j.txt
+#SBATCH --error=logs/cp_err_%j.txt
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
-
 
 # Get the current date and time
 CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
@@ -17,6 +16,8 @@ source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
 echo "Starting computational phenotyping job..."
 
+
+#RUN CASES CONTROL DEFINITION
 # Define paths
 PATH_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
 #PATH_DATA="./raw_data/"
@@ -32,7 +33,6 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #Create folder for logs if it doesn't exist
 mkdir -p logs
 
-#RUN CASES CONTROL DEFINITION
 srun python3 data_transformation_pipeline.py "$PATH_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
 
 #RUN CLINICAL CONCEPT EXTRACTION
