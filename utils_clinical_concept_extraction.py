@@ -29,13 +29,13 @@ def extract_sequence_from_dictionary(data, name_col_sequence, value_diagnostic, 
             num_consulta = "consulta_{}".format(i)
             codes_diagnostic = (str(value[num_consulta][value_diagnostic])).replace(",", " ")            
             text_diagnostic = str(value[num_consulta][value_clinical_note])
-            list_seq.append(codes_diagnostic + " " + text_diagnostic.lower())
+            list_seq.append(codes_diagnostic + " " + text_diagnostic.lower())            
             data.loc[index, "history_patient"] = " ".join(list_seq)
-
             lista_codes_icd10.append(codes_diagnostic)
             
     set_codes = set(lista_codes_icd10)
     return data, set_codes
+    #return data
 
 
 #función para cargar los nombres de los diagnosticos según el codigo
