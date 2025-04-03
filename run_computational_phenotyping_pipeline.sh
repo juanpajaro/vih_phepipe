@@ -1,7 +1,10 @@
 #!/bin/bash
+# Get the current date and time
+CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
+echo "Current date: $CURRENT_DATE"
 #SBATCH --job-name=computational_phenotyping
-#SBATCH --output=logs/${NEW_FILE}_%j.txt
-#SBATCH --error=logs/${NEW_FILE}_%j.err
+#SBATCH --output=logs/"cp_${CURRENT_DATE}_%j.txt"
+#SBATCH --error=logs/cp_${CURRENT_DATE}_%j.err
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
@@ -11,44 +14,11 @@
 # Define the CSV file to store the counter
 COUNTER_FILE="file_version_counter.csv"
 
-# Define the base name for the files
-BASE_NAME="computational_phenotyping"
-
-# Create a directory for logs if it doesn't exist
-mkdir -p logs
-
-# Check if the counter file exists
-if [[ ! -f $COUNTER_FILE ]]; then
-    # If the file doesn't exist, create it and initialize the counter
-    echo "Run,Version" > $COUNTER_FILE
-    echo "1,1" >> $COUNTER_FILE
-    VERSION=1
-    echo "Counter initialized."
-else
-    # If the file exists, read the last version number
-    LAST_VERSION=$(tail -n 1 $COUNTER_FILE | cut -d',' -f2)
-    VERSION=$((LAST_VERSION + 1))
-    RUN_NUMBER=$(( $(wc -l < $COUNTER_FILE) ))
-    
-    # Append the new version number to the file
-    echo "$RUN_NUMBER,$VERSION" >> $COUNTER_FILE
-    echo "Counter updated to version $VERSION."
-fi
-
-# Create a new file with the versioned name
-NEW_FILE="logs/${BASE_NAME}_v${VERSION}.txt"
-echo "This is version $VERSION of the file." > $NEW_FILE
-
-# Output the name of the created file
-echo "Created file: $NEW_FILE"
-
 # Load the conda environment
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
 echo "Starting computational phenotyping job..."
-# Get the current date and time
-CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
-echo "Current date: $CURRENT_DATE"
+
 # Define paths
 PATH_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
 #PATH_DATA="./raw_data/"
