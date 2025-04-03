@@ -1,4 +1,11 @@
 #!/bin/bash
+#SBATCH --job-name=computational_phenotyping
+#SBATCH --output=logs/${NEW_FILE}_%j.txt
+#SBATCH --error=logs/${NEW_FILE}_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=24:00:00
 
 #SAVE HYPERPARAMETERS
 # Define the CSV file to store the counter
@@ -32,14 +39,6 @@ fi
 NEW_FILE="logs/${BASE_NAME}_v${VERSION}.txt"
 echo "This is version $VERSION of the file." > $NEW_FILE
 
-#SBATCH --job-name=computational_phenotyping
-#SBATCH --output=logs/${NEW_FILE}_%j.txt
-#SBATCH --error=logs/${NEW_FILE}_%j.err
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
-#SBATCH --time=24:00:00
-
 # Output the name of the created file
 echo "Created file: $NEW_FILE"
 
@@ -51,8 +50,8 @@ echo "Starting computational phenotyping job..."
 CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
 echo "Current date: $CURRENT_DATE"
 # Define paths
-#PATH_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
-PATH_DATA="./raw_data/"
+PATH_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
+#PATH_DATA="./raw_data/"
 NAME_POLI_DATA="fecha_cedula_clinica_suenio_may 31 2023.csv"
 NAME_SLEEP_DATA="base principal ajustada 11mayo2021.csv"
 NAME_IDCC="3636_idClientes.csv"
