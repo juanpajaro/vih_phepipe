@@ -1,18 +1,16 @@
 #!/bin/bash
-# Get the current date and time
-CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
-echo "Current date: $CURRENT_DATE"
 #SBATCH --job-name=computational_phenotyping
-#SBATCH --output=logs/"cp_${CURRENT_DATE}_%j.txt"
-#SBATCH --error=logs/cp_${CURRENT_DATE}_%j.err
+#SBATCH --output=logs/cp_%j.txt
+#SBATCH --error=logs/cp_%j.err
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
 
-#SAVE HYPERPARAMETERS
-# Define the CSV file to store the counter
-COUNTER_FILE="file_version_counter.csv"
+
+# Get the current date and time
+CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
+echo "Current date: $CURRENT_DATE"
 
 # Load the conda environment
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
