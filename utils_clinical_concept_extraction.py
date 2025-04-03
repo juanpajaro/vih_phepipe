@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-print("1. estamos aqui")
+#print("1. estamos aqui")
 import pandas as pd
-print("2. segunda llegada")
+#print("2. segunda llegada")
 import spacy
-print("2.1 segunda primera llegada")
+#print("2.1 segunda primera llegada")
 import medspacy
-print("2.2 segunda segunda llegada")
+#print("2.2 segunda segunda llegada")
 from quickumls.spacy_component import SpacyQuickUMLS
-print("2.3 segunda tercera llegada")
+#print("2.3 segunda tercera llegada")
 from medspacy.util import DEFAULT_PIPE_NAMES
-print("3. llegamos aqui")
+#print("3. llegamos aqui")
 from medspacy.ner import TargetRule
-print("4 cuarta estacion")
+#print("4 cuarta estacion")
 from spacy.tokens import Span
-print("5 quinta estacion")
+#print("5 quinta estacion")
 from medspacy.context import ConTextRule
-print("6 final del viacruciz")
+#print("6 final del viacruciz")
 
 #function to transform the dictionay ssequence patient data into strigns
 def extract_sequence_from_dictionary(data, name_col_sequence, value_diagnostic, value_clinical_note, name_col_id_patient):
