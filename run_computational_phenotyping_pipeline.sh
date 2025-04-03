@@ -1,9 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=computational_phenotyping
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
-#SBATCH --time=24:00:00
 
 #SAVE HYPERPARAMETERS
 # Define the CSV file to store the counter
@@ -34,11 +29,16 @@ else
 fi
 
 # Create a new file with the versioned name
-NEW_FILE="${BASE_NAME}_v${VERSION}.txt"
+NEW_FILE="logs/${BASE_NAME}_v${VERSION}.txt"
 echo "This is version $VERSION of the file." > $NEW_FILE
 
-#SBATCH --output=logs/${NEW_FILE}_%j.out
+#SBATCH --job-name=computational_phenotyping
+#SBATCH --output=logs/${NEW_FILE}_%j.txt
 #SBATCH --error=logs/${NEW_FILE}_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=24:00:00
 
 # Output the name of the created file
 echo "Created file: $NEW_FILE"
