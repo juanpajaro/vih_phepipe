@@ -118,7 +118,7 @@ if __name__ == "__main__":
     print(f"Using {n_workers} workers...")
 
     # Load data
-    patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path)
+    patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat)
     print("Data loaded.")
 
     # Split the data into chunks for parallel processing
