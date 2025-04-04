@@ -18,11 +18,12 @@ echo "Current date: $CURRENT_DATE"
 # Define paths
 PATH_DATA_TRAIN="cases_controls/cases_controls_20250402_205502.json"
 CURRENT_PATH="/zine/data/salud/compu_Pipe_V3/"
+#CURRENT_PATH="/home/pajaro/compu_Pipe_V3/"
 UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-LISTA_CAT=("disease or syndrome" "finding" "sign or symptoms")
+LISTA_CAT=("Disease or Syndrome")
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
@@ -35,5 +36,5 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #mkdir -p logs
 
 # Run the pipeline
-#srun python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
-python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
+srun python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
+#python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"

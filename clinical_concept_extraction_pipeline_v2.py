@@ -55,15 +55,15 @@ def extract_concepts(patients_list):
         #matches = [ent for ent in doc.ents if ent._.semtypes in cat_semantic]
         matches = []
         for ent in doc.ents:
-            print("ent: ", ent)
-            print("ent._.semtypes: ", ent._.semtypes)
+            #print("ent: ", ent)
+            #print("ent._.semtypes: ", ent._.semtypes)
             if ent._.semtypes in cat_semantic:
-                print("ent: ", ent)
-                print("ent._.semtypes: ", ent._.semtypes)
+                #print("ent: ", ent)
+                #print("ent._.semtypes: ", ent._.semtypes)
 
                 matches.append(ent)
                 
-        print("matches: ", matches)
+        #print("matches: ", matches)
         
         for ent in matches:               
             if ent._.description == "":
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     num_processes = int(sys.argv[5])
     timestamp = sys.argv[6]
     simi = float(sys.argv[7])
-    lista_cat = sys.argv[8].split(",")
+    lista_tipos_semanticos = sys.argv[8].split(",")
     
     #Example local paths
     """
@@ -136,9 +136,12 @@ if __name__ == "__main__":
     simi = 0.8
     lista_cat = [{"T047"},{"T184"}]
     """
-    print("lista: ", lista_cat)
+    #print("lista: ", lista_tipos_semanticos)
+
+    lista_cat = utils_clinical_concept_extraction.buscar_terminos_en_diccionario(lista_tipos_semanticos)
+
+    #print("lista_cat: ", lista_cat)
     
-    """
     n_workers = multiprocessing.cpu_count()
     print(f"Using {n_workers} workers...")
 
@@ -160,8 +163,10 @@ if __name__ == "__main__":
     print("Running parallel extraction...")
     with multiprocessing.Pool(processes=n_workers) as pool:
         results = pool.map(extract_concepts, chunks)
-
-    patients_seq, dictionary_entities = extract_concepts(patients_maxLength[2:3])
+    
+    
+    #patients_seq, dictionary_entities = extract_concepts(patients_maxLength[2:3])
+    #print("patients_seq: ", patients_seq)
 
     # Merging results from multiprocessing
     patient_seq = []
@@ -177,4 +182,5 @@ if __name__ == "__main__":
     save_data(patient_seq, dictionary_entities, current_path, timestamp)
     print("Extraction clinical concept execution completed.")
 
-"""
+    
+

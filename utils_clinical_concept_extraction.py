@@ -251,5 +251,30 @@ def list_codes_identified(lista_example_umls_icd):
     print("list of codes identified and not identified created")
     return lista_NoIdentificados, lista_identificados
 
+def buscar_terminos_en_diccionario(lista_terminos):
+    """
+    Busca una lista de términos en un diccionario y devuelve una lista con los valores correspondientes.
+
+    Args:
+        lista_terminos (list): Lista de términos (valores) a buscar.        
+
+    Returns:
+        list: Lista con los valores encontrados en el diccionario.
+    """
+    # Diccionario basado en la tabla proporcionada
+    diccionario = {
+    "T047": "Disease or Syndrome",
+    "T033": "Finding",
+    "T191": "Neoplastic Process",
+    "T184": "Sign or Symptom",
+    "T046": "Pathologic Function",
+    "T048": "Mental or Behavioral Dysfunction",
+    "T034": "Laboratory or Test Result",
+    "T037": "Injury or Poisoning"
+    }
+
+
+    return [{key} for key, value in diccionario.items() if value in lista_terminos]
+
 #python3
 #import utils_clinical_concept_extraction
