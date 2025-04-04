@@ -15,7 +15,7 @@ def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, l
     data_train = utils_general_porpose.load_json(current_path, path_data_train)
     
     # Extract patient information
-    patients = utils_split_dataset.send_patient_info(data_train[:80])
+    patients = utils_split_dataset.send_patient_info(data_train)
     
     # Create a list of patients with a maximum length
     patients_maxLength = utils_split_dataset.make_patient_list_with_maxlength(patients, 1000000)
@@ -41,8 +41,8 @@ def extract_concepts(patients_list):
     # Extract clinical concepts
     patients_seq = []
     dictionary_entities = {}
-    print("lista_cat_semantic: ", cat_semantic)
-    print(type(cat_semantic))
+    #print("lista_cat_semantic: ", cat_semantic)
+    #print(type(cat_semantic))
 
     for patient in patients_list:
         id_cliente = patient.get("id_cliente")
