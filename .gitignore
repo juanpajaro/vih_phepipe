@@ -79,3 +79,4 @@ dataframes/
 cases_controls/
 p_date.sh
 !colab_consistency.ipynb
+!colab_cnlp_settings.ipynb
