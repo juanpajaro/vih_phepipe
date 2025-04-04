@@ -8,8 +8,9 @@ import utils_split_dataset
 
 # Global clinical pipeline
 clinical_pipe = None
+cat_semantic = None
 
-def load_data(path_data_train, current_path, umlstoicd_path, qumls_path):
+def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat):
     # Load the data
     data_train = utils_general_porpose.load_json(current_path, path_data_train)
     
@@ -26,8 +27,12 @@ def load_data(path_data_train, current_path, umlstoicd_path, qumls_path):
 
     # Initialize the clinical pipeline
     global clinical_pipe
-    clinical_pipe = utils_clinical_concept_extraction.load_clinical_NLPpipe(current_path, qumls_path, target_rules)
+    clinical_pipe = utils_clinical_concept_extraction.load_clinical_NLPpipe(current_path, qumls_path, target_rules, simi)
     print("Clinical pipeline initialized.")
+
+    global cat_semantic
+    cat_semantic = lista_cat
+    print("Category semantic initialized.")
 
     return patients_maxLength
 
@@ -44,7 +49,9 @@ def extract_concepts(patients_list):
         list_entities = []
         list_codes = []
 
-        for ent in doc.ents:               
+        matches = [ent for ent in doc.ents if ent._.semtypes in cat_semantic]
+        
+        for ent in matches:               
             if ent._.description == "":
                 #print(ent.text)
                 list_entities.append(ent.text)
@@ -93,7 +100,7 @@ def save_data(patients_seq, dictionary_entities, current_path, timestamp):
         utils_general_porpose.save_json(dictionary_entities, path_entities)
         
 if __name__ == "__main__":
-    if len(sys.argv) != 7:
+    if len(sys.argv) != 9:
         print("Usage: python clinical_concept_extraction_pipeline.py <path_data_train> <current_path> <umlstoicd_path> <qumls_path> <num_processes>")
         sys.exit(1)
 
@@ -103,6 +110,9 @@ if __name__ == "__main__":
     qumls_path = sys.argv[4]
     num_processes = int(sys.argv[5])
     timestamp = sys.argv[6]
+    simi = int(sys.argv[7])
+    lista_cat = sys.argv[8].split(",")
+    
 
     n_workers = multiprocessing.cpu_count()
     print(f"Using {n_workers} workers...")

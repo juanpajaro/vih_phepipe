@@ -154,7 +154,7 @@ context_rule = [
 ]
 
 #function to load the nlp pipeline
-def load_clinical_NLPpipe(path_destination, name_database, target_rules):
+def load_clinical_NLPpipe(path_destination, name_database, target_rules, simi):
     
     # Load the spacy model
     nlp = spacy.blank("spa")
@@ -168,7 +168,7 @@ def load_clinical_NLPpipe(path_destination, name_database, target_rules):
     
     # Add the QuickUMLS component to the pipeline
     quickumls_file_path = path_destination + name_database    
-    nlp.add_pipe('medspacy_quickumls', config={"quickumls_fp": quickumls_file_path})
+    nlp.add_pipe('medspacy_quickumls', config={"threshold":simi, "quickumls_fp": quickumls_file_path})
     
     #Add the medspacy context component to the pipeline
     context = nlp.add_pipe("medspacy_context")
