@@ -22,7 +22,7 @@ UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-LISTA_CAT=('{"T047"}')
+LISTA_CAT=('{"T047"}' '{{"T184"}')
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
