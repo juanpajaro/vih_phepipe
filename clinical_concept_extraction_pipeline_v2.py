@@ -110,7 +110,7 @@ if __name__ == "__main__":
     qumls_path = sys.argv[4]
     num_processes = int(sys.argv[5])
     timestamp = sys.argv[6]
-    simi = int(sys.argv[7])
+    simi = float(sys.argv[7])
     lista_cat = sys.argv[8].split(",")
     
 
