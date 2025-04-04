@@ -57,8 +57,8 @@ def extract_concepts(patients_list):
         for ent in matches:               
             if ent._.description == "":
                 #print(ent.text)
-                entity = ent.text.split("_".join(entity))
-                list_entities.append(ent.text)
+                entity = ent.text.split()
+                list_entities.append("_".join(entity))
                 #print(ent.label_)
                 list_codes.append(ent.label_)                
                 dictionary_entities[ent.label_] = "_".join(entity)
