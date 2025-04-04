@@ -15,7 +15,7 @@ def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, l
     data_train = utils_general_porpose.load_json(current_path, path_data_train)
     
     # Extract patient information
-    patients = utils_split_dataset.send_patient_info(data_train)
+    patients = utils_split_dataset.send_patient_info(data_train[:80])
     
     # Create a list of patients with a maximum length
     patients_maxLength = utils_split_dataset.make_patient_list_with_maxlength(patients, 1000000)
@@ -53,20 +53,20 @@ def extract_concepts(patients_list):
         list_codes = []        
 
         #matches = [ent for ent in doc.ents if ent._.semtypes in cat_semantic]
-        matches = []
+        #matches = []
         for ent in doc.ents:
             #print("ent: ", ent)
             #print("ent._.semtypes: ", ent._.semtypes)
-            if ent._.semtypes in cat_semantic:
+            #if ent._.semtypes in cat_semantic:
                 #print("ent: ", ent)
                 #print("ent._.semtypes: ", ent._.semtypes)
 
-                matches.append(ent)
+                #matches.append(ent)
                 
         #print("matches: ", matches)
         
-        for ent in matches:               
-            if ent._.description == "":
+        #for ent in matches:               
+            if ent._.description == "" and ent._.semtypes in cat_semantic:
                 #print(ent.text)
                 entity = ent.text.split()
                 list_entities.append("_".join(entity))

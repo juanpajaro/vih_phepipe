@@ -80,3 +80,4 @@ cases_controls/
 p_date.sh
 !colab_consistency.ipynb
 !colab_cnlp_settings.ipynb
+!colab_consistency_v2.ipynb
