@@ -42,6 +42,7 @@ def extract_concepts(patients_list):
     patients_seq = []
     dictionary_entities = {}
     print("lista_cat_semantic: ", cat_semantic)
+    print(type(cat_semantic))
 
     for patient in patients_list:
         id_cliente = patient.get("id_cliente")
@@ -54,10 +55,12 @@ def extract_concepts(patients_list):
         #matches = [ent for ent in doc.ents if ent._.semtypes in cat_semantic]
         matches = []
         for ent in doc.ents:
+            print("ent: ", ent)
+            print("ent._.semtypes: ", ent._.semtypes)
             if ent._.semtypes in cat_semantic:
                 print("ent: ", ent)
                 print("ent._.semtypes: ", ent._.semtypes)
-                
+
                 matches.append(ent)
                 
         print("matches: ", matches)
@@ -124,7 +127,18 @@ if __name__ == "__main__":
     simi = float(sys.argv[7])
     lista_cat = sys.argv[8].split(",")
     
-
+    #Example local paths
+    """
+    path_data_train = "cases_controls/cases_controls_20250402_205502.json"
+    current_path = "/home/pajaro/compu_Pipe_V3/"
+    umlstoicd_path = "/map/map_icd10_umls.csv"
+    qumls_path = "/destination_umls_es"
+    simi = 0.8
+    lista_cat = [{"T047"},{"T184"}]
+    """
+    print("lista: ", lista_cat)
+    
+    """
     n_workers = multiprocessing.cpu_count()
     print(f"Using {n_workers} workers...")
 
@@ -147,6 +161,8 @@ if __name__ == "__main__":
     with multiprocessing.Pool(processes=n_workers) as pool:
         results = pool.map(extract_concepts, chunks)
 
+    patients_seq, dictionary_entities = extract_concepts(patients_maxLength[2:3])
+
     # Merging results from multiprocessing
     patient_seq = []
     dictionary_entities = {}
@@ -161,3 +177,4 @@ if __name__ == "__main__":
     save_data(patient_seq, dictionary_entities, current_path, timestamp)
     print("Extraction clinical concept execution completed.")
 
+"""
