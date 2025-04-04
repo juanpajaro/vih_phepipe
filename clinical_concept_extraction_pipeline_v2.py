@@ -55,6 +55,9 @@ def extract_concepts(patients_list):
         matches = []
         for ent in doc.ents:
             if ent._.semtypes in cat_semantic:
+                print("ent: ", ent)
+                print("ent._.semtypes: ", ent._.semtypes)
+                
                 matches.append(ent)
                 
         print("matches: ", matches)
