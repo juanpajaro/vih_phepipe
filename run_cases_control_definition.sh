@@ -9,6 +9,7 @@
 
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 echo "Starting cases control definition job..."
 
@@ -27,7 +28,6 @@ NAME_EHR_DATA="Vista_Minable_3636.csv"
 DAYSPW=180
 DAYSOW=730
 
-echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 #Create folder for logs if it doesn't exist
 mkdir -p logs

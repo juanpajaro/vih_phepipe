@@ -15,7 +15,7 @@ echo "Current date: $CURRENT_DATE"
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
 echo "Starting computational phenotyping job..."
-
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 #RUN CASES CONTROL DEFINITION
 # Define paths
@@ -27,8 +27,6 @@ NAME_IDCC="3636_idClientes.csv"
 NAME_EHR_DATA="Vista_Minable_3636.csv"
 DAYSPW=180
 DAYSOW=730
-
-echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 #Create folder for logs if it doesn't exist
 mkdir -p logs

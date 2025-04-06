@@ -139,6 +139,7 @@ if __name__ == "__main__":
     #print("lista: ", lista_tipos_semanticos)
 
     lista_cat = utils_clinical_concept_extraction.buscar_terminos_en_diccionario(lista_tipos_semanticos)
+    print("list of semantic type included: ", lista_cat)
 
     #print("lista_cat: ", lista_cat)
     
@@ -163,7 +164,6 @@ if __name__ == "__main__":
     print("Running parallel extraction...")
     with multiprocessing.Pool(processes=n_workers) as pool:
         results = pool.map(extract_concepts, chunks)
-    
     
     #patients_seq, dictionary_entities = extract_concepts(patients_maxLength[2:3])
     #print("patients_seq: ", patients_seq)

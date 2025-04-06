@@ -9,6 +9,7 @@
 
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 echo "Starting clinical concept extraction job..."
 
@@ -29,8 +30,6 @@ LISTA_CAT=("Disease or Syndrome")
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #LIST_AS_STRING='{"T047"},{"T184"}'
 
-
-echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 # Crear carpeta de logs si no existe
 #mkdir -p logs
