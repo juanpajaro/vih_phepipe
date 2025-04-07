@@ -210,7 +210,8 @@ def balanced_subsample(patient_in):
     
     for i in list_index:
         patient_selected = all_patientes[i]
-        dict_result = {"id_cliente": patient_selected.get("id_cliente"), "label": patient_selected.get("label"), "seq": patient_selected.get("seq")}
+        #dict_result = {"id_cliente": patient_selected.get("id_cliente"), "label": patient_selected.get("label"), "seq": patient_selected.get("seq")}
+        dict_result = {"id_cliente": patient_selected.get("id_cliente"), "label": patient_selected.get("label"), "seq": patient_selected.get("entities")}
         balanced_patients.append(dict_result)
 
     print("ten random indexes in which the patient list is shuffled {}".format(list_index[:10]))
