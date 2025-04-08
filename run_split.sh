@@ -21,5 +21,5 @@ PATH="/zine/data/salud/compu_Pipe_V3/"
 FILENAME="concepts/concepts_${CURREN_DATE}.json/"
 TRAIN_SIZE=0.8
 
-#run the pipeline
+# Run the pipeline
 srun python3 split_data_pipeline.py $PATH $FILENAME $TRAIN_SIZE "$CURRENT_DATE"
