@@ -21,6 +21,7 @@ def split_data(data, train_size):
     return train_data, test_data
 
 def save_data(data, directory, filename_prefix, timestamp):
+    directory = utils_general_porpose.create_directory(directory)
     json_path = os.path.join(directory, f"{filename_prefix}_{timestamp}.json")
     utils_general_porpose.save_json(data, json_path)
     print("Data saved")
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     timestamp = sys.argv[4]
 
     #path = "/home/pajaro/compu_Pipe_V3/"
-    #filename = "concepts/concepts_${CURREN_DATE}.json/"
+    #filename = "/concepts/clinical_concepts_20250404_171428.json"
     #train_size = 0.8
     #timestamp = "2023-10-01_12-00-00"
 

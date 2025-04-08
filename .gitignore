@@ -83,3 +83,5 @@ p_date.sh
 !colab_consistency_v2.ipynb
 !colab_consistency_v3.ipynb
 !colab_explore_data.ipynb
+test/
+train/
