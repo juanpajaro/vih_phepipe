@@ -142,7 +142,7 @@ def save_dataset(data, directory, filename_prefix, timestamp):
     utils_general_porpose.save_json(data, json_path)
     print(f"Dataset saved in JSON format: {json_path}")
 
-def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow):
+def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow, timestamp):
     """Pipeline principal para transformar los datos."""
     data_poli = load_and_process_polisomnography_data(path_data, name_poli_data)
     data_sleep = load_and_process_sleep_study_data(path_data, name_sleepS_data)
@@ -175,4 +175,4 @@ if __name__ == "__main__":
     #days_pw = 180
     #days_ow = 730
     
-    main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow)
+    main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow, timestamp)
