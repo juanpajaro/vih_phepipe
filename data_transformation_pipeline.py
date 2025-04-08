@@ -7,9 +7,10 @@ from datetime import datetime
 import utils_early_disease
 import utils_general_porpose
 
+
 def get_timestamp():
     """Genera un timestamp con formato de fecha y hora."""
-    return datetime.now().strftime("%Y%m%d_%H%M%S")
+    #return datetime.now().strftime("%Y%m%d_%H%M%S")
 
 def load_and_process_polisomnography_data(path, filename):
     """Carga y procesa los datos de polisomnografía."""
