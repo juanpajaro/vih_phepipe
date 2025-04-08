@@ -1,11 +1,11 @@
 #!/bin/bash
-# #SBATCH --job-name=split
-# #SBATCH --output=logs/split_%j.out
-# #SBATCH --error=logs/split_%j.err
-# #SBATCH --ntasks=1
-# #SBATCH --cpus-per-task=8
-# #SBATCH --mem=32G
-# #SBATCH --time=24:00:00
+#SBATCH --job-name=split
+#SBATCH --output=logs/split_%j.out
+#SBATCH --error=logs/split_%j.err
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=24:00:00
 
 source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate 1cphe
