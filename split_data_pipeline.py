@@ -40,7 +40,7 @@ if __name__ == "__main__":
     
     path = sys.argv[1]    
     filename = sys.argv[2]
-    train_size = sys.argv[3]
+    train_size = float(sys.argv[3])
     timestamp = sys.argv[4]
 
     #path = "/home/pajaro/compu_Pipe_V3/"
