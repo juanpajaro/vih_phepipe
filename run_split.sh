@@ -7,8 +7,8 @@
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
 
-source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
-conda activate 1cphe
+# source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
+# conda activate 1cphe
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 echo "Starting split job..."
@@ -18,8 +18,9 @@ echo "Current date: $CURRENT_DATE"
 
 # Define paths
 PATH="/zine/data/salud/compu_Pipe_V3/"
-FILENAME="concepts/concepts_${CURREN_DATE}.json/"
+FILENAME="concepts/clinical_concepts_20250404_170038.json"
 TRAIN_SIZE=0.8
 
 # Run the pipeline
-srun python3 split_data_pipeline.py $PATH $FILENAME $TRAIN_SIZE "$CURRENT_DATE"
+#srun python3 split_data_pipeline.py $PATH $FILENAME $TRAIN_SIZE "$CURRENT_DATE"
+python3 split_data_pipeline.py $PATH $FILENAME $TRAIN_SIZE "$CURRENT_DATE"

@@ -43,5 +43,10 @@ if __name__ == "__main__":
     train_size = sys.argv[3]
     timestamp = sys.argv[4]
 
+    #path = "/home/pajaro/compu_Pipe_V3/"
+    #filename = "concepts/concepts_${CURREN_DATE}.json/"
+    #train_size = 0.8
+    #timestamp = "2023-10-01_12-00-00"
+
 
     main(path, filename, train_size, timestamp)
