@@ -136,9 +136,9 @@ def train_lstm_model(X_train,
 
     
     # Verify that validation labels are in the same range as training labels.
-    y_train = y_train.astype(int)
+    y_train = y_train.astype(int)    
     num_classes = utils_explore_data.get_num_classes(y_train)
-    y_test = y_test.astype(int)
+    y_test = y_test.astype(int)    
     unexpected_labels = [v for v in y_test if v not in range(num_classes)]
     if len(unexpected_labels):
         raise ValueError('Unexpected label values found in the validation set:'
