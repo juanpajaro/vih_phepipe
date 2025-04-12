@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os
+import tensorflow as tf
+from tensorflow.keras.layers import TextVectorization
 import utils_general_porpose
-import utils_train_models
+#import utils_train_models
 import numpy as np
 
 def load_data(path, filename):
@@ -12,50 +14,35 @@ def load_data(path, filename):
     print("Data loaded")
     return data
 
-def get_vocab(train):
-    """
-    Get the vocabulary from the training data.
-    """
-    Vocab = {'__PAD__': 0, '__UNK__': 1}    
-    for patient in train:
-        for concept in patient['seq'].split():
-            if concept not in Vocab:
-                Vocab[concept] = len(Vocab)
-    print("Vocabulary created")
-            
-    return Vocab
-
-def seq_to_tensor(seq, vocab, unk_token='__UNK__', verbose=False):
-    """
-    Convert a sequence of concepts to a tensor.
-    """
-    seq_tensor = []
-    for token in seq.split():
-        if token in vocab:
-            seq_tensor.append(vocab[token])            
-        else:
-            seq_tensor.append(vocab[unk_token])            
-    if verbose:
-        print("seq_to_tensor:", seq_tensor)
-    return np.array(seq_tensor)
-    
-def data_to_tensor(data, vocab, unk_token='__UNK__', verbose=False):
-    """
-    Convert the entire dataset to tensors.
-    """
-    tensor_data = []
-    for patient in data:
-        seq_tensor = seq_to_tensor(patient['seq'], vocab, unk_token, verbose)
-        tensor_data.append(seq_tensor)
-        #tensor_data = np.vstack(np.ravel(seq_tensor))
-    return tensor_data
-
 def get_labels(data):
     """
     Get the labels from the dataset.
     """
     labels = [patient.get("label") for patient in data]
     return labels
+
+def get_data_to_tensor_string(data):
+    """
+    Convert the entire dataset to tensors.
+    """
+    tensor_data = []
+    for patient in data:
+        seq_tensor = patient['seq']
+        tensor_data.append(seq_tensor)
+        #tensor_data = np.vstack(np.ravel(seq_tensor))
+    return tensor_data
+
+def get_vectorized_layer(X_train, max_tokens, max_len):
+    """
+    Create and adapt a TextVectorization layer.
+    """
+    vectorize_layer = TextVectorization(
+        max_tokens=max_tokens,
+        standardize=None,
+        output_mode='int',
+        output_sequence_length=max_len)
+    vectorize_layer.adapt(X_train)
+    return vectorize_layer
 
 current_path = os.getcwd()
 #print(current_path)
@@ -65,6 +52,18 @@ filename_train = "/" + filename[0] + "/" + filename[0] +"_20250408_144607.json"
 train = load_data(current_path, filename_train)
 print("Train data loaded")
 print(len(train))
+print(train[0])
+print(train[0]["seq"])
+
+X_train = get_data_to_tensor_string(train)
+print("data_to_tensor_string:", X_train[:2])
+
+encoder = get_vectorized_layer(X_train, max_tokens=5000, max_len=4)
+vocab = np.array(encoder.get_vocabulary())
+print("Vocabulary:", vocab[:100])
+print("Vocabulary size:", len(vocab))
+
+
 filename_test = "/" + filename[1] + "/" + filename[1] +"_20250408_144607.json"
 test = load_data(current_path, filename_test)
 print("Test data loaded")
