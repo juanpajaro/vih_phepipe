@@ -2,7 +2,7 @@
 import utils_build_models as build_models
 import utils_explore_data
 import tensorflow as tf
-import keras
+#import keras
 import pickle
 import utils_performance_analysis
 import utils_general_porpose
@@ -187,17 +187,17 @@ def train_lstm_model(X_train,
     now = utils_general_porpose.get_time()
 
     #Get the list of models in the directory
-    list_models = utils_general_porpose.extract_name_model(path_model_save, ".h5")
+    #list_models = utils_general_porpose.extract_name_model(path_model_save, ".h5")
 
     #Get the last version of the model
-    last_version = utils_general_porpose.extract_last_version_model(list_models)
+    #last_version = utils_general_porpose.extract_last_version_model(list_models)
 
     #Get the number of the new version
-    version = str(utils_general_porpose.counter_version(last_version))
+    #version = str(utils_general_porpose.counter_version(last_version))
 
     # Save model.
-    name = 'lstm_model_v' + version +'.h5'
-    model.save(path_model_save + name)
+    #name = 'lstm_model_v' + version +'.h5'
+    #model.save(path_model_save + name)
     return now, name, history['val_accuracy'][-1], history['val_loss'][-1], model, num_classes
 
 #function to train the logistic regression model

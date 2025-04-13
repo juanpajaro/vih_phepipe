@@ -55,50 +55,31 @@ print(len(train))
 print(train[0])
 print(train[0]["seq"])
 
-X_train = get_data_to_tensor_string(train)
-print("data_to_tensor_string:", X_train[:2])
+train_string = get_data_to_tensor_string(train)
+print("data_to_tensor_string:", train_string[:2])
 
-encoder = get_vectorized_layer(X_train, max_tokens=5000, max_len=4)
+encoder = get_vectorized_layer(train_string, max_tokens=5000, max_len=4)
 vocab = np.array(encoder.get_vocabulary())
 print("Vocabulary:", vocab[:100])
 print("Vocabulary size:", len(vocab))
-
+print(type(encoder))
+X_train = encoder(train_string)
+print("X_token:", X_train[:2])
+print("X_token shape:", X_train.shape)
+print(type(X_train))
+X_train_np = np.array(X_train)
+print(X_train_np.shape)
 
 filename_test = "/" + filename[1] + "/" + filename[1] +"_20250408_144607.json"
 test = load_data(current_path, filename_test)
 print("Test data loaded")
 print(len(test))
 
-Vocab = get_vocab(train)
-print("Total words in vocab are",len(Vocab))
-print(type(Vocab))
-print("Vocabulary:", Vocab)
+test_s = get_data_to_tensor_string(test)
+print("data_to_tensor_string:", test_s[:2])
+X_test = encoder(test_s)
+print("X_test_token:", X_test[:2])
 
-print(train[0]["seq"])
-
-tensor_result = seq_to_tensor(train[0]["seq"], Vocab, verbose=False)
-print("seq_to_tensor:", tensor_result)
-print(type(tensor_result))
-
-X_train = data_to_tensor(train, Vocab, verbose=False)
-print("data_to_tensor:", X_train[0])
-print("data_to_tensor:", X_train[1])
-print("data_to_tensor:", X_train[2])
-print(type(X_train))
-print(X_train.shape)
-X_train = np.array(X_train)
-print(X_train.shape)
-print(X_train[0].shape)
-
-X_test = data_to_tensor(test, Vocab, verbose=False)
-print("data_to_tensor:", X_test[0])
-print("data_to_tensor:", X_test[1])
-print("data_to_tensor:", X_test[2])
-print(type(X_test))
-
-
-print(train[0]["label"])
-print(train[1]["label"])
 
 hyper_paramts_lstm = utils_general_porpose.load_json(current_path, "/models_parameters/hyper_params_lstm.json")
 print("Hyperparameters loaded")
@@ -119,4 +100,5 @@ y_train = np.array(y_train)
 y_test = np.array(y_test)
 print(X_train[:1])
 
+import utils_train_models
 now, name, acc, loss, model, num_classes = utils_train_models.train_lstm_model(X_train, y_train, X_test, y_test, hyper_paramts_lstm, path_model_save)
