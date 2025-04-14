@@ -91,6 +91,8 @@ def get_vocab_size(vectorize_layer):
 def train_lstm_model(hyper_paramts_lstm):
 
     #Get the hyperparameters from dictionary
+    print("Hyperparameters loaded")
+    print(type(hyper_paramts_lstm))
     num_features = vocab_size_g
     embedding_dim = hyper_paramts_lstm['embedding_dim']
     block_layers = hyper_paramts_lstm['block_layers']
@@ -98,6 +100,7 @@ def train_lstm_model(hyper_paramts_lstm):
     learning_rate = hyper_paramts_lstm['learning_rate']
     epochs = hyper_paramts_lstm['epochs']
     batch_size = hyper_paramts_lstm['batch_size']
+
 
     
     # Verify that validation labels are in the same range as training labels.
@@ -197,6 +200,8 @@ if __name__ == "__main__":
     name_file_seq_params = "list_hyper_params_lstm.json"
     list_seq_params = utils_general_porpose.load_json(current_path + file_vector_params, name_file_seq_params)
     print(len(list_seq_params))
+    print(type(list_seq_params))
+    print(list_seq_params[0])
     print("list seq params loaded")
 
     # Split the data into chunks for parallel processing
