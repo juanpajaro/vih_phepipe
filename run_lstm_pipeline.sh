@@ -6,8 +6,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
-##source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
-##conda activate 1cphe
+source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
+conda activate 1cphe
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 echo "Starting LSTM pipeline job..."
 
@@ -23,7 +23,8 @@ MAX_TOKEN=1000
 MAX_LEN=4
 
 # Run the model
-p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
+#p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
+p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
 
 # Extract PARAM1 and PARAM2
 param1=$(echo "$p_report" | grep '^PARAM1=' | cut -d'=' -f2)
