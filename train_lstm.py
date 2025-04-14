@@ -187,7 +187,8 @@ if __name__ == "__main__":
 
     get_labels(train, test)
 
-    n_workers = multiprocessing.cpu_count()
+    #n_workers = multiprocessing.cpu_count()
+    n_workers = 8
     print(f"Using {n_workers} workers...")
 
     #load the ngram list of parameters
