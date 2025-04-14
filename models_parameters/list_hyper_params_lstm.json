@@ -43,5 +43,32 @@
   "learning_rate": 0.001,
   "epochs": 30,
   "batch_size": 128
+},
+{
+  "num_features": "NA",
+  "embedding_dim": 600,
+  "block_layers": 1,
+  "hidden_units": 64,
+  "learning_rate": 0.001,
+  "epochs": 30,
+  "batch_size": 128
+},
+{
+  "num_features": "NA",
+  "embedding_dim": 700,
+  "block_layers": 1,
+  "hidden_units": 64,
+  "learning_rate": 0.001,
+  "epochs": 30,
+  "batch_size": 128
+},
+{
+  "num_features": "NA",
+  "embedding_dim": 800,
+  "block_layers": 1,
+  "hidden_units": 64,
+  "learning_rate": 0.001,
+  "epochs": 30,
+  "batch_size": 128
 }
 ]
