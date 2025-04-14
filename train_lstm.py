@@ -191,8 +191,8 @@ if __name__ == "__main__":
     print(f"Using {n_workers} workers...")
 
     #load the ngram list of parameters
-    current_path = "/home/pajaro/compu_Pipe_V3/"
-    file_vector_params = "/models_parameters/"
+    #current_path = "/home/pajaro/compu_Pipe_V3/"
+    file_vector_params = "models_parameters/"
     name_file_seq_params = "list_hyper_params_lstm.json"
     list_seq_params = utils_general_porpose.load_json(current_path + file_vector_params, name_file_seq_params)
     print(len(list_seq_params))
