@@ -7,6 +7,7 @@ import utils_build_models
 import utils_explore_data
 import numpy as np
 import sys
+import subprocess
 #import utils_train_models
 
 X_train_g = None
@@ -14,6 +15,7 @@ y_train_g = None
 X_test_g = None
 y_test_g = None
 max_len_seq = None
+vocab_size_g = None
 
 def load_data(path, filename):
     """
@@ -75,6 +77,16 @@ def get_X_test(vectorize_layer, x_test_s):
     global X_test_g
     X_test_g = X_test
 
+def get_vocab_size(vectorize_layer):
+    """
+    Get the size of the vocabulary.
+    """
+    vocab = np.array(encoder.get_vocabulary())
+    vocab_size = len(vocab)
+    global vocab_size_g
+    vocab_size_g = vocab_size
+    
+
 #Function to train a lstm model    
 def train_lstm_model(hyper_paramts_lstm):
     """Trains LSTM model on the given dataset.
@@ -95,7 +107,7 @@ def train_lstm_model(hyper_paramts_lstm):
     """
 
     #Get the hyperparameters from dictionary
-    num_features = hyper_paramts_lstm['num_features']
+    num_features = vocab_size_g
     embedding_dim = hyper_paramts_lstm['embedding_dim']
     block_layers = hyper_paramts_lstm['block_layers']
     units = hyper_paramts_lstm['hidden_units']
@@ -180,42 +192,37 @@ def save_model(model, current_path, timestamp):
         #data.to_csv(path_version, index = False)
         model.save(path_version)
 
-if __name__ == "main":
-    if len(sys.argv) !=3:
+if __name__ == "__main__":
+    if len(sys.argv) !=5:
         print("faltan hyperparametros")
         sys.exit(1)
         
-    #timestamp = sys.argv[2]
-    timestamp = "2023-10-01_12-00-00"
-    #current_path = sys.argv[3]
-    current_path = "/home/pajaro/compu_Pipe_V3/"
+    timestamp = sys.argv[1]
+    current_path = sys.argv[2]
+    max_tokens = int(sys.argv[3])
+    max_len = int(sys.argv[4])
+
     d_filename = ["train", "test"]
-    filename_train = "/" + d_filename[0] + "/" + d_filename[0] + "_" + "20250408_144607" + ".json"
+    filename_train = "/" + d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
     train = load_data(current_path, filename_train)
-    train_string = get_data_to_tensor_string(train)
-    print("data_to_tensor_string:", train_string[:2])
-    encoder = get_vectorized_layer(train_string, max_tokens=5000, max_len=4)
-    vocab = np.array(encoder.get_vocabulary())
-    print("Vocabulary:", vocab[:100])
-    print("Vocabulary size:", len(vocab))
-    print(type(encoder))
-    get_X_train(encoder, train_string)
-    print(X_train_g[:2])
-    filename_test = "/" + d_filename[1] + "/" + d_filename[1] +"_" + "20250408_144607" + ".json"
+    train_string = get_data_to_tensor_string(train)    
+    encoder = get_vectorized_layer(train_string, max_tokens, max_len)
+    #vocab = np.array(encoder.get_vocabulary())    
+    #print("Vocabulary size:", len(vocab))
+    get_vocab_size(encoder)
+    #print("Vocabulary size:", vocab_size_g)
+    get_X_train(encoder, train_string)    
+    filename_test = "/" + d_filename[1] + "/" + d_filename[1] +"_" + timestamp + ".json"
     test = load_data(current_path, filename_test)
-    print(len(test))
-    test_s = get_data_to_tensor_string(test)
-    print("data_to_tensor_string:", test_s[:2])
+    #print(len(test))
+    test_s = get_data_to_tensor_string(test)    
     get_X_test(encoder, test_s)
-    print(X_test_g[:2])
     hyper_paramts_lstm = utils_general_porpose.load_json(current_path, "/models_parameters/hyper_params_lstm.json")
-    print("Hyperparameters loaded")
-    print(hyper_paramts_lstm)
-    print(type(hyper_paramts_lstm))
+    #print("Hyperparameters loaded")
+    #print(hyper_paramts_lstm)
+    #print(type(hyper_paramts_lstm))
     get_labels(train, test)
-    print("y_train:", y_train_g[0])
-    print("y_train:", y_train_g[1])
-    print("y_test:", y_test_g[0])
-    print("y_test:", y_test_g[1])
     acc, loss, model, num_classes = train_lstm_model(hyper_paramts_lstm)
+    print("PARAM1={}".format(acc))
+    print("PARAM2={}".format(loss))
     save_model(model, current_path, timestamp)
