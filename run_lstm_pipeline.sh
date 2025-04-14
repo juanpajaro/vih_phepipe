@@ -10,17 +10,39 @@
 ##conda activate 1cphe
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 echo "Starting LSTM pipeline job..."
-##CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
+
+# Set current date
+#CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
 CURRENT_DATE="20250408_144607"
 echo "Current date: $CURRENT_DATE"
+
 # Define paths
 #PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
 PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 MAX_TOKEN=1000
 MAX_LEN=4
+
+# Run the model
 p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
-# Extraer solo las líneas que contienen PARAM1 y PARAM2
+
+# Extract PARAM1 and PARAM2
 param1=$(echo "$p_report" | grep '^PARAM1=' | cut -d'=' -f2)
 param2=$(echo "$p_report" | grep '^PARAM2=' | cut -d'=' -f2)
-echo ""$CURRENT_DATE","$PATH_DATA",$MAX_TOKEN,$MAX_LEN,$param1,$param2" >> performance_report.csv
+
+# Create results folder if it doesn't exist
+results_dir="performance_reports"
+mkdir -p "$results_dir"
+
+# Determine next version number
+base_name="pipeline"
+last_version=$(ls "$results_dir"/${base_name}_v*.csv 2>/dev/null | sed -E "s/.*${base_name}_v([0-9]+)\.csv/\1/" | sort -n | tail -n 1)
+next_version=$(( (${last_version:-0}) + 1 ))
+
+# Set versioned filename inside results folder
+report_file="$results_dir/${base_name}_v${next_version}.csv"
+
+# Write the output
+echo ""$CURRENT_DATE","$PATH_DATA",$MAX_TOKEN,$MAX_LEN,$param1,$param2" >> "$report_file"
+
 echo "Parámetros capturados correctamente: $param1,$param2"
+echo "Reporte guardado como: $report_file"

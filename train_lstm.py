@@ -7,7 +7,7 @@ import utils_build_models
 import utils_explore_data
 import numpy as np
 import sys
-import subprocess
+import multiprocessing
 #import utils_train_models
 
 X_train_g = None
@@ -89,22 +89,6 @@ def get_vocab_size(vectorize_layer):
 
 #Function to train a lstm model    
 def train_lstm_model(hyper_paramts_lstm):
-    """Trains LSTM model on the given dataset.
-
-    # Arguments
-        data: tuples of training and test texts and labels.
-        num_features: int, number of input features.
-        embedding_dim: int, dimension of the embedding vectors.
-        block_layers: int, number of `Dense` layers in the model.
-        units: int, output dimension of Dense layers in the model.
-        learning_rate: float, learning rate for training model.
-        epochs: int, number of epochs.
-        batch_size: int, number of samples per batch.
-
-    # Raises
-        ValueError: If validation data has label values which were not seen
-            in the training data.
-    """
 
     #Get the hyperparameters from dictionary
     num_features = vocab_size_g
@@ -161,34 +145,17 @@ def train_lstm_model(hyper_paramts_lstm):
     
     # Print results.
     history = history.history
-    #print("the performances of the lstm model are:")
-    #print('Validation accuracy: {acc}, loss: {loss}'.format(acc=history['val_accuracy'][-1], loss=history['val_loss'][-1]))
     
-    #Get the date and time
-    #now = utils_general_porpose.get_time()
-
-    #Get the list of models in the directory
-    #list_models = utils_general_porpose.extract_name_model(path_model_save, ".h5")
-
-    #Get the last version of the model
-    #last_version = utils_general_porpose.extract_last_version_model(list_models)
-
-    #Get the number of the new version
-    #version = str(utils_general_porpose.counter_version(last_version))
-
-    # Save model.
-    #name = 'lstm_model_v' + version +'.h5'
-    #model.save(path_model_save + name)
     return history['val_accuracy'][-1], history['val_loss'][-1], model, num_classes
 
-def save_model(model, current_path, timestamp):
+def save_model(model, current_path, timestamp, index):
 #save the dataset
     path_save = current_path + "/models/"
     path_save = utils_general_porpose.create_directory(path_save)
 
     if os.path.exists(path_save):
         #path_version = path_save + "model_" + timestamp + ".pkl"
-        path_version = path_save + "model_" + timestamp
+        path_version = path_save + "model_" + timestamp + "_" + str(index)
         #data.to_csv(path_version, index = False)
         model.save(path_version)
 
@@ -217,12 +184,48 @@ if __name__ == "__main__":
     #print(len(test))
     test_s = get_data_to_tensor_string(test)    
     get_X_test(encoder, test_s)
-    hyper_paramts_lstm = utils_general_porpose.load_json(current_path, "/models_parameters/hyper_params_lstm.json")
+
+    get_labels(train, test)
+
+    n_workers = multiprocessing.cpu_count()
+    print(f"Using {n_workers} workers...")
+
+    #load the ngram list of parameters
+    current_path = "/home/pajaro/compu_Pipe_V3/"
+    file_vector_params = "/models_parameters/"
+    name_file_seq_params = "list_hyper_params_lstm.json"
+    list_seq_params = utils_general_porpose.load_json(current_path + file_vector_params, name_file_seq_params)
+    print(len(list_seq_params))
+    print("list seq params loaded")
+
+    # Split the data into chunks for parallel processing
+    chunk_size = len(list_seq_params) // n_workers
+    print(f"Chunk size: {chunk_size}")
+    chunks = [list_seq_params[i:i + chunk_size] for i in range(0, len(list_seq_params), chunk_size)]
+
+    # If there are any remaining patients, add them to the last chunk
+    if len(list_seq_params) % n_workers != 0:
+        chunks[-1].extend(list_seq_params[len(chunks) * chunk_size:])
+
+    # Run parallel extraction
+    print("Running parallel extraction...")
+    with multiprocessing.Pool(processes=n_workers) as pool:
+        results = pool.map(train_lstm_model, chunks)
+
+    for i, result in enumerate(results, 1):
+        acc, loss, model, num_classes = result
+        print("Result #{}".format(i))
+        print("PARAM1={}".format(acc))
+        print("PARAM2={}".format(loss))
+        # Save the model
+        save_model(model, current_path, timestamp, i)
+
+    #hyper_paramts_lstm = utils_general_porpose.load_json(current_path, "/models_parameters/hyper_params_lstm.json")
     #print("Hyperparameters loaded")
     #print(hyper_paramts_lstm)
     #print(type(hyper_paramts_lstm))
-    get_labels(train, test)
-    acc, loss, model, num_classes = train_lstm_model(hyper_paramts_lstm)
-    print("PARAM1={}".format(acc))
-    print("PARAM2={}".format(loss))
-    save_model(model, current_path, timestamp)
+    
+    #acc, loss, model, num_classes = train_lstm_model(hyper_paramts_lstm)
+    #print("PARAM1={}".format(acc))
+    #print("PARAM2={}".format(loss))
+    #save_model(model, current_path, timestamp)
