@@ -170,7 +170,7 @@ if __name__ == "__main__":
     max_len = int(sys.argv[4])
 
     d_filename = ["train", "test"]
-    filename_train = "/" + d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
+    filename_train = d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
     train = load_data(current_path, filename_train)
     train_string = get_data_to_tensor_string(train)    
     encoder = get_vectorized_layer(train_string, max_tokens, max_len)
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     get_vocab_size(encoder)
     #print("Vocabulary size:", vocab_size_g)
     get_X_train(encoder, train_string)    
-    filename_test = "/" + d_filename[1] + "/" + d_filename[1] +"_" + timestamp + ".json"
+    filename_test = d_filename[1] + "/" + d_filename[1] +"_" + timestamp + ".json"
     test = load_data(current_path, filename_test)
     #print(len(test))
     test_s = get_data_to_tensor_string(test)    
