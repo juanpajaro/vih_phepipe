@@ -25,5 +25,23 @@
   "learning_rate": 0.001,
   "epochs": 30,
   "batch_size": 128
+},
+{
+  "num_features": "NA",
+  "embedding_dim": 400,
+  "block_layers": 1,
+  "hidden_units": 64,
+  "learning_rate": 0.001,
+  "epochs": 30,
+  "batch_size": 128
+},
+{
+  "num_features": "NA",
+  "embedding_dim": 500,
+  "block_layers": 1,
+  "hidden_units": 64,
+  "learning_rate": 0.001,
+  "epochs": 30,
+  "batch_size": 128
 }
 ]
