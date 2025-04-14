@@ -94,7 +94,9 @@ def train_lstm_model(hyper_paramts_lstm):
     print("Hyperparameters loaded")
     print(type(hyper_paramts_lstm))
     num_features = vocab_size_g
+    print("num_features: ", num_features)
     embedding_dim = hyper_paramts_lstm['embedding_dim']
+    print("embedding_dim: ", embedding_dim)
     block_layers = hyper_paramts_lstm['block_layers']
     units = hyper_paramts_lstm['hidden_units']
     learning_rate = hyper_paramts_lstm['learning_rate']
