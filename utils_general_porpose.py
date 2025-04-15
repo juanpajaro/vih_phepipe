@@ -90,3 +90,18 @@ def directories_in_path(path):
         directories = [directory for directory in directories if os.path.isdir(path + directory)]
         
     return directories
+
+def load_hyperparams_as_tuples(json_file_path):
+    with open(json_file_path, 'r') as f:
+        data = json.load(f)
+    return [
+        (            
+            entry['embedding_dim'],
+            entry['block_layers'],
+            entry['hidden_units'],
+            entry['learning_rate'],
+            entry['epochs'],
+            entry['batch_size']
+        )
+        for entry in data
+    ]

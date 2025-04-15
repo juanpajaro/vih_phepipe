@@ -85,25 +85,28 @@ def get_vocab_size(vectorize_layer):
     vocab_size = len(vocab)
     global vocab_size_g
     vocab_size_g = vocab_size
-    
 
+def load_hyperparameters(path_h):
+    """
+    Load the hyperparameters from a JSON file.
+    """    
+    hyper_paramts_lstm = utils_general_porpose.load_hyperparams_as_tuples(path_h)
+    print("Hyperparameters loaded")
+    print(type(hyper_paramts_lstm))
+    return hyper_paramts_lstm
+    
 #Function to train a lstm model    
 def train_lstm_model(hyper_paramts_lstm):
 
     #Get the hyperparameters from dictionary
-    print("Hyperparameters loaded")
-    print(type(hyper_paramts_lstm))
     num_features = vocab_size_g
-    print("num_features: ", num_features)
-    embedding_dim = hyper_paramts_lstm['embedding_dim']
-    print("embedding_dim: ", embedding_dim)
-    block_layers = hyper_paramts_lstm['block_layers']
-    units = hyper_paramts_lstm['hidden_units']
-    learning_rate = hyper_paramts_lstm['learning_rate']
-    epochs = hyper_paramts_lstm['epochs']
-    batch_size = hyper_paramts_lstm['batch_size']
-
-
+    (embedding_dim, 
+     block_layers,
+     units,
+     learning_rate,
+     epochs,
+     batch_size
+    ) = hyper_paramts_lstm
     
     # Verify that validation labels are in the same range as training labels.
     
@@ -197,10 +200,9 @@ if __name__ == "__main__":
     print(f"Using {n_workers} workers...")
 
     #load the ngram list of parameters
-    #current_path = "/home/pajaro/compu_Pipe_V3/"
-    file_vector_params = "models_parameters/"
-    name_file_seq_params = "list_hyper_params_lstm.json"
-    list_seq_params = utils_general_porpose.load_json(current_path + file_vector_params, name_file_seq_params)
+    current_path = "/home/pajaro/compu_Pipe_V3/"
+    filename_h = "models_parameters/list_hyper_params_lstm.json"
+    list_seq_params = load_hyperparameters(current_path + filename_h)
     print(len(list_seq_params))
     print(type(list_seq_params))
     print(list_seq_params[0])
@@ -218,7 +220,7 @@ if __name__ == "__main__":
     # Run parallel extraction
     print("Running parallel extraction...")
     with multiprocessing.Pool(processes=n_workers) as pool:
-        results = pool.map(train_lstm_model, chunks)
+        results = pool.starmap(train_lstm_model, chunks)
 
     for i, result in enumerate(results, 1):
         acc, loss, model, num_classes = result

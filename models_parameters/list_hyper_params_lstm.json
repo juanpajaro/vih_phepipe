@@ -1,6 +1,5 @@
 [
-{
-  "num_features": "NA",
+{  
   "embedding_dim": 100,
   "block_layers": 1,
   "hidden_units": 64,
@@ -9,7 +8,6 @@
   "batch_size": 128
 },
 {
-  "num_features": "NA",
   "embedding_dim": 200,
   "block_layers": 1,
   "hidden_units": 64,
@@ -18,7 +16,6 @@
   "batch_size": 128
 },
 {
-  "num_features": "NA",
   "embedding_dim": 300,
   "block_layers": 1,
   "hidden_units": 64,
@@ -26,8 +23,7 @@
   "epochs": 30,
   "batch_size": 128
 },
-{
-  "num_features": "NA",
+{  
   "embedding_dim": 400,
   "block_layers": 1,
   "hidden_units": 64,
@@ -35,8 +31,7 @@
   "epochs": 30,
   "batch_size": 128
 },
-{
-  "num_features": "NA",
+{  
   "embedding_dim": 500,
   "block_layers": 1,
   "hidden_units": 64,
@@ -44,8 +39,7 @@
   "epochs": 30,
   "batch_size": 128
 },
-{
-  "num_features": "NA",
+{  
   "embedding_dim": 600,
   "block_layers": 1,
   "hidden_units": 64,
@@ -53,8 +47,7 @@
   "epochs": 30,
   "batch_size": 128
 },
-{
-  "num_features": "NA",
+{  
   "embedding_dim": 700,
   "block_layers": 1,
   "hidden_units": 64,
@@ -62,8 +55,7 @@
   "epochs": 30,
   "batch_size": 128
 },
-{
-  "num_features": "NA",
+{  
   "embedding_dim": 800,
   "block_layers": 1,
   "hidden_units": 64,
