@@ -200,7 +200,7 @@ if __name__ == "__main__":
     print(f"Using {n_workers} workers...")
 
     #load the ngram list of parameters
-    current_path = "/home/pajaro/compu_Pipe_V3/"
+    #current_path = "/home/pajaro/compu_Pipe_V3/"
     filename_h = "models_parameters/list_hyper_params_lstm.json"
     list_seq_params = load_hyperparameters(current_path + filename_h)
     print(len(list_seq_params))
