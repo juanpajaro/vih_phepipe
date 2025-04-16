@@ -236,7 +236,7 @@ if __name__ == "__main__":
         # Save the model
         save_model(model, current_path, timestamp, i)
     """
-    current_path = "/home/pajaro/compu_Pipe_V3/"
+    
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
     print("Hyperparameters loaded")
     print(hyper_paramts_lstm)
