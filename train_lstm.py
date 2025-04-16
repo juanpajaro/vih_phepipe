@@ -172,15 +172,15 @@ if __name__ == "__main__":
         print("faltan hyperparametros")
         sys.exit(1)
         
-    #timestamp = sys.argv[1]
-    #current_path = sys.argv[2]
-    #max_tokens = int(sys.argv[3])
-    #max_len = int(sys.argv[4])
+    timestamp = sys.argv[1]
+    current_path = sys.argv[2]
+    max_tokens = int(sys.argv[3])
+    max_len = int(sys.argv[4])
 
-    timestamp = "20250408_144607"
-    current_path = "/home/pajaro/compu_Pipe_V3/"
-    max_tokens = 5000
-    max_len = 4
+    #timestamp = "20250408_144607"
+    #current_path = "/home/pajaro/compu_Pipe_V3/"
+    #max_tokens = 5000
+    #max_len = 4
 
     d_filename = ["train", "test"]
     filename_train = d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
