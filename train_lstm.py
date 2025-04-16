@@ -238,9 +238,9 @@ if __name__ == "__main__":
 
     for i, result in enumerate(results, 1):
         acc, loss, model, num_classes = result
-        print("Result #{}".format(i))
-        print("PARAM1={}".format(acc))
-        print("PARAM2={}".format(loss))
+        print("index{}".format(i))
+        print("acc{}".format(acc))
+        print("loss{}".format(loss))
         # Save the model
         save_model(model, current_path, timestamp, i)
     
