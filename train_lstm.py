@@ -222,11 +222,12 @@ if __name__ == "__main__":
     # If there are any remaining patients, add them to the last chunk
     if len(list_seq_params) % n_workers != 0:
         chunks[-1].extend(list_seq_params[len(chunks) * chunk_size:])
+    """
 
     # Run parallel extraction
     print("Running parallel extraction...")
     with multiprocessing.Pool(processes=n_workers) as pool:
-        results = pool.starmap(train_lstm_model, chunks)
+        results = pool.starmap(train_lstm_model, list_seq_params)
 
     for i, result in enumerate(results, 1):
         acc, loss, model, num_classes = result
@@ -235,8 +236,8 @@ if __name__ == "__main__":
         print("PARAM2={}".format(loss))
         # Save the model
         save_model(model, current_path, timestamp, i)
-    """
     
+    """
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
     print("Hyperparameters loaded")
     print(hyper_paramts_lstm)
@@ -247,3 +248,4 @@ if __name__ == "__main__":
     #print("PARAM1={}".format(acc))
     #print("PARAM2={}".format(loss))
     save_model(model, current_path, timestamp, 1)
+    """
