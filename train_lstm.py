@@ -172,10 +172,15 @@ if __name__ == "__main__":
         print("faltan hyperparametros")
         sys.exit(1)
         
-    timestamp = sys.argv[1]
-    current_path = sys.argv[2]
-    max_tokens = int(sys.argv[3])
-    max_len = int(sys.argv[4])
+    #timestamp = sys.argv[1]
+    #current_path = sys.argv[2]
+    #max_tokens = int(sys.argv[3])
+    #max_len = int(sys.argv[4])
+
+    timestamp = "20250408_144607"
+    current_path = "/home/pajaro/compu_Pipe_V3/"
+    max_tokens = 5000
+    max_len = 4
 
     d_filename = ["train", "test"]
     filename_train = d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
@@ -207,7 +212,8 @@ if __name__ == "__main__":
     print(type(list_seq_params))
     print(list_seq_params[0])
     print("list seq params loaded")
-
+    
+    """
     # Split the data into chunks for parallel processing
     chunk_size = len(list_seq_params) // n_workers
     print(f"Chunk size: {chunk_size}")
@@ -229,13 +235,15 @@ if __name__ == "__main__":
         print("PARAM2={}".format(loss))
         # Save the model
         save_model(model, current_path, timestamp, i)
-
-    #hyper_paramts_lstm = utils_general_porpose.load_json(current_path, "/models_parameters/hyper_params_lstm.json")
-    #print("Hyperparameters loaded")
-    #print(hyper_paramts_lstm)
-    #print(type(hyper_paramts_lstm))
+    """
+    current_path = "/home/pajaro/compu_Pipe_V3/"
+    hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
+    print("Hyperparameters loaded")
+    print(hyper_paramts_lstm)
+    print(type(hyper_paramts_lstm))
     
-    #acc, loss, model, num_classes = train_lstm_model(hyper_paramts_lstm)
+    acc, loss, model, num_classes = train_lstm_model(hyper_paramts_lstm[0])
+    print(acc, loss)
     #print("PARAM1={}".format(acc))
     #print("PARAM2={}".format(loss))
-    #save_model(model, current_path, timestamp)
+    save_model(model, current_path, timestamp, 1)

@@ -17,15 +17,16 @@ CURRENT_DATE="20250408_144607"
 echo "Current date: $CURRENT_DATE"
 
 # Define paths
-PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
-#PATH_DATA="/home/pajaro/compu_Pipe_V3/"
+#PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
+PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 MAX_TOKEN=1000
 MAX_LEN=4
 
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
 #p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
-srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
+#srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
+python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
 
 # Extract PARAM1 and PARAM2
 #param1=$(echo "$p_report" | grep '^PARAM1=' | cut -d'=' -f2)

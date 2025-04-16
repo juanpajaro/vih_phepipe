@@ -1,5 +1,5 @@
+[
 {
-  "num_features": 20000,
   "embedding_dim": 200,
   "block_layers": 1,
   "hidden_units": 64,
@@ -7,3 +7,4 @@
   "epochs": 10,
   "batch_size": 128
 }
+]
