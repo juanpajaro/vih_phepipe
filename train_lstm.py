@@ -96,10 +96,16 @@ def load_hyperparameters(path_h):
     return hyper_paramts_lstm
     
 #Function to train a lstm model    
-def train_lstm_model(hyper_paramts_lstm):
+def train_lstm_model(embedding_dim, 
+     block_layers,
+     units,
+     learning_rate,
+     epochs,
+     batch_size):
 
     #Get the hyperparameters from dictionary
     num_features = vocab_size_g
+    """
     (embedding_dim, 
      block_layers,
      units,
@@ -107,6 +113,7 @@ def train_lstm_model(hyper_paramts_lstm):
      epochs,
      batch_size
     ) = hyper_paramts_lstm
+    """
     
     # Verify that validation labels are in the same range as training labels.
     
