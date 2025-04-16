@@ -64,5 +64,19 @@ TRAIN_SIZE=0.8
 srun python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
+#RUN LSTM TRAINING STEP
+conda deactivate
+conda activate tf_envs_v2
+echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
+# Define paths
+PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
+#PATH_DATA="/home/pajaro/compu_Pipe_V3/"
+MAX_TOKEN=1000
+MAX_LEN=4
 
+# Run the model
+#p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
+#p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
+srun python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
+#python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
