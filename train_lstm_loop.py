@@ -7,8 +7,8 @@ import utils_build_models
 import utils_explore_data
 import numpy as np
 import sys
-import multiprocessing
-#import utils_train_models
+import utils_performance_analysis
+
 
 X_train_g = None
 y_train_g = None
@@ -241,6 +241,23 @@ if __name__ == "__main__":
         acc, loss, model, num_classes = train_lstm_model(list_seq_params[i])        
         print("acc {}".format(acc))
         print("loss {}".format(loss))
+        #Make predictions in training
+        y_pred_train = utils_performance_analysis.predict_values(model, X_train, num_classes)
+
+        #make predictions in test
+        y_pred_test = utils_performance_analysis.predict_values(model, X_test, num_classes)
+
+        #Get the metrics train
+        precision_train, recall_train, f1_train = utils_performance_analysis.get_model_metrics(y_train, y_pred_train, num_classes)
+        print("precision_train: {}".format(precision_train))
+        print("recall_train: {}".format(recall_train))
+        print("f1_train: {}".format(f1_train))
+
+        #Get the metrics test
+        precision_test, recall_test, f1_test = utils_performance_analysis.get_model_metrics(y_test, y_pred_test, num_classes)
+        print("precision_test: {}".format(precision_test))
+        print("recall_test: {}".format(recall_test))
+        print("f1_test: {}".format(f1_test))
         # Save the model
         save_model(model, current_path, timestamp, 0, acc, loss)
     
