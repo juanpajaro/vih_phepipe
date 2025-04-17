@@ -21,7 +21,7 @@ def save_model_info(now, dataset_name, num_classes, vectorize_technique, vectori
         #if the file does not exist, then create the file and add the header
         with open(path_save, mode='w') as file:
             writer = csv.writer(file)
-            writer.writerow(["date", "dataset_name", "num_classes", "vectorize_technique", "vectorization_hyperparameters", "path_vectorization", "model_name", "model_hyperparameters", "accuracy", "loss", "precision_train", "recall_train", "f1_train", "precision_test", "recall_test", "f1_test"])
+            writer.writerow(["date", "semantic_categories", "num_classes", "vectorize_technique", "vectorization_hyperparameters", "path_vectorization", "model_name", "model_hyperparameters", "accuracy", "loss", "precision_train", "recall_train", "f1_train", "precision_test", "recall_test", "f1_test"])
             writer.writerow([now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test])
 
 def read_analysis(path):

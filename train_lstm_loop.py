@@ -77,14 +77,31 @@ def get_X_test(vectorize_layer, x_test_s):
     global X_test_g
     X_test_g = X_test
 
-def get_vocab_size(vectorize_layer):
+def get_vocab_size(encoder):
     """
     Get the size of the vocabulary.
     """
-    vocab = np.array(encoder.get_vocabulary())
+    vocab = np.array(encoder.get_vocabulary())    
     vocab_size = len(vocab)
     global vocab_size_g
     vocab_size_g = vocab_size
+    return vocab
+
+def save_tokens(current_path, timestamp, vocab):
+    """
+    Save the tokens in a file.
+    """
+    path_save = os.path.join(current_path, "tokens")
+    path_tokens = os.path.join(path_save, timestamp)
+    path_token_save = utils_general_porpose.create_directory(path_tokens)
+
+    np.save(path_token_save + "/" + "X_train", X_train_g)
+    np.save(path_token_save + "/" + "X_test", X_test_g)
+    np.save(path_token_save + "/" + "y_train", y_train_g)
+    np.save(path_token_save + "/" + "y_test", y_test_g)
+    np.save(path_token_save + "/" + "vocab", vocab)
+
+    return path_token_save
 
 def load_hyperparameters(path_h):
     """
@@ -152,48 +169,35 @@ def train_lstm_model(h_dictionary):
     
     # Print results.
     history = history.history
-    
+
+
     return history['val_accuracy'][-1], history['val_loss'][-1], model, num_classes
 
-def save_model(model, current_path, timestamp, index=0, acc=None, loss=None):
+def save_model(model, current_path):
     # Crear el directorio de modelos si no existe
     path_save = os.path.join(current_path, "models")
-    path_save = utils_general_porpose.create_directory(path_save)
+    path_model_save = utils_general_porpose.create_directory(path_save)
+
+    #Get the list of models in the directory
+    list_models = utils_general_porpose.extract_name_model(path_model_save, ".keras")
+
+    #Get the last version of the model
+    last_version = utils_general_porpose.extract_last_version_model(list_models)
+
+    #Get the number of the new version
+    version = str(utils_general_porpose.counter_version(last_version))
 
     # Archivo de versiones
-    versions_file = os.path.join(path_save, "model_versions.txt")
+    model_name = "lstm_v" + version + ".keras"
+    model.save(path_save + "/" + model_name)
+    
+    return model_name
+    #path_save = current_path + "/" + "performance_report.csv"
+    #utils_performance_analysis.save_model_info(timestamp, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_save)
 
-    # Crear archivo con encabezado si no existe
-    if not os.path.exists(versions_file):
-        with open(versions_file, "w") as f:
-            f.write("date,version,name_model,acc,loss\n")
-
-    # Cargar versiones existentes para este timestamp
-    existing_indices = []
-    with open(versions_file, "r") as f:
-        next(f)  # saltar encabezado
-        for line in f:
-            ts, idx, *_ = line.strip().split(",")
-            if ts == timestamp:
-                existing_indices.append(int(idx))
-
-    # Calcular siguiente índice disponible
-    while index in existing_indices:
-        index += 1
-
-    # Definir nombre y ruta del modelo
-    model_filename = f"model_{timestamp}_{index}"
-    model_path = os.path.join(path_save, model_filename)
-
-    # Guardar el modelo
-    model.save(model_path)
-
-    # Registrar en archivo de versiones
-    with open(versions_file, "a") as f:
-        f.write(f"{timestamp},{index},{model_filename},{acc},{loss}\n")
-
+    
 if __name__ == "__main__":
-    if len(sys.argv) !=5:
+    if len(sys.argv) !=6:
         print("faltan hyperparametros")
         sys.exit(1)
         
@@ -201,6 +205,7 @@ if __name__ == "__main__":
     current_path = sys.argv[2]
     max_tokens = int(sys.argv[3])
     max_len = int(sys.argv[4])
+    semantic_cat = sys.argv[5]
 
     #timestamp = "20250408_144607"
     #current_path = "/home/pajaro/compu_Pipe_V3/"
@@ -209,22 +214,22 @@ if __name__ == "__main__":
 
     d_filename = ["train", "test"]
     filename_train = d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
+    print("path_train {}".format(filename_train))
     train = load_data(current_path, filename_train)
     train_string = get_data_to_tensor_string(train)    
     encoder = get_vectorized_layer(train_string, max_tokens, max_len)
     #vocab = np.array(encoder.get_vocabulary())    
     #print("Vocabulary size:", len(vocab))
-    get_vocab_size(encoder)
-    #print("Vocabulary size:", vocab_size_g)
+    vocab = get_vocab_size(encoder)
+    print("Vocabulary size:", vocab_size_g)
     get_X_train(encoder, train_string)    
     filename_test = d_filename[1] + "/" + d_filename[1] +"_" + timestamp + ".json"
     test = load_data(current_path, filename_test)
     #print(len(test))
     test_s = get_data_to_tensor_string(test)    
     get_X_test(encoder, test_s)
-
     get_labels(train, test)
-
+    path_token_save = save_tokens(current_path, timestamp, vocab)
     #load lstm hyperparameters
     filename_h = "models_parameters/list_hyper_params_lstm.json"
     list_seq_params = utils_general_porpose.load_json(current_path, filename_h)
@@ -236,30 +241,32 @@ if __name__ == "__main__":
     
     # Run parallel extraction
     print("Running lstm loop...")
-    for i in range(len(list_seq_params)):
+    for i in range(len(list_seq_params[:2])):
         print(list_seq_params[i])        
         acc, loss, model, num_classes = train_lstm_model(list_seq_params[i])        
         print("acc {}".format(acc))
         print("loss {}".format(loss))
         #Make predictions in training
-        y_pred_train = utils_performance_analysis.predict_values(model, X_train, num_classes)
+        y_pred_train = utils_performance_analysis.predict_values(model, X_train_g, num_classes)
 
         #make predictions in test
-        y_pred_test = utils_performance_analysis.predict_values(model, X_test, num_classes)
+        y_pred_test = utils_performance_analysis.predict_values(model, X_test_g, num_classes)
 
         #Get the metrics train
-        precision_train, recall_train, f1_train = utils_performance_analysis.get_model_metrics(y_train, y_pred_train, num_classes)
+        precision_train, recall_train, f1_train = utils_performance_analysis.get_model_metrics(y_train_g, y_pred_train, num_classes)
         print("precision_train: {}".format(precision_train))
         print("recall_train: {}".format(recall_train))
         print("f1_train: {}".format(f1_train))
 
         #Get the metrics test
-        precision_test, recall_test, f1_test = utils_performance_analysis.get_model_metrics(y_test, y_pred_test, num_classes)
+        precision_test, recall_test, f1_test = utils_performance_analysis.get_model_metrics(y_test_g, y_pred_test, num_classes)
         print("precision_test: {}".format(precision_test))
         print("recall_test: {}".format(recall_test))
         print("f1_test: {}".format(f1_test))
         # Save the model
-        save_model(model, current_path, timestamp, 0, acc, loss)
+        model_name = save_model(model, current_path)
+        path_pr_save = current_path + "/" + "performance_report.csv"
+        utils_performance_analysis.save_model_info(timestamp, semantic_cat, num_classes, "TextVectorize layer", {"max_tokens":max_tokens, "max_len":max_len}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save)
     
     """
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
