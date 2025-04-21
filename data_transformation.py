@@ -149,7 +149,7 @@ def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, 
     data = merge_and_clean_data(data_poli, data_sleep)
     data = load_and_merge_idcc_data(path_data, name_idcc, data)
     data, data_ehr = process_ehr_data(path_data, name_ehr_data, data, days_pw, days_ow)
-    save_dataset(data, "./cases_controls", "cases_controls", timestamp)
+    save_dataset(data, "./data_transformation", "data_t", timestamp)
     print("Cases_controls step finished successfully")
 
 # Ejecución del pipeline
