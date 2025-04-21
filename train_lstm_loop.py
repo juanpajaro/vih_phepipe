@@ -241,7 +241,7 @@ if __name__ == "__main__":
     
     # Run parallel extraction
     print("Running lstm loop...")
-    for i in range(len(list_seq_params[:2])):
+    for i in range(len(list_seq_params)):
         print(list_seq_params[i])        
         acc, loss, model, num_classes = train_lstm_model(list_seq_params[i])        
         print("acc {}".format(acc))
