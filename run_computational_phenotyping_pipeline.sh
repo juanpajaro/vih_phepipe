@@ -31,10 +31,10 @@ DAYSOW=730
 #Create folder for logs if it doesn't exist
 mkdir -p logs
 
-srun python3 data_transformation_pipeline.py "$PATH_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
+srun python3 data_transformation.py "$PATH_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
 
 # Define paths
-PATH_DATA_TRAIN="cases_controls/cases_controls_${CURRENT_DATE}.json"
+PATH_DATA_TRAIN="data_transformation/data_t_${CURRENT_DATE}.json"
 CURRENT_PATH="/zine/data/salud/compu_Pipe_V3/"
 #CURRENT_PATH="/home/pajaro/compu_Pipe_V3/"
 UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
@@ -52,7 +52,7 @@ LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
+srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 #python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 
 #RUN DATA SPLITTING STEP
@@ -61,7 +61,7 @@ PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 FILENAME="/concepts/clinical_concepts_${CURRENT_DATE}.json"
 TRAIN_SIZE=0.8
-srun python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
+srun python3 split_data.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
 #RUN LSTM TRAINING STEP

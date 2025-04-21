@@ -143,14 +143,14 @@ def save_dataset(data, directory, filename_prefix, timestamp):
     print(f"Dataset saved in JSON format: {json_path}")
 
 def main(path_data, name_poli_data, name_sleepS_data, name_idcc, name_ehr_data, days_pw, days_ow, timestamp):
-    """Pipeline principal para transformar los datos."""
+    print("Starting data transformation pipeline...")    
     data_poli = load_and_process_polisomnography_data(path_data, name_poli_data)
     data_sleep = load_and_process_sleep_study_data(path_data, name_sleepS_data)
     data = merge_and_clean_data(data_poli, data_sleep)
     data = load_and_merge_idcc_data(path_data, name_idcc, data)
     data, data_ehr = process_ehr_data(path_data, name_ehr_data, data, days_pw, days_ow)
-    save_dataset(data, "./data_transformation", "data_t", timestamp)
-    print("Cases_controls step finished successfully")
+    save_dataset(data, "./data_transformation", "data_t_", timestamp)
+    print("Dataset transformation step finished successfully")
 
 # Ejecución del pipeline
 if __name__ == "__main__":
