@@ -212,6 +212,8 @@ if __name__ == "__main__":
     #max_tokens = 5000
     #max_len = 4
 
+    print("Starting LSTM pipeline...")
+
     d_filename = ["train", "test"]
     filename_train = d_filename[0] + "/" + d_filename[0] + "_" + timestamp + ".json"
     print("path_train {}".format(filename_train))
@@ -280,3 +282,4 @@ if __name__ == "__main__":
     #print("PARAM2={}".format(loss))
     save_model(model, current_path, timestamp, 1)
     """
+    print("LSTM loop finished")
