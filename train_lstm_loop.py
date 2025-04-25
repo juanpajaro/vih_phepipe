@@ -8,6 +8,7 @@ import utils_explore_data
 import numpy as np
 import sys
 import utils_performance_analysis
+import datetime
 
 
 X_train_g = None
@@ -268,7 +269,9 @@ if __name__ == "__main__":
         # Save the model
         model_name = save_model(model, current_path)
         path_pr_save = current_path + "/" + "performance_report.csv"
-        utils_performance_analysis.save_model_info(timestamp, semantic_cat, num_classes, "TextVectorize layer", {"max_tokens":max_tokens, "max_len":max_len}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save)
+        #chage the format of the timestamp
+        timestamp_s = datetime.datetime.strptime(timestamp, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
+        utils_performance_analysis.save_model_info(timestamp_s, semantic_cat, num_classes, "TextVectorize layer", {"max_tokens":max_tokens, "max_len":max_len}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save)
     
     """
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
