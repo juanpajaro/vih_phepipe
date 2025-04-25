@@ -19,7 +19,7 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 #RUN DATA TRANSFORMATION STEP
 # Define paths
-PATH_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
+PATH_RAW_DATA="/zine/data/salud/computational_pipe_v2/raw_data/"
 #PATH_DATA="./raw_data/"
 NAME_POLI_DATA="fecha_cedula_clinica_suenio_may 31 2023.csv"
 NAME_SLEEP_DATA="base principal ajustada 11mayo2021.csv"
@@ -31,7 +31,7 @@ DAYSOW=730
 #Create folder for logs if it doesn't exist
 mkdir -p logs
 
-srun python3 data_transformation.py "$PATH_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
+srun python3 data_transformation.py "$PATH_RAW_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
 
 # Define paths
 PATH_DATA_TRAIN="data_transformation/data_t_${CURRENT_DATE}.json"
@@ -57,11 +57,11 @@ srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS
 
 #RUN DATA SPLITTING STEP
 # Define paths
-PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
+#PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 FILENAME="/concepts/clinical_concepts_${CURRENT_DATE}.json"
 TRAIN_SIZE=0.8
-srun python3 split_data.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
+srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
 #RUN LSTM TRAINING STEP
@@ -70,7 +70,7 @@ conda activate tf_envs_v2
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 # Define paths
-PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
+#PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 MAX_TOKEN=1000
 MAX_LEN=4
@@ -78,5 +78,5 @@ MAX_LEN=4
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
 #p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
-srun python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING"
+srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING"
 #python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
