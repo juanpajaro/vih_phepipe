@@ -21,6 +21,6 @@ dependencies:
   - spacy
   - wheel
   - pip
-  - pip:
-    - tensorflow==2.15.0
+  - tensorflow==2.16.1
+  - pip:    
     - shap
