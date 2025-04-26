@@ -180,7 +180,7 @@ def save_model(model, current_path):
     path_model_save = utils_general_porpose.create_directory(path_save)
 
     #Get the list of models in the directory
-    list_models = utils_general_porpose.extract_name_model(path_model_save, ".keras")
+    list_models = utils_general_porpose.extract_name_model(path_model_save, ".h5")
 
     #Get the last version of the model
     last_version = utils_general_porpose.extract_last_version_model(list_models)
@@ -189,7 +189,7 @@ def save_model(model, current_path):
     version = str(utils_general_porpose.counter_version(last_version))
 
     # Archivo de versiones
-    model_name = "lstm_v" + version + ".keras"
+    model_name = "lstm_v" + version + ".h5"
     model.save(path_save + "/" + model_name)
     
     return model_name
@@ -244,7 +244,7 @@ if __name__ == "__main__":
     
     # Run parallel extraction
     print("Running lstm loop...")
-    for i in range(len(list_seq_params)):
+    for i in range(len(list_seq_params[:2])):
         print(list_seq_params[i])        
         acc, loss, model, num_classes = train_lstm_model(list_seq_params[i])        
         print("acc {}".format(acc))
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         path_pr_save = current_path + "/" + "performance_report.csv"
         #chage the format of the timestamp
         timestamp_s = datetime.datetime.strptime(timestamp, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-        utils_performance_analysis.save_model_info(timestamp_s, semantic_cat, num_classes, "TextVectorize layer", {"max_tokens":max_tokens, "max_len":max_len}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save)
+        utils_performance_analysis.save_model_info(timestamp_s, semantic_cat, num_classes, "TextVectorize layer", {"max_tokens":max_tokens, "max_len":max_len, "vectorize_technique":"other-sequence"}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save)
     
     """
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")

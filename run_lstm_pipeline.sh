@@ -17,8 +17,8 @@ CURRENT_DATE="20250408_144607"
 echo "Current date: $CURRENT_DATE"
 
 # Define paths
-PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
-#PATH_DATA="/home/pajaro/compu_Pipe_V3/"
+#PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
+PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 MAX_TOKEN=1000
 MAX_LEN=4
 LISTA_CAT=("Disease or Syndrome")
