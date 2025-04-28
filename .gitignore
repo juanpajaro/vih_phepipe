@@ -87,3 +87,4 @@ test/
 train/
 tf_envs/
 tokens/
+!colab_vocab.ipynb
