@@ -9,7 +9,7 @@ import numpy as np
 import sys
 import utils_performance_analysis
 import datetime
-
+import pickle
 
 X_train_g = None
 y_train_g = None
@@ -42,7 +42,6 @@ def get_labels(train, test):
     global y_test_g
     y_test_g = y_test
     
-
 def get_data_to_tensor_string(data):
     """
     Convert the entire dataset to tensors.
@@ -66,6 +65,7 @@ def get_vectorized_layer(X_train, max_tokens, max_len):
         output_mode='int',
         output_sequence_length=max_len)
     vectorize_layer.adapt(X_train)
+    
     return vectorize_layer
 
 def get_X_train(vectorize_layer, x_train_s):
@@ -101,8 +101,14 @@ def save_tokens(current_path, timestamp, vocab):
     np.save(path_token_save + "/" + "y_train", y_train_g)
     np.save(path_token_save + "/" + "y_test", y_test_g)
     np.save(path_token_save + "/" + "vocab", vocab)
-
+    
     return path_token_save
+
+#Function to save a pickle object in a file
+def save_pickle_file(obj, path):
+    with open(path, 'wb') as handle:
+        pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    return path
 
 def load_hyperparameters(path_h):
     """
@@ -221,6 +227,7 @@ if __name__ == "__main__":
     train = load_data(current_path, filename_train)
     train_string = get_data_to_tensor_string(train)    
     encoder = get_vectorized_layer(train_string, max_tokens, max_len)
+        
     #vocab = np.array(encoder.get_vocabulary())    
     #print("Vocabulary size:", len(vocab))
     vocab = get_vocab_size(encoder)
@@ -233,6 +240,8 @@ if __name__ == "__main__":
     get_X_test(encoder, test_s)
     get_labels(train, test)
     path_token_save = save_tokens(current_path, timestamp, vocab)
+    save_pickle_file(encoder, path_token_save + "/" + "tokenizer_obj.pkl")
+
     #load lstm hyperparameters
     filename_h = "models_parameters/list_hyper_params_lstm.json"
     list_seq_params = utils_general_porpose.load_json(current_path, filename_h)
