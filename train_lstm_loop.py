@@ -240,7 +240,7 @@ if __name__ == "__main__":
     get_X_test(encoder, test_s)
     get_labels(train, test)
     path_token_save = save_tokens(current_path, timestamp, vocab)
-    save_pickle_file(encoder, path_token_save + "/" + "tokenizer_obj.pkl")
+    #save_pickle_file(encoder, path_token_save + "/" + "tokenizer_obj.pkl")
 
     #load lstm hyperparameters
     filename_h = "models_parameters/list_hyper_params_lstm.json"
