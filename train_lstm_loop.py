@@ -62,10 +62,12 @@ def get_vectorized_layer(X_train, max_tokens, max_len):
     vectorize_layer = TextVectorization(
         max_tokens=max_tokens,
         standardize=None,
-        output_mode='int',
-        output_sequence_length=max_len)
-    vectorize_layer.adapt(X_train)
+        #output_mode='int',
+        output_sequence_length=max_len,
+        dtype=tf.int32)
     
+    vectorize_layer.adapt(X_train)
+
     return vectorize_layer
 
 def get_X_train(vectorize_layer, x_train_s):
@@ -227,6 +229,7 @@ if __name__ == "__main__":
     train = load_data(current_path, filename_train)
     train_string = get_data_to_tensor_string(train)    
     encoder = get_vectorized_layer(train_string, max_tokens, max_len)
+    #encoder.adapt(train_string)
         
     #vocab = np.array(encoder.get_vocabulary())    
     #print("Vocabulary size:", len(vocab))
@@ -240,7 +243,7 @@ if __name__ == "__main__":
     get_X_test(encoder, test_s)
     get_labels(train, test)
     path_token_save = save_tokens(current_path, timestamp, vocab)
-    #save_pickle_file(encoder, path_token_save + "/" + "tokenizer_obj.pkl")
+    save_pickle_file(encoder, path_token_save + "/" + "tokenizer_obj.pkl")
 
     #load lstm hyperparameters
     filename_h = "models_parameters/list_hyper_params_lstm.json"
