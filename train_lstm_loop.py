@@ -63,8 +63,8 @@ def get_vectorized_layer(X_train, max_tokens, max_len):
         max_tokens=max_tokens,
         standardize=None,
         #output_mode='int',
-        output_sequence_length=max_len,
-        dtype="int32")
+        output_sequence_length=max_len)
+        #dtype="int32")
     
     vectorize_layer.adapt(X_train)
 
