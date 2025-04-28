@@ -106,11 +106,25 @@ def save_tokens(current_path, timestamp, vocab):
     
     return path_token_save
 
-#Function to save a pickle object in a file
-def save_pickle_file(obj, path):
-    with open(path, 'wb') as handle:
-        pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    return path
+def guardar_text_vectorization(vectorizer, ruta_archivo):
+    """
+    Guarda un objeto TextVectorization serializando su configuración y pesos.
+
+    Parámetros:
+    - vectorizer: instancia de TextVectorization.
+    - ruta_archivo (str): ruta donde se guardará el archivo pickle.
+    """
+    config = vectorizer.get_config()
+    weights = vectorizer.get_weights()
+    
+    # Guardamos el config y pesos juntos
+    serializable = {
+        'config': config,
+        'weights': weights
+    }
+    
+    with open(ruta_archivo, 'wb') as f:
+        pickle.dump(serializable, f)
 
 def load_hyperparameters(path_h):
     """
@@ -243,7 +257,7 @@ if __name__ == "__main__":
     get_X_test(encoder, test_s)
     get_labels(train, test)
     path_token_save = save_tokens(current_path, timestamp, vocab)
-    save_pickle_file(encoder, path_token_save + "/" + "tokenizer_obj.pkl")
+    guardar_text_vectorization(encoder, path_token_save + "/" + "vectorizer_obj.pkl")
 
     #load lstm hyperparameters
     filename_h = "models_parameters/list_hyper_params_lstm.json"
