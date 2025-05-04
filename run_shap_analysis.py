@@ -223,8 +223,9 @@ def run_shap_analysis(
         folder=folder,
         model_path=os.path.join(folder, model_name),
         vectorizer_path=assets[0],
-        vectorization_hyperparameters=ModelWrapper.parse_parameters(record["vectorization_hyperparameters"]),
-        model_hyperparameters=ModelWrapper.parse_parameters(record["model_hyperparameters"]),
+        vectorizer_technique=record["vectorize_technique"],
+        vectorization_hyperparameters=record["vectorization_hyperparameters"],
+        model_hyperparameters=record["model_hyperparameters"],
         sequences_path=assets[1],
         reverse_sequences=not no_reverse_sequences,
     )

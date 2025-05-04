@@ -1,5 +1,6 @@
 import enum
 import os
+import pickle
 from typing import Any, Optional
 
 import numpy as np
@@ -25,7 +26,7 @@ class ModelType(enum.Enum):
 class VectorizeTechnique(enum.Enum):
     N_GRAM = "n-gram"
     SEQUENCE = "sequence"
-    OTHER_SEQUENCE = "other-sequence"
+    KERAS_VECTORIZER = "keras-vectorizer"
 
 
 class ModelWrapper(AbstractWrapper):
@@ -40,8 +41,8 @@ class ModelWrapper(AbstractWrapper):
     has_preloaded_sequences: Optional[bool] = False
     reverse_sequences: bool = False
 
-    vectorizer: Optional[Any] = None  # instance of keras sequencer
-    vectorizer_type: Optional[VectorizeTechnique] = None
+    vectorizer: Optional[Any] = None  # instance of keras sequencer or TextVectorization
+    vectorizer_technique: Optional[VectorizeTechnique] = None
     vectorizer_path: Optional[str]
     vectorization_hyperparameters: Optional[Any]
 
@@ -60,22 +61,28 @@ class ModelWrapper(AbstractWrapper):
     def sequences_path_validator(cls, value: Optional[str]):
         return cls.path_validator(value, "sequences")
 
+    @field_validator("vectorizer_technique", mode="before")
+    def vectorize_technique_validator(cls, value: Optional[str]):
+        match value:
+            case VectorizeTechnique.N_GRAM.value:
+                return VectorizeTechnique.N_GRAM
+
+            case VectorizeTechnique.SEQUENCE.value:
+                return VectorizeTechnique.SEQUENCE
+
+            case VectorizeTechnique.KERAS_VECTORIZER.value:
+                return VectorizeTechnique.KERAS_VECTORIZER
+
+            case _:
+                raise AIXInvalidVectorTypeError("not recognized vectorization technique: '{}'".format(value))
+
     @field_validator("vectorization_hyperparameters", mode="before")
     def vectorization_hyperparameters_validator(cls, value: Optional[str]):
-        allowed_values = [
-            VectorizeTechnique.N_GRAM.value,
-            VectorizeTechnique.SEQUENCE.value,
-            VectorizeTechnique.OTHER_SEQUENCE.value,
-        ]
-        if not value["vectorize_technique"]:
-            return value
+        return cls.parse_parameters(value)
 
-        if value["vectorize_technique"] not in allowed_values:
-            raise AIXInvalidVectorTypeError(
-                "not recognized vectorization technique: '{}'".format(value["vectorize_technique"])
-            )
-
-        return value
+    @field_validator("model_hyperparameters", mode="before")
+    def model_hyperparameters_validator(cls, value: Optional[str]):
+        return cls.parse_parameters(value)
 
     def transform(self, x):
         """
@@ -94,11 +101,11 @@ class ModelWrapper(AbstractWrapper):
         if self.vectorizer == None:
             raise AIXVectorizerNotFoundError(f"vectorizer not instantiated for {self.name}")
 
-        if self.vectorizer_type == VectorizeTechnique.N_GRAM:
+        if self.vectorizer_technique == VectorizeTechnique.N_GRAM:
             transformed = self.vectorizer.transform(x)
             return np.array(transformed.toarray())
 
-        elif self.vectorizer_type == VectorizeTechnique.SEQUENCE:
+        elif self.vectorizer_technique == VectorizeTechnique.KERAS_VECTORIZER:
             return self.vectorizer(x)
 
         return x
@@ -119,7 +126,7 @@ class ModelWrapper(AbstractWrapper):
         if self.model == None:
             return None
 
-        match self.vectorizer_type:
+        match self.vectorizer_technique:
 
             case VectorizeTechnique.N_GRAM:
                 transformed = self.vectorizer.transform(x)
@@ -128,52 +135,17 @@ class ModelWrapper(AbstractWrapper):
             case VectorizeTechnique.SEQUENCE:
                 transformed = self.vectorizer(x)
 
-            case VectorizeTechnique.OTHER_SEQUENCE:
-                transformed = keras.utils.pad_sequences(
-                    self.vectorizer.texts_to_sequences(x),
-                    maxlen=self.vectorization_hyperparameters["MAX_SEQUENCE_LENGTH"],
-                    dtype="int32",
-                    padding="pre",
-                    truncating="pre",
-                    value=0,
-                )
+            case VectorizeTechnique.KERAS_VECTORIZER:
+                transformed = self.vectorizer(x)
 
             case _:
                 transformed = x
 
         return self.model.predict(transformed).flatten()
 
-    def build_new_vectorizer(self, x):
-        if self.vectorizer is not None:
-            return
-
-        match self.vectorization_hyperparameters["vectorize_technique"]:
-
-            case VectorizeTechnique.N_GRAM.value:
-                self.vectorizer = sklearn.feature_extraction.text.TfidfVectorizer(
-                    analyzer=self.vectorization_hyperparameters["TOKEN_MODE"],
-                    min_df=self.vectorization_hyperparameters["MIN_DOCUMENT_FREQUENCY"],
-                    ngram_range=self.vectorization_hyperparameters["NGRAM_RANGE"],
-                    max_features=self.vectorization_hyperparameters["TOP_K"],
-                )
-                self.vectorizer_type = VectorizeTechnique.N_GRAM
-                self.vectorizer.fit_transform(x)
-
-            case VectorizeTechnique.SEQUENCE.value:
-                self.vectorizer = keras.layers.TextVectorization(
-                    standardize="lower_and_strip_punctuation",
-                    pad_to_max_tokens=True,
-                    max_tokens=self.vectorization_hyperparameters["TOP_K"],
-                    output_sequence_length=self.vectorization_hyperparameters["MAX_SEQUENCE_LENGTH"],
-                )
-                self.vectorizer_type = VectorizeTechnique.SEQUENCE
-                self.vectorizer.adapt(x)
-
-            case _:
-                self.vectorizer_type = VectorizeTechnique.OTHER_SEQUENCE
-
     def build_model(self):
         self.model_builded = False
+
         if not os.path.exists(self.model_path):
             raise AIXModelNotFoundError("model file do not exist: '{}'".format(self.model_path))
 
@@ -183,11 +155,24 @@ class ModelWrapper(AbstractWrapper):
         except Exception:
             raise AIXVectorizerNotFoundError("vectorizer file do not exist: '{}'".format(self.model_path))
 
-        match self.vectorization_hyperparameters["vectorize_technique"]:
+        self._load_sequences()
+        self.model_builded = True
 
-            case VectorizeTechnique.N_GRAM.value:
-                self.vectorizer_type = VectorizeTechnique.N_GRAM
-                self.sequences = self.load(self.sequences_path)
+    def _load_sequences(self):
+        # Determine file type and load sequences
+        if self.sequences_path.endswith(".npy"):
+            sequences = np.load(self.sequences_path)
+        elif self.sequences_path.endswith(".pkl"):
+            with open(self.sequences_path, "rb") as f:
+                sequences = pickle.load(f)
+        else:
+            raise AIXSequencesError(
+                f"Unsupported file format: {self.sequences_path}. " "Only .npy and .pkl files are supported"
+            )
+
+        match self.vectorizer_technique:
+            case VectorizeTechnique.N_GRAM:
+                self.sequences = sequences
 
                 if type(self.sequences).__name__ == "csr_matrix":
                     raise AIXSequencesError(
@@ -196,20 +181,31 @@ class ModelWrapper(AbstractWrapper):
                         )
                     )
 
-            case VectorizeTechnique.SEQUENCE.value:
-                self.vectorizer_type = VectorizeTechnique.SEQUENCE
-                self.sequences = self.load(self.sequences_path)
+            case VectorizeTechnique.SEQUENCE:
+                self.sequences = sequences
 
-            case VectorizeTechnique.OTHER_SEQUENCE.value:
-                self.vectorizer_type = VectorizeTechnique.OTHER_SEQUENCE
-                self.sequences = self.load(self.sequences_path)
-                self.sequences = np.array(self.sequences)
+                if self.reverse_sequences:
+                    self.sequences = self._reverse_sequences(self.sequences)
 
-            case _:
-                raise AIXInvalidVectorTypeError(
-                    "not recognized vectorization technique: '{}'".format(
-                        self.vectorization_hyperparameters["vectorize_technique"]
-                    )
-                )
+            case VectorizeTechnique.KERAS_VECTORIZER:
+                self.sequences = np.array(sequences)
 
-        self.model_builded = True
+                config, weights = self.vectorizer["config"], self.vectorizer["weights"]
+                self.vectorizer = keras.layers.TextVectorization.from_config(config)
+                self.vectorizer.set_weights(weights)
+
+                if self.reverse_sequences:
+                    self.sequences = self._reverse_sequences(self.sequences)
+
+    def _reverse_sequences(self, sequences):
+        if not hasattr(self.vectorizer, "get_vocabulary"):
+            return sequences
+
+        vocab = self.vectorizer.get_vocabulary()
+        reversed_sequences = []
+
+        for seq in sequences:
+            words = [vocab[idx] for idx in seq if idx > 0 and idx < len(vocab)]
+            reversed_sequences.append(" ".join(words))
+
+        return np.array(reversed_sequences)
