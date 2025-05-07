@@ -74,7 +74,7 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 MAX_TOKEN=1000
-MAX_LEN=4
+MAX_LEN=30
 
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
