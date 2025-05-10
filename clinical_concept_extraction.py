@@ -74,7 +74,7 @@ def extract_concepts(patients_list):
                 list_codes.append(ent.label_)                
                 dictionary_entities[ent.label_] = "_".join(entity)
             
-            elif ent._.description != "":
+            elif ent._.description != "" and "icd" in cat_semantic:
                 #print(ent._.Diagnostic)
                 entity = ent._.description.split()
                 list_entities.append("_".join(entity))
