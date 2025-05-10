@@ -12,7 +12,7 @@ TOKENIZER=vectorizer_obj.pkl
 DATA_TEST=X_test.npy
 
 
-conda activate shap_V20
+conda activate shap_v20
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 srun python3 run_shap_analysis.py $NAME_MODEL -t $TOKENIZER -se $DATA_TEST
