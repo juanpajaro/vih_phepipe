@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=feature
 #SBATCH --output=logs/fa_out_%j.txt
-#SBATCH --error=logs/fa_err%j.txt
+#SBATCH --error=logs/fa_err_%j.txt
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
@@ -11,7 +11,7 @@ NAME_MODEL=lstm_v64.h5
 TOKENIZER=vectorizer_obj.pkl
 DATA_TEST=X_test.npy
 
-
+source /zine/apps/anaconda_salud/etc/profile.d/conda.sh
 conda activate shap_v20
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
