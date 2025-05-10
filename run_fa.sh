@@ -16,4 +16,3 @@ conda activate shap_v20
 echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 
 srun python3 run_shap_analysis.py $NAME_MODEL -t $TOKENIZER -se $DATA_TEST -f
-
