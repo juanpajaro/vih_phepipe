@@ -41,8 +41,8 @@ UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-#LISTA_CAT=("Disease or Syndrome")
-LISTA_CAT=None
+LISTA_CAT=("Disease or Syndrome")
+#LISTA_CAT=None
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
