@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=cp
+#SBATCH --job-name=feature
 #SBATCH --output=logs/fa_out_%j.txt
 #SBATCH --error=logs/fa_err%j.txt
 #SBATCH --ntasks=1
