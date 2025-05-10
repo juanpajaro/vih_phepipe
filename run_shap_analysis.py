@@ -47,10 +47,11 @@ ERROR_MESSAGE_TEMPLATE = "ERROR: {}"
 #     max_features_num (int): Number of top features to display in the analysis report.
 #     default_record (int): Index of the record to be used for local feature importance analysis.
 #     no_reverse_sequences (bool): If True, sequences will not be reversed. Default is False, meaning sequences are reversed by default.
+#     clean_sequences (bool): If True, empty sequences will be cleaned. Default is True, meaning empty sequences are cleaned by default.
 
 # Examples:
 #     python run_shap_analysis.py my_model.h5 --default-record 5 --max-features-num 15
-
+#     python run_shap_analysis.py my_model.h5 --clean-sequences --no-reverse-sequences
 
 # This command will execute SHAP analysis on 'my_model.h5', performing local analysis on record number 5 and displaying the top 15 important features.
 #
@@ -126,6 +127,14 @@ ERROR_MESSAGE_TEMPLATE = "ERROR: {}"
     default=False,
     help="Do not reverse sequences. (default: reverse sequences)",
 )
+@click.option(
+    "-cs",
+    "--clean-sequences",
+    is_flag=True,
+    flag_value=True,
+    default=True,
+    help="Clean empty sequences. (default: True)",
+)
 def run_shap_analysis(
     model_name,
     tokenizer_name,
@@ -139,6 +148,7 @@ def run_shap_analysis(
     max_features_num,
     default_record,
     no_reverse_sequences,
+    clean_sequences,
 ):
     """
     Execute SHAP analysis on a specified machine learning model.
@@ -169,9 +179,11 @@ def run_shap_analysis(
         max_features_num (int): Number of top features to display in the analysis report.
         default_record (int): Index of the record to be used for local feature importance analysis.
         no_reverse_sequences (bool): If True, sequences will not be reversed. Default is False, meaning sequences are reversed by default.
+        clean_sequences (bool): If True, empty sequences will be cleaned. Default is True, meaning empty sequences are cleaned by default.
 
     Examples:
         python run_shap_analysis.py my_model.h5 --default-record 5 --max-features-num 15
+        python run_shap_analysis.py my_model.h5 --clean-sequences --no-reverse-sequences
 
     This command will execute SHAP analysis on 'my_model.h5', performing local analysis on record number 5 and displaying the top 15 important features.
     """
@@ -228,6 +240,7 @@ def run_shap_analysis(
         model_hyperparameters=record["model_hyperparameters"],
         sequences_path=assets[1],
         reverse_sequences=not no_reverse_sequences,
+        clean_empty_sequences=clean_sequences,
     )
 
     try:
