@@ -45,7 +45,7 @@ SIMILARITY_THRESHOLD=0.8
 LISTA_CAT=("Disease or Syndrome")
 #LISTA_CAT=("icd_10", "Disease or Syndrome", "Sign or Symptom")
 #LISTA_CAT=None
-#DICTIONARY_ICD_LOCAL="icd"
+DICTIONARY_ICD_LOCAL="icd"
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
