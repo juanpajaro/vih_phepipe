@@ -6,6 +6,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
+##SBATCH -w hpc02-w002
 
 # Get the current date and time
 CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
@@ -41,7 +42,8 @@ UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-LISTA_CAT=("icd_10", "Disease or Syndrome", "Sign or Symptom")
+LISTA_CAT=("icd_10")
+#LISTA_CAT=("icd_10", "Disease or Syndrome", "Sign or Symptom")
 #LISTA_CAT=None
 
 # Convierte la lista en una cadena separada por comas
