@@ -10,7 +10,7 @@ import utils_split_dataset
 clinical_pipe = None
 cat_semantic = None
 
-def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat):
+def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat, dic_local):
     # Load the data
     data_train = utils_general_porpose.load_json(current_path, path_data_train)
     
@@ -33,6 +33,10 @@ def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, l
     global cat_semantic
     cat_semantic = lista_cat
     print("Category semantic initialized.")
+
+    global dic_local_g
+    dic_local_g = dic_local
+    print("Dictionary ICD local initialized.")
 
     return patients_maxLength
 
@@ -74,7 +78,7 @@ def extract_concepts(patients_list):
                 list_codes.append(ent.label_)                
                 dictionary_entities[ent.label_] = "_".join(entity)
             
-            elif ent._.description != "" and '{"icd"}' in cat_semantic:
+            elif ent._.description != "" and dic_local_g==True:
                 #print(ent._.Diagnostic)
                 #print(ent._.description)
                 #print(ent._.cui_code)
@@ -116,7 +120,7 @@ def save_data(patients_seq, dictionary_entities, current_path, timestamp):
         utils_general_porpose.save_json(dictionary_entities, path_entities)
         
 if __name__ == "__main__":
-    if len(sys.argv) != 9:
+    if len(sys.argv) != 10:
         print("Usage: python clinical_concept_extraction_pipeline.py <path_data_train> <current_path> <umlstoicd_path> <qumls_path> <num_processes>")
         sys.exit(1)
 
@@ -128,6 +132,7 @@ if __name__ == "__main__":
     timestamp = sys.argv[6]
     simi = float(sys.argv[7])
     lista_tipos_semanticos = sys.argv[8].split(",")
+    dic_local = sys.argv[9]
     
     #Example local paths
     """
@@ -149,7 +154,7 @@ if __name__ == "__main__":
     print(f"Using {n_workers} workers...")
 
     # Load data
-    patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat)
+    patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat, dic_local)
     print("Data loaded.")
 
     # Split the data into chunks for parallel processing

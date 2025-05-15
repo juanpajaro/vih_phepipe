@@ -270,8 +270,7 @@ def buscar_terminos_en_diccionario(lista_terminos):
     "T046": "Pathologic Function",
     "T048": "Mental or Behavioral Dysfunction",
     "T034": "Laboratory or Test Result",
-    "T037": "Injury or Poisoning",
-    "icd": "icd_10"
+    "T037": "Injury or Poisoning",    
     }
 
 
