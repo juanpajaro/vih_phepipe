@@ -220,7 +220,7 @@ def save_model(model, current_path):
 
     
 if __name__ == "__main__":
-    if len(sys.argv) !=6:
+    if len(sys.argv) !=7:
         print("faltan hyperparametros")
         sys.exit(1)
         
@@ -229,6 +229,10 @@ if __name__ == "__main__":
     max_tokens = int(sys.argv[3])
     max_len = int(sys.argv[4])
     semantic_cat = sys.argv[5]
+    dic_local = sys.argv[6]
+
+    semantic_cat.append(dic_local)
+    print("semantic categories {}".format(semantic_cat))
 
     #timestamp = "20250408_144607"
     #current_path = "/home/pajaro/compu_Pipe_V3/"
