@@ -42,8 +42,8 @@ UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-#LISTA_CAT=("icd_10")
-LISTA_CAT=(""Disease or Syndrome"")
+LISTA_CAT=("icd_10")
+#LISTA_CAT=("Disease or Syndrome")
 #LISTA_CAT=("icd_10", "Disease or Syndrome", "Sign or Symptom")
 #LISTA_CAT=None
 
