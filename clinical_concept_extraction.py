@@ -9,6 +9,7 @@ import utils_split_dataset
 # Global clinical pipeline
 clinical_pipe = None
 cat_semantic = None
+dic_local_g = None
 
 def load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat, dic_local):
     # Load the data
@@ -48,7 +49,7 @@ def extract_concepts(patients_list):
     #print("lista_cat_semantic: ", cat_semantic)
     #print(type(cat_semantic))
 
-    for patient in patients_list:
+    for patient in patients_list[:100]:
         id_cliente = patient.get("id_cliente")
         label = patient.get("label")
         seq = patient.get("seq")        
