@@ -79,7 +79,7 @@ def extract_concepts(patients_list):
                 list_codes.append(ent.label_)                
                 dictionary_entities[ent.label_] = "_".join(entity)
             
-            elif ent._.description != "" and dic_local_g==True:
+            elif ent._.description != "" and dic_local_g=="icd":
                 #print(ent._.Diagnostic)
                 #print(ent._.description)
                 #print(ent._.cui_code)
@@ -148,6 +148,7 @@ if __name__ == "__main__":
 
     lista_cat = utils_clinical_concept_extraction.buscar_terminos_en_diccionario(lista_tipos_semanticos)
     print("list of semantic type included: ", lista_cat)
+    print("dic_local: ", dic_local)
 
     #print("lista_cat: ", lista_cat)
     

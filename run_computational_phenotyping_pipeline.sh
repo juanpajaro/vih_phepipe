@@ -45,7 +45,7 @@ SIMILARITY_THRESHOLD=0.8
 #LISTA_CAT=("Disease or Syndrome")
 #LISTA_CAT=("icd_10", "Disease or Syndrome", "Sign or Symptom")
 #LISTA_CAT=None
-DICTIONARY_ICD_LOCAL=True
+DICTIONARY_ICD_LOCAL="icd"
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
@@ -56,7 +56,7 @@ LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" $DICTIONARY_ICD_LOCAL
+srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
 #python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 
 #RUN DATA SPLITTING STEP
