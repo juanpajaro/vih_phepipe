@@ -24,7 +24,7 @@ vectors/
 vectorized_data/
 performance_report_old.csv
 dataset/
-*performance_report.csv
+performance_report.csv
 verification_report.csv
 condaVenv/
 colab_early_disease_transformation_old.ipynb
