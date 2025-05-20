@@ -99,8 +99,10 @@ def extract_concepts(patients_list):
         macthed_inc = [word for word in list_entities if any(term in word for term in terms)]
         if len(macthed_inc) > 0:
             inc_patient = {"id_cliente":id_cliente, "label":label, "entities":list_entities_str, "codes":list_codes_str}
+            incosistencies.append(inc_patient)
         else:
             dict_patient = {"id_cliente":id_cliente, "label":label, "entities":list_entities_str, "codes":list_codes_str}
+            patients_seq.append(dict_patient)
             
             #print("id_cliente: ", id_cliente)
             #print("label: ", label)
@@ -108,8 +110,8 @@ def extract_concepts(patients_list):
             #print("list_entities: ", list_entities)
             #print("list_codes: ", list_codes)
         
-        incosistencies.append(inc_patient)        
-        patients_seq.append(dict_patient)
+                
+        
 
     #print("clinical concepts extracted")
     return patients_seq, dictionary_entities, incosistencies
