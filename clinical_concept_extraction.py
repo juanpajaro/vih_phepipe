@@ -46,6 +46,7 @@ def extract_concepts(patients_list):
     # Extract clinical concepts
     patients_seq = []
     dictionary_entities = {}
+    incosistencies = []
     #print("lista_cat_semantic: ", cat_semantic)
     #print(type(cat_semantic))
 
@@ -94,13 +95,26 @@ def extract_concepts(patients_list):
         list_codes_str = " ".join(list_codes)
             #print(list_codes_str)
 
-        dict_patient = {"id_cliente":id_cliente, "label":label, "entities":list_entities_str, "codes":list_codes_str}
+        terms = ["apnea"]
+        macthed_inc = [word for word in list_entities if any(term in word for term in terms)]
+        if len(macthed_inc) > 0:
+            inc_patient = {"id_cliente":id_cliente, "label":label, "entities":list_entities_str, "codes":list_codes_str}
+        else:
+            dict_patient = {"id_cliente":id_cliente, "label":label, "entities":list_entities_str, "codes":list_codes_str}
+            
+            #print("id_cliente: ", id_cliente)
+            #print("label: ", label)
+            #print("seq: ", seq)
+            #print("list_entities: ", list_entities)
+            #print("list_codes: ", list_codes)
+        
+        incosistencies.append(inc_patient)        
         patients_seq.append(dict_patient)
 
     #print("clinical concepts extracted")
-    return patients_seq, dictionary_entities
+    return patients_seq, dictionary_entities, incosistencies
     
-def save_data(patients_seq, dictionary_entities, current_path, timestamp):
+def save_data(patients_seq, dictionary_entities, current_path, timestamp, incosistencies):
 #save the dataset
     path_save = current_path + "/concepts/"
     path_save = utils_general_porpose.create_directory(path_save)
@@ -119,6 +133,9 @@ def save_data(patients_seq, dictionary_entities, current_path, timestamp):
         #save the dictionary of entities
         path_entities = path_save + "dictionary_concepts_" + timestamp + ".json"
         utils_general_porpose.save_json(dictionary_entities, path_entities)
+        #save the inconsistencies
+        path_incosistencies = path_save + "inconsistencies_" + timestamp + ".json"
+        utils_general_porpose.save_json(incosistencies, path_incosistencies)
         
 if __name__ == "__main__":
     if len(sys.argv) != 10:
@@ -158,7 +175,7 @@ if __name__ == "__main__":
     # Load data
     patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat, dic_local)
     print("Data loaded.")
-    #patients_maxLength = patients_maxLength[:100]
+    patients_maxLength = patients_maxLength[:100]
 
     # Split the data into chunks for parallel processing
     chunk_size = len(patients_maxLength) // n_workers
@@ -181,15 +198,17 @@ if __name__ == "__main__":
     # Merging results from multiprocessing
     patient_seq = []
     dictionary_entities = {}
+    incosistencies = []
     for result in results:
         if result:
-            seq, entities = result[0], result[1]
+            seq, entities, inco = result[0], result[1], result[2]
             patient_seq.extend(seq)
             dictionary_entities.update(entities)
+            incosistencies.extend(inco)
             
     # Save data
     print("Saving data...")
-    save_data(patient_seq, dictionary_entities, current_path, timestamp)
+    save_data(patient_seq, dictionary_entities, current_path, timestamp, incosistencies)
     print("Extraction clinical concept execution completed.")
 
     
