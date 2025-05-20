@@ -27,7 +27,7 @@ NAME_SLEEP_DATA="base principal ajustada 11mayo2021.csv"
 NAME_IDCC="3636_idClientes.csv"
 NAME_EHR_DATA="Vista_Minable_3636.csv"
 DAYSPW=180
-DAYSOW=180
+DAYSOW=730
 
 #Create folder for logs if it doesn't exist
 mkdir -p logs
@@ -42,7 +42,7 @@ UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-#LISTA_CAT=("Disease or Syndrome")
+LISTA_CAT=("Disease or Syndrome")
 #LISTA_CAT=("Disease or Syndrome", "Sign or Symptom")
 DICTIONARY_ICD_LOCAL="icd"
 
@@ -76,7 +76,8 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #PATH_DATA="/zine/data/salud/compu_Pipe_V3/"
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 MAX_TOKEN=1000
-MAX_LEN=$DAYSOW
+#MAX_LEN=$DAYSOW
+MAX_LEN=30
 
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
