@@ -177,7 +177,7 @@ if __name__ == "__main__":
     # Load data
     patients_maxLength = load_data(path_data_train, current_path, umlstoicd_path, qumls_path, simi, lista_cat, dic_local)
     print("Data loaded.")
-    patients_maxLength = patients_maxLength[:100]
+    #patients_maxLength = patients_maxLength[:100]
 
     # Split the data into chunks for parallel processing
     chunk_size = len(patients_maxLength) // n_workers
