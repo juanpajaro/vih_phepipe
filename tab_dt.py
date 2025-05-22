@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 import datetime as dt
 import os  # <-- Añade esta línea
@@ -95,6 +96,175 @@ def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_
     else:
         plt.show()
 
+def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencias_label_apnea.png"):
+    """
+    Cuenta los valores únicos de una columna y dibuja una gráfica de frecuencias, 
+    agregando una leyenda con el conteo de 1, 0 y el total.
+
+    Parámetros:
+    - df: DataFrame de pandas.
+    - columna: nombre de la columna a analizar.
+    - save_fig: si True, guarda la figura en la carpeta 'g_reports'.
+    - fig_name: nombre del archivo de la figura.
+    """
+    conteo = df[columna].value_counts()
+    total = len(df)
+    count_1 = conteo.get(1, 0)
+    count_0 = conteo.get(0, 0)
+
+    plt.figure(figsize=(10, 5))
+    #ax = conteo.plot(kind='bar', color='skyblue')
+    ax = conteo.plot(kind='bar')
+    plt.title(f"Frecuencia de Pacientes con/sin Apnea")
+    plt.xlabel(columna)
+    plt.ylabel("Frecuencia")
+    plt.tight_layout()
+
+    # Agregar los números encima de las barras
+    for p in ax.patches:
+        ax.annotate(str(int(p.get_height())),
+                    (p.get_x() + p.get_width() / 2, p.get_height()),
+                    ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+    # Agregar leyenda en la parte superior derecha
+    legend_text = f"1: {count_1}\n0: {count_0}\nTotal: {total}"
+    plt.gca().legend([legend_text], loc='upper right', frameon=True)
+
+    if save_fig:
+        output_dir = "g_reports"
+        os.makedirs(output_dir, exist_ok=True)
+        fig_path = os.path.join(output_dir, fig_name)
+        plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+        print(f"Figura guardada en: {fig_path}")
+    else:
+        plt.show()
+
+def distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sexo", 
+                          title1="Distribución del sexo en Pacientes con Apnea = 1", 
+                          title2="Distribución del sexo en Pacientes sin Apnea = 0", 
+                          save_fig=False, fig_name="distribucion_por_sexo.png"):
+    """
+    Separa un DataFrame según los valores únicos de una columna y genera dos gráficos comparativos,
+    mostrando los valores sobre las barras.
+
+    Args:
+        df (pd.DataFrame): El DataFrame de entrada.
+        column_to_split (str): La columna según la cual se separará el DataFrame.
+        column_to_plot (str): La columna que se graficará.
+        title1 (str): Título del primer gráfico.
+        title2 (str): Título del segundo gráfico.
+        save_fig (bool): Si True, guarda la figura en la carpeta 'g_reports'.
+        fig_name (str): Nombre del archivo de la figura.
+    """
+    unique_values = df[column_to_split].unique()
+    if len(unique_values) < 2:
+        print("La columna para dividir debe tener al menos dos valores únicos.")
+        return
+
+    df_1 = df[df[column_to_split] == unique_values[0]]
+    df_2 = df[df[column_to_split] == unique_values[1]]
+
+    plt.figure(figsize=(14, 6))
+
+    # Primer gráfico
+    plt.subplot(1, 2, 1)
+    ax1 = sns.countplot(x=column_to_plot, data=df_1)
+    plt.title(title1)
+    plt.xlabel(column_to_plot)
+    plt.ylabel("Conteo")
+    for p in ax1.patches:
+        ax1.annotate(f'{int(p.get_height())}', 
+                     (p.get_x() + p.get_width() / 2., p.get_height()), 
+                     ha='center', va='bottom', fontsize=10, color='black', xytext=(0, 5), 
+                     textcoords='offset points')
+
+    # Segundo gráfico
+    plt.subplot(1, 2, 2)
+    ax2 = sns.countplot(x=column_to_plot, data=df_2)
+    plt.title(title2)
+    plt.xlabel(column_to_plot)
+    plt.ylabel("Conteo")
+    for p in ax2.patches:
+        ax2.annotate(f'{int(p.get_height())}', 
+                     (p.get_x() + p.get_width() / 2., p.get_height()), 
+                     ha='center', va='bottom', fontsize=10, color='black', xytext=(0, 5), 
+                     textcoords='offset points')
+
+    plt.tight_layout()
+    if save_fig:
+        output_dir = "g_reports"
+        os.makedirs(output_dir, exist_ok=True)
+        fig_path = os.path.join(output_dir, fig_name)
+        plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+        print(f"Figura guardada en: {fig_path}")
+    else:
+        plt.show()
+
+def distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="edad_poli", bins=5,
+                          title1="Distribución de Edad con Apnea = 1",
+                          title2="Distribución de Edad sin Apnea = 0",
+                          save_fig=False, fig_name="distribucion_por_edad.png"):
+    """
+    Separa un DataFrame según los valores únicos de una columna, agrupa los valores continuos
+    en intervalos (bins) y genera dos gráficos comparativos.
+
+    Args:
+        df (pd.DataFrame): El DataFrame de entrada.
+        column_to_split (str): La columna según la cual se separará el DataFrame.
+        column_to_plot (str): La columna continua que se graficará.
+        bins (int): Número de intervalos (bins) para agrupar los valores continuos.
+        title1 (str): Título del primer gráfico.
+        title2 (str): Título del segundo gráfico.
+        save_fig (bool): Si True, guarda la figura en la carpeta 'g_reports'.
+        fig_name (str): Nombre del archivo de la figura.
+    """
+    unique_values = df[column_to_split].unique()
+    if len(unique_values) < 2:
+        print("La columna para dividir debe tener al menos dos valores únicos.")
+        return
+
+    df_1 = df[df[column_to_split] == unique_values[0]].copy()
+    df_2 = df[df[column_to_split] == unique_values[1]].copy()
+
+    df_1['binned'] = pd.cut(df_1[column_to_plot], bins=bins)
+    df_2['binned'] = pd.cut(df_2[column_to_plot], bins=bins)
+
+    plt.figure(figsize=(14, 6))
+
+    # Primer gráfico
+    plt.subplot(1, 2, 1)
+    ax1 = sns.countplot(x='binned', data=df_1, order=sorted(df_1['binned'].unique()))
+    plt.title(title1)
+    plt.xlabel(f"{column_to_plot} (agrupado)")
+    plt.ylabel("Conteo")
+    plt.xticks(rotation=45)
+    for p in ax1.patches:
+        ax1.annotate(f'{int(p.get_height())}', (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='bottom', fontsize=10, color='black', xytext=(0, 5),
+                     textcoords='offset points')
+
+    # Segundo gráfico
+    plt.subplot(1, 2, 2)
+    ax2 = sns.countplot(x='binned', data=df_2, order=sorted(df_2['binned'].unique()))
+    plt.title(title2)
+    plt.xlabel(f"{column_to_plot} (agrupado)")
+    plt.ylabel("Conteo")
+    plt.xticks(rotation=45)
+    for p in ax2.patches:
+        ax2.annotate(f'{int(p.get_height())}', (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='bottom', fontsize=10, color='black', xytext=(0, 5),
+                     textcoords='offset points')
+
+    plt.tight_layout()
+    if save_fig:
+        output_dir = "g_reports"
+        os.makedirs(output_dir, exist_ok=True)
+        fig_path = os.path.join(output_dir, fig_name)
+        plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+        print(f"Figura guardada en: {fig_path}")
+    else:
+        plt.show()
+
 def main():
     # Cargar datos
 
@@ -103,7 +273,16 @@ def main():
     df.info()
 
     # Graficar eventos y guardar figura
-    graficar_eventos_pacientes_df(df, n_pacientes=5, save_fig=True, fig_name="eventos_pacientes.png")
+    graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_pacientes.png")
+
+    # Graficar frecuencias con leyenda y guardar figura
+    graficar_frecuencias_label(df, "label_apnea", save_fig=True, fig_name="frecuencias_label_apnea.png")
+
+    # Graficar distribución por sexo y guardar figura
+    distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sexo", save_fig=True, fig_name="distribucion_por_sexo.png")
+
+    # Graficar distribución por edad y guardar figura
+    distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="edad_poli", bins=5, save_fig=True, fig_name="distribucion_por_edad.png")
 
 if __name__ == "__main__":
     main()
