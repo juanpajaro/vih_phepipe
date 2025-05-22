@@ -83,7 +83,7 @@ def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_
     # Estética
     ax.set_title("Línea de tiempo de eventos por paciente")
     ax.set_xlabel("Fecha")
-    ax.set_ylabel("Paciente")
+    ax.set_ylabel("Label Paciente")
 
     plt.tight_layout()
     
@@ -99,7 +99,7 @@ def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_
 def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencias_label_apnea.png"):
     """
     Cuenta los valores únicos de una columna y dibuja una gráfica de frecuencias, 
-    agregando una leyenda con el conteo de 1, 0 y el total.
+    agregando una leyenda solo con el valor total.
 
     Parámetros:
     - df: DataFrame de pandas.
@@ -109,11 +109,8 @@ def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencia
     """
     conteo = df[columna].value_counts()
     total = len(df)
-    count_1 = conteo.get(1, 0)
-    count_0 = conteo.get(0, 0)
 
     plt.figure(figsize=(10, 5))
-    #ax = conteo.plot(kind='bar', color='skyblue')
     ax = conteo.plot(kind='bar')
     plt.title(f"Frecuencia de Pacientes con/sin Apnea")
     plt.xlabel(columna)
@@ -126,8 +123,8 @@ def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencia
                     (p.get_x() + p.get_width() / 2, p.get_height()),
                     ha='center', va='bottom', fontsize=10, fontweight='bold')
 
-    # Agregar leyenda en la parte superior derecha
-    legend_text = f"1: {count_1}\n0: {count_0}\nTotal: {total}"
+    # Agregar solo el total en la leyenda
+    legend_text = f"Total: {total}"
     plt.gca().legend([legend_text], loc='upper right', frameon=True)
 
     if save_fig:
