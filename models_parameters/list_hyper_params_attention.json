@@ -1,0 +1,58 @@
+[
+{  
+  "embedding_dim": 100,  
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{
+  "embedding_dim": 200,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{
+  "embedding_dim": 300,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{  
+  "embedding_dim": 400,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{  
+  "embedding_dim": 500,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{  
+  "embedding_dim": 600,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{  
+  "embedding_dim": 700,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+},
+{  
+  "embedding_dim": 800,
+  "units": 64,
+  "dropout": 0.2,  
+  "epochs": 30,
+  "batch_size": 128
+}
+]
