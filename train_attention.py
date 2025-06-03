@@ -114,7 +114,7 @@ if __name__ == "__main__":
     
     #max_tokens = 1000
     #max_len = X_train.shape[1]  # Assuming X_train is a 2D array with shape (num_samples, max_len)
-    #path_token_save = current_path + "/tokens/" + timestamp
+    path_token_save = current_path + "/tokens/" + timestamp
     #semantic_cat = ["icd_proof", "disease_proof"]
     
     #vocab_size
@@ -128,14 +128,14 @@ if __name__ == "__main__":
     
     print("Running attention loop...")
     for i in range(len(list_seq_params)):
-        embedding_dim = list_seq_params[i]["embedding_dim"]
+        embedding_dim_ = list_seq_params[i]["embedding_dim"]
         units = list_seq_params[i]["units"]
         dropout = list_seq_params[i]["dropout"]        
         epochs = list_seq_params[i]["epochs"]
         batch_size = list_seq_params[i]["batch_size"]        
 
         print(f"Configuración {i+1}:")
-        print(f"  embedding_dim: {embedding_dim}")
+        print(f"  embedding_dim: {embedding_dim_}")
         print(f"  units: {units}")
         print(f"  dropout: {dropout}")        
         print(f"  epochs: {epochs}")
@@ -149,7 +149,7 @@ if __name__ == "__main__":
             units=units,
             dropout=dropout,
             vocab_size=vocab_size_,
-            embedding_dim=embedding_dim            
+            embedding_dim=embedding_dim_            
         )
         model.summary()
         print("Entrenando...")
