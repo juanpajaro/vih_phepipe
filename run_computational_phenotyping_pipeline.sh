@@ -9,7 +9,10 @@
 ##SBATCH -w hpc02-w002
 
 # Get the current date and time
-CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
+#CURRENT_DATE=$(date +"%Y%m%d_%H%M%S")
+#echo "Current date: $CURRENT_DATE"
+
+CURRENT_DATE="20250520_053753"
 echo "Current date: $CURRENT_DATE"
 
 # Load the conda environment
@@ -32,7 +35,7 @@ DAYSOW=730
 #Create folder for logs if it doesn't exist
 mkdir -p logs
 
-srun python3 data_transformation.py "$PATH_RAW_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
+#srun python3 data_transformation.py "$PATH_RAW_DATA" "$NAME_POLI_DATA" "$NAME_SLEEP_DATA" "$NAME_IDCC" "$NAME_EHR_DATA" $DAYSPW $DAYSOW "$CURRENT_DATE"
 
 # Define paths
 PATH_DATA_TRAIN="data_transformation/data_t_${CURRENT_DATE}.json"
@@ -55,7 +58,7 @@ LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+#srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
 #python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 
 #RUN DATA SPLITTING STEP
@@ -64,7 +67,7 @@ srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 FILENAME="/concepts/clinical_concepts_${CURRENT_DATE}.json"
 TRAIN_SIZE=0.8
-srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
+#srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
 #RUN LSTM TRAINING STEP
@@ -82,7 +85,8 @@ MAX_LEN=$DAYSOW
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
 #p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
-srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+#srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
 #python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
 
+# Run the attention model
 srun python3 train_attention.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
