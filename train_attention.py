@@ -90,16 +90,15 @@ def save_model(model, current_path):
     return model_name
 
 if __name__ == "__main__":
-    if len(sys.argv) !=7:
+    if len(sys.argv) !=6:
         print("faltan hyperparametros")
         sys.exit(1)
         
     timestamp = sys.argv[1]
     current_path = sys.argv[2]
-    max_tokens = int(sys.argv[3])
-    max_len = int(sys.argv[4])
-    semantic_cat = sys.argv[5].split(",")
-    dic_local = sys.argv[6]
+    max_tokens = int(sys.argv[3])    
+    semantic_cat = sys.argv[4].split(",")
+    dic_local = sys.argv[5]
 
     semantic_cat.append(dic_local)
     print("semantic categories {}".format(semantic_cat))
@@ -113,7 +112,7 @@ if __name__ == "__main__":
         X_train.shape, X_test.shape, y_train.shape, y_test.shape))
     
     #max_tokens = 1000
-    #max_len = X_train.shape[1]  # Assuming X_train is a 2D array with shape (num_samples, max_len)
+    max_len = X_train.shape[1]  # Assuming X_train is a 2D array with shape (num_samples, max_len)
     path_token_save = current_path + "/tokens/" + timestamp
     #semantic_cat = ["icd_proof", "disease_proof"]
     
