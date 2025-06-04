@@ -64,7 +64,7 @@ def save_tokens(current_path, timestamp, X_train_enc, X_test_enc, y_train, y_tes
 def one_hot_encode_sequences(X_train, X_test):
     # Concatenar para ajustar el encoder a todos los posibles tokens
     all_sequences = np.concatenate((X_train, X_test), axis=0)
-    encoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
+    encoder = OneHotEncoder(handle_unknown='ignore')
     # Suponemos que cada muestra es una secuencia de enteros (tokens)
     # Convertimos cada secuencia en una cadena para que OneHotEncoder trate cada token como una categoría
     X_all = np.array([' '.join(map(str, seq)) for seq in all_sequences]).reshape(-1, 1)
