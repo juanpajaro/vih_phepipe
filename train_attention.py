@@ -103,8 +103,8 @@ if __name__ == "__main__":
     semantic_cat.append(dic_local)
     print("semantic categories {}".format(semantic_cat))
 
-    current_path = os.getcwd()
-    timestamp = "20250520_053753"  # Example timestamp, replace with actual value
+    #current_path = os.getcwd()
+    #timestamp = "20250520_053753"  # Example timestamp, replace with actual value
 
     print("Cargando datos...")
     X_train, X_test, y_train, y_test, vocab = load_data(current_path + "/tokens/" + timestamp) 
