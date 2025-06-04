@@ -64,7 +64,9 @@ def obtener_dataframe_modelos(ruta_performance):
 
     lista_modelos = cargar_y_listar_columna(ruta_performance, "model_name")
     resultados = []
-
+    print("lista_modelos:", lista_modelos)
+    
+    """
     for modelo in lista_modelos:
         result = utils_reports.buscar_performance_por_version(
             ruta_performance, "model_name", modelo)
@@ -72,102 +74,111 @@ def obtener_dataframe_modelos(ruta_performance):
         if result is None:
             continue
 
-        print("result:", result)
-        print(type(result))
-        date = result["date"]
-        f_score = result["f1_test"]
-        semantic_categories = result["semantic_categories"]
+        if modelo.startswith("lstm"):
 
-        dic_vec = ast.literal_eval(result["vectorization_hyperparameters"])
-        max_len = dic_vec.get("max_len", None)
+                print("result:", result)
+                print(type(result))
+                date = result["date"]
+                f_score = result["f1_test"]
+                semantic_categories = result["semantic_categories"]
 
-        dic_hyperparameters = ast.literal_eval(result["model_hyperparameters"])
-        embedding_dim = dic_hyperparameters.get("embedding_dim", None)
-        block_layers = dic_hyperparameters.get("block_layers", None)
-        hidden_units = dic_hyperparameters.get("hidden_units", None)
-        learning_rate = dic_hyperparameters.get("learning_rate", None)
-        epochs = dic_hyperparameters.get("epochs", None)
-        batch_size = dic_hyperparameters.get("batch_size", None)
+                dic_vec = ast.literal_eval(result["vectorization_hyperparameters"])
+                max_len = dic_vec.get("max_len", None)
 
-        loss = result["loss"]
-        accuracy = result["accuracy"]
-        precision_train = result["precision_train"]
-        recall_train = result["recall_train"]
-        precision_test = result["precision_test"]
-        recall_test = result["recall_test"]
-        
-        folder = result['path_vectorization']
-        print("folder:", folder)
-        folder_recortado = utils_reports.recortar_folder(folder, "tokens", incluir_carpeta=False)
-        print("folder_recortado:", folder_recortado)
+                dic_hyperparameters = ast.literal_eval(result["model_hyperparameters"])
+                embedding_dim = dic_hyperparameters.get("embedding_dim", None)
+                block_layers = dic_hyperparameters.get("block_layers", None)
+                hidden_units = dic_hyperparameters.get("hidden_units", None)
+                learning_rate = dic_hyperparameters.get("learning_rate", None)
+                epochs = dic_hyperparameters.get("epochs", None)
+                batch_size = dic_hyperparameters.get("batch_size", None)
 
-        file_path = f"/home/pajaro/compu_Pipe_V3/data_transformation/data_t_{folder_recortado}.csv"
-        if not os.path.isfile(file_path):
-            print("No se encontró el archivo:", file_path)
-            continue
+                loss = result["loss"]
+                accuracy = result["accuracy"]
+                precision_train = result["precision_train"]
+                recall_train = result["recall_train"]
+                precision_test = result["precision_test"]
+                recall_test = result["recall_test"]
+                
+                folder = result['path_vectorization']
+                print("folder:", folder)
+                folder_recortado = utils_reports.recortar_folder(folder, "tokens", incluir_carpeta=False)
+                print("folder_recortado:", folder_recortado)
 
-        df = utils_reports.load_data(file_path)
-        patient_len = len(df)
+                file_path = f"/home/pajaro/compu_Pipe_V3/data_transformation/data_t_{folder_recortado}.csv"
+                if not os.path.isfile(file_path):
+                    print("No se encontró el archivo:", file_path)
+                    continue
 
-        file_path = f"/home/pajaro/compu_Pipe_V3/concepts/"
-        file_name = f"clinical_concepts_{folder_recortado}.json"    
-        data = utils_general_porpose.load_json(file_path, file_name)
-        df = pd.DataFrame(data)
-        p_concepts_len = len(df)
+                df = utils_reports.load_data(file_path)
+                patient_len = len(df)
 
-        dict_c = utils_general_porpose.load_json(file_path, "dictionary_concepts_"+folder_recortado+".json")
-        dict_c_len = len(dict_c)
+                file_path = f"/home/pajaro/compu_Pipe_V3/concepts/"
+                file_name = f"clinical_concepts_{folder_recortado}.json"    
+                data = utils_general_porpose.load_json(file_path, file_name)
+                df = pd.DataFrame(data)
+                p_concepts_len = len(df)
 
-        file_path_inc = f"/home/pajaro/compu_Pipe_V3/concepts/inconsistencies_{folder_recortado}.json"
-        if not os.path.isfile(file_path_inc):
-            print("No se encontró el archivo:", file_path_inc)
-            continue
+                dict_c = utils_general_porpose.load_json(file_path, "dictionary_concepts_"+folder_recortado+".json")
+                dict_c_len = len(dict_c)
 
-        inc_len = cargar_json_result(file_path_inc)
+                file_path_inc = f"/home/pajaro/compu_Pipe_V3/concepts/inconsistencies_{folder_recortado}.json"
+                if not os.path.isfile(file_path_inc):
+                    print("No se encontró el archivo:", file_path_inc)
+                    continue
 
-        file_path_train = f"/home/pajaro/compu_Pipe_V3/train/train_{folder_recortado}.json"
-        if not os.path.isfile(file_path_train):
-            print("No se encontró el archivo:", file_path_train)
-            continue
+                inc_len = cargar_json_result(file_path_inc)
 
-        # Cargar el archivo de entrenamiento para obtener la cantidad de pacientes
-        train_len = cargar_json_result(file_path_train)
+                file_path_train = f"/home/pajaro/compu_Pipe_V3/train/train_{folder_recortado}.json"
+                if not os.path.isfile(file_path_train):
+                    print("No se encontró el archivo:", file_path_train)
+                    continue
 
-        file_path_test = f"/home/pajaro/compu_Pipe_V3/test/test_{folder_recortado}.json"
-        if not os.path.isfile(file_path_test):
-            print("No se encontró el archivo:", file_path_test)
-            continue
-        
-        # Cargar el archivo de prueba para obtener la cantidad de pacientes
-        test_len = cargar_json_result(file_path_test)
+                # Cargar el archivo de entrenamiento para obtener la cantidad de pacientes
+                train_len = cargar_json_result(file_path_train)
 
-        resultados.append({
-            "date": date,
-            "max_len": max_len,
-            "p_dt_len": patient_len,
-            "semantic_categories": semantic_categories,
-            "p_concepts_len": p_concepts_len,
-            "dict_len": dict_c_len,
-            "inc_len": inc_len,
-            "train_len": train_len,
-            "test_len": test_len,
-            "model_name": modelo,
-            "embedding_dim": embedding_dim,
-            "block_layers": block_layers,
-            "hidden_units": hidden_units,
-            "learning_rate": learning_rate,
-            "epochs": epochs,
-            "batch_size": batch_size,
-            "loss": loss,
-            "accuracy": accuracy,
-            "precision_train": precision_train,
-            "recall_train": recall_train,
-            "precision_test": precision_test,
-            "recall_test": recall_test,                     
-            "f_score": f_score
-        })
+                file_path_test = f"/home/pajaro/compu_Pipe_V3/test/test_{folder_recortado}.json"
+                if not os.path.isfile(file_path_test):
+                    print("No se encontró el archivo:", file_path_test)
+                    continue
+                
+                # Cargar el archivo de prueba para obtener la cantidad de pacientes
+                test_len = cargar_json_result(file_path_test)
+
+                resultados.append({
+                    "date": date,
+                    "max_len": max_len,
+                    "p_dt_len": patient_len,
+                    "semantic_categories": semantic_categories,
+                    "p_concepts_len": p_concepts_len,
+                    "dict_len": dict_c_len,
+                    "inc_len": inc_len,
+                    "train_len": train_len,
+                    "test_len": test_len,
+                    "model_name": modelo,
+                    "embedding_dim": embedding_dim,
+                    "block_layers": block_layers,
+                    "hidden_units": hidden_units,
+                    "learning_rate": learning_rate,
+                    "epochs": epochs,
+                    "batch_size": batch_size,
+                    "loss": loss,
+                    "accuracy": accuracy,
+                    "precision_train": precision_train,
+                    "recall_train": recall_train,
+                    "precision_test": precision_test,
+                    "recall_test": recall_test,                     
+                    "f_score": f_score
+                })
+        elif modelo.startswith("log"):
+            print(modelo)
+
+            #elif modelo.startswith("attention"):
+                #print(modelo)
 
     return pd.DataFrame(resultados)
+    """
+    
 
 def comparacion_OW_desempenio(df, patient_col="p_dt_len", fscore_col="f_score", save_fig=False, fig_name="comparacion_OW_desempenio.png"):
     """
@@ -240,9 +251,9 @@ def comparacion_maxlen_vs_pdtlen(df, maxlen_col="max_len", pdtlen_col="p_dt_len"
 def main():
     ruta_performance = "/home/pajaro/compu_Pipe_V3/performance_zine/performance_report.csv"
     df_modelos = obtener_dataframe_modelos(ruta_performance)
-    print(df_modelos)
-    df_modelos.to_csv("df_modelos.csv", index=False)
-    comparacion_OW_desempenio(df_modelos, save_fig=True, fig_name="comparacion_OW_desempenio.png")
+    #print(df_modelos)
+    #df_modelos.to_csv("df_modelos.csv", index=False)
+    #comparacion_OW_desempenio(df_modelos, save_fig=True, fig_name="comparacion_OW_desempenio.png")
     #comparacion_maxlen_vs_pdtlen(df_modelos, save_fig=True, fig_name="comparacion_maxlen_vs_pdtlen.png")
     
 if __name__ == "__main__":
