@@ -30,7 +30,7 @@ NAME_SLEEP_DATA="base principal ajustada 11mayo2021.csv"
 NAME_IDCC="3636_idClientes.csv"
 NAME_EHR_DATA="Vista_Minable_3636.csv"
 DAYSPW=180
-DAYSOW=30
+DAYSOW=180
 
 #Create folder for logs if it doesn't exist
 mkdir -p logs
@@ -45,9 +45,9 @@ UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
-LISTA_CAT=("Disease or Syndrome")
+#LISTA_CAT=("Disease or Syndrome")
 #LISTA_CAT=("Disease or Syndrome", "Sign or Symptom")
-#DICTIONARY_ICD_LOCAL="icd"
+DICTIONARY_ICD_LOCAL="icd"
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
