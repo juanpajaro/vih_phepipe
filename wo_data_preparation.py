@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
     # Define the prediction and observation windows in days
     days_pw = int(sys.argv[1])  # Prediction window
-    days_ow = int(sys.arg[2])  # Observation window
+    days_ow = int(sys.argv[2])  # Observation window
     timestamp = sys.argv[3]  # Timestamp
     # Define the path and file name
     data_path = sys.argv[4]
