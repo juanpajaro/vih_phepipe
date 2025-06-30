@@ -88,4 +88,4 @@ srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_
 srun python3 train_attention.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
 
 #Run logistic regression model
-#srun python3 train_logistic.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
+srun python3 train_logistic.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
