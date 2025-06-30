@@ -36,8 +36,7 @@ srun python3 wo_data_preparation.py $DAYSPW $DAYSOW "$CURRENT_DATE" "$PATH_RAW_D
 
 # Define paths
 PATH_DATA_TRAIN="data_transformation/data_t_${CURRENT_DATE}.json"
-CURRENT_PATH="/zine/data/salud/compu_Pipe_V3/"
-#CURRENT_PATH="/home/pajaro/compu_Pipe_V3/"
+CURRENT_PATH="/zine/data/salud/vih_phepipe/"
 UMLS_TO_ICD_PATH="/map/map_icd10_umls.csv"
 QUMLS_PATH="/destination_umls_es"
 NUM_PROCESSES=8
@@ -55,7 +54,7 @@ LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #mkdir -p logs
 
 # Run the pipeline
-#srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
 #python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 
 #RUN DATA SPLITTING STEP
