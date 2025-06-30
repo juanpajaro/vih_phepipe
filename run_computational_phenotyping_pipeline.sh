@@ -81,11 +81,11 @@ MAX_LEN=30
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
 #p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
-srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
 #python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
 
 # Run the attention model
-srun python3 train_attention.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+srun python3 train_attention.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
 
 #Run logistic regression model
 srun python3 train_logistic.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"

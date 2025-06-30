@@ -9,20 +9,20 @@ from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_sc
 from scipy import sparse
 
 #function to save the information of the model in list of dictionaries
-def save_model_info(now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_save):
+def save_model_info(now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_save, days_pw, days_ow):
 
     #check if the file exists
     if os.path.isfile(path_save):
         #if the file exists, then append the new information
         with open(path_save, mode='a') as file:
             writer = csv.writer(file)
-            writer.writerow([now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test])
+            writer.writerow([now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, days_pw, days_ow])
     else:
         #if the file does not exist, then create the file and add the header
         with open(path_save, mode='w') as file:
             writer = csv.writer(file)
-            writer.writerow(["date", "semantic_categories", "num_classes", "vectorize_technique", "vectorization_hyperparameters", "path_vectorization", "model_name", "model_hyperparameters", "accuracy", "loss", "precision_train", "recall_train", "f1_train", "precision_test", "recall_test", "f1_test"])
-            writer.writerow([now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test])
+            writer.writerow(["date", "semantic_categories", "num_classes", "vectorize_technique", "vectorization_hyperparameters", "path_vectorization", "model_name", "model_hyperparameters", "accuracy", "loss", "precision_train", "recall_train", "f1_train", "precision_test", "recall_test", "f1_test", "days_pw", "days_ow"])
+            writer.writerow([now, dataset_name, num_classes, vectorize_technique, vectorization_hyperparameters, path_vectorization, model_name, model_hyperparameters, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, days_pw, days_ow])
 
 def read_analysis(path):
     #read the file

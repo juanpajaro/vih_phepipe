@@ -220,7 +220,7 @@ def save_model(model, current_path):
 
     
 if __name__ == "__main__":
-    if len(sys.argv) !=7:
+    if len(sys.argv) !=9:
         print("faltan hyperparametros")
         sys.exit(1)
         
@@ -230,6 +230,8 @@ if __name__ == "__main__":
     max_len = int(sys.argv[4])
     semantic_cat = sys.argv[5].split(",")
     dic_local = sys.argv[6]
+    days_pw = int(sys.argv[7])
+    days_ow = int(sys.argv[8])
 
     semantic_cat.append(dic_local)
     print("semantic categories {}".format(semantic_cat))
@@ -301,7 +303,7 @@ if __name__ == "__main__":
         path_pr_save = current_path + "/" + "performance_report.csv"
         #chage the format of the timestamp
         timestamp_s = datetime.datetime.strptime(timestamp, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-        utils_performance_analysis.save_model_info(timestamp_s, str(semantic_cat), num_classes, "keras-vectorizer", {"max_tokens":max_tokens, "max_len":max_len, "vectorize_technique":"other-sequence"}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save)
+        utils_performance_analysis.save_model_info(timestamp_s, str(semantic_cat), num_classes, "keras-vectorizer", {"max_tokens":max_tokens, "max_len":max_len, "vectorize_technique":"other-sequence"}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save, days_pw, days_ow)
     
     """
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
