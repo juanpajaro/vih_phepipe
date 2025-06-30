@@ -90,4 +90,4 @@ tokens/
 !colab_vocab.ipynb
 d_windows/
 data_transformation/
-base_datos/
+!base_datos/
