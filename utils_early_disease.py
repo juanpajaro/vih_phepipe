@@ -16,17 +16,28 @@ def calcular_fecha_antes_poli(fecha_poli, num_dias):
 
 #Funcion para recortar una lista de fecha seis meses atras de la fecha de entrada
 def recortar_historia(secuencia_paciente, fecha_poli, days_pw, days_ow):
+    #print("secuencia_paciente {}".format(secuencia_paciente))
     secuencia_recortada = {}
-    lista_secuencia = []    
+    lista_secuencia = []
+    #print("fecha poli {}".format(fecha_poli))
     fecha_antes_poli = calcular_fecha_antes_poli(fecha_poli, days_pw)
+    #print("day_pw {}".format(days_pw))
+    #print("fecha antes poli {}".format(fecha_antes_poli))
     fecha_max_dos_anios = fecha_antes_poli - datetime.timedelta(days = days_ow)
+    #print("day_ow {}".format(days_ow))
+    #print("fecha max dos años {}".format(fecha_max_dos_anios))
     #for index, value in secuencia_paciente.items():
     for i in secuencia_paciente:
         fecha = i.get("FechaConsulta")
+        #print("fecha_str {}".format(fecha))
+        #print("i= {}".format(i))
+        #if pd.isna(fecha_str):
+         #   continue
+        #fecha = datetime.datetime.strptime(str(fecha_str), '%Y-%m-%d %H:%M:%S')
         if fecha > fecha_max_dos_anios and fecha < fecha_antes_poli:
-            diagnosticos = i.get("Diagnosticos_Consulta")
-            texto = i.get("DesPlanYConcepto")
-            fecha_menor = i.get("FechaConsulta")
+            diagnosticos = i.get("Dx")
+            texto = i.get("Análisis_y_Plan_de_Manejo")
+            fecha_menor = fecha
             secuencia_recortada = {"FechaConsulta":fecha_menor, "Diagnosticos_Consulta":diagnosticos, "DesPlanYConcepto":texto}                
             lista_secuencia.append(secuencia_recortada)
     return lista_secuencia
@@ -277,7 +288,7 @@ def make_listDictionary_patients(dataframe):
     for index, row in dataframe.iterrows():        
         #print(row["IdCliente"])
         id_cliente = row["IdCliente"]
-        label = row["label_apnea"]
+        label = row["label"]
         #print(row["secuencia_recortada"])
         num_consulta = 0       
         dictionary_patient = {"id_cliente":id_cliente, "label":label}
@@ -354,9 +365,9 @@ def imprimir_fechas_consulta(secuencia_paciente):
 
 def view_cut_patient(data, id_patient, num_dias):
     sample_data = data.loc[data["IdCliente"] == id_patient]    
-    fecha_poli = sample_data["fecha_poli"].iloc[0] 
+    fecha_poli = sample_data["Fecha_Dx_Prueba"].iloc[0] 
     fecha_menos_seis_meses = calcular_fecha_antes_poli(fecha_poli, num_dias)    
-    secuencia_paciente = sample_data["dic_datos_consulta"].iloc[0]    
+    secuencia_paciente = sample_data["seq_diag"].iloc[0]    
     lista_consultas = imprimir_fechas_consulta(secuencia_paciente)
     ultima_consulta = lista_consultas[-1]
     secuencia_recortada = sample_data["secuencia_recortada"].iloc[0]            

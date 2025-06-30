@@ -57,7 +57,7 @@ def load_target_rules(lista_identificados):
     target_rules = []
     for item in lista_identificados:
         #target_rules.append(TargetRule(item["icd_husi"], "icd_husi", attributes = {"description":item["description"], "code":item["icd_10"], "cui_code":item["cui_code"]}))
-        target_rules.append(TargetRule(item["icd_husi"], "icd_husi", attributes = {"description":item["description"], "cui_code":item["cui_code"]}))
+        target_rules.append(TargetRule(item["icd_10"], "icd_10", attributes = {"description":item["description"], "cui_code":item["cui_code"]}))
     print("target rules loaded")
     return target_rules
 
