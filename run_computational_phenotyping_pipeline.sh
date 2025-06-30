@@ -30,7 +30,7 @@ DATA_NAME="Variables_HC.txt"
 LABEL_NAME='Etiqueta.txt'
 
 #Create folder for logs if it doesn't exist
-mkdir -p logs
+#mkdir -p logs
 
 srun python3 wo_data_preparation.py $DAYSPW $DAYSOW "$CURRENT_DATE" "$PATH_RAW_DATA" "$DATA_NAME" "$LABEL_NAME" 
 
@@ -54,7 +54,7 @@ LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+#srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
 #python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 
 #RUN DATA SPLITTING STEP
@@ -63,7 +63,7 @@ srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 FILENAME="/concepts/clinical_concepts_${CURRENT_DATE}.json"
 TRAIN_SIZE=0.8
-srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
+#srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
 #RUN LSTM TRAINING STEP
