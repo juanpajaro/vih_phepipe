@@ -63,7 +63,7 @@ srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 FILENAME="/concepts/clinical_concepts_${CURRENT_DATE}.json"
 TRAIN_SIZE=0.8
-#srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
+srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
 #RUN LSTM TRAINING STEP
