@@ -360,6 +360,7 @@ def imprimir_fechas_consulta(secuencia_paciente):
     fecha_consulta = []
     for i in secuencia_paciente:        
         fecha_consulta.append(i.get("FechaConsulta"))
+    #print("fechas consultas {}".format(fecha_consulta)))
 
     return fecha_consulta
 
@@ -369,7 +370,7 @@ def view_cut_patient(data, id_patient, num_dias):
     fecha_menos_seis_meses = calcular_fecha_antes_poli(fecha_poli, num_dias)    
     secuencia_paciente = sample_data["seq_diag"].iloc[0]    
     lista_consultas = imprimir_fechas_consulta(secuencia_paciente)
-    ultima_consulta = lista_consultas[-1]
+    ultima_consulta = lista_consultas[-1].sort()
     secuencia_recortada = sample_data["secuencia_recortada"].iloc[0]            
     lista_recorte = imprimir_fechas_consulta(secuencia_recortada)
     obs_window = lista_recorte[0]

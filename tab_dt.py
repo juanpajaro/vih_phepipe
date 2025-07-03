@@ -6,10 +6,10 @@ import os  # <-- Añade esta línea
 
 def load_data(file_path):
     datos = pd.read_csv(file_path)
-    datos = datos.rename(columns={"fecha_poli": "fecha_diagnostico"})
+    datos = datos.rename(columns={"Fecha_Dx_Prueba": "fecha_diagnostico"})
     return datos
 
-def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_apnea", save_fig=False, fig_name="grafica_eventos.png"):
+def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_apnea", save_fig=False, fig_name="grafica_eventos.png", model_version=""):
     """
     Grafica eventos temporales para pacientes desde un DataFrame.
     
@@ -81,9 +81,9 @@ def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_
     fig.autofmt_xdate()
 
     # Estética
-    ax.set_title("Línea de tiempo de eventos por paciente")
-    ax.set_xlabel("Fecha")
-    ax.set_ylabel("Label Paciente")
+    ax.set_title("timeline per patients {}".format(model_version))
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Label patient")
 
     plt.tight_layout()
     
@@ -96,7 +96,7 @@ def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_
     else:
         plt.show()
 
-def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencias_label_apnea.png"):
+def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencias_label_apnea.png", model_version=""):
     """
     Cuenta los valores únicos de una columna y dibuja una gráfica de frecuencias, 
     agregando una leyenda solo con el valor total.
@@ -112,9 +112,9 @@ def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencia
 
     plt.figure(figsize=(10, 5))
     ax = conteo.plot(kind='bar')
-    plt.title(f"Frecuencia de Pacientes con/sin Apnea")
+    plt.title("Frequency of Patients with/without Apnea {}".format(model_version))
     plt.xlabel(columna)
-    plt.ylabel("Frecuencia")
+    plt.ylabel("Frequency")
     plt.tight_layout()
 
     # Agregar los números encima de las barras
@@ -136,10 +136,10 @@ def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencia
     else:
         plt.show()
 
-def distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sexo", 
-                          title1="Distribución del sexo en Pacientes con Apnea = 1", 
-                          title2="Distribución del sexo en Pacientes sin Apnea = 0", 
-                          save_fig=False, fig_name="distribucion_por_sexo.png"):
+def distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sex", 
+                          title1="Sex distribution in patients with apnea = 1", 
+                          title2="Sex distribution in patients without apnea = 0", 
+                          save_fig=False, fig_name="distribucion_por_sexo.png", model_version=""):
     """
     Separa un DataFrame según los valores únicos de una columna y genera dos gráficos comparativos,
     mostrando los valores sobre las barras.
@@ -166,9 +166,9 @@ def distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sex
     # Primer gráfico
     plt.subplot(1, 2, 1)
     ax1 = sns.countplot(x=column_to_plot, data=df_1)
-    plt.title(title1)
+    plt.title(title1+" {}".format(model_version))
     plt.xlabel(column_to_plot)
-    plt.ylabel("Conteo")
+    plt.ylabel("Count")
     for p in ax1.patches:
         ax1.annotate(f'{int(p.get_height())}', 
                      (p.get_x() + p.get_width() / 2., p.get_height()), 
@@ -178,9 +178,9 @@ def distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sex
     # Segundo gráfico
     plt.subplot(1, 2, 2)
     ax2 = sns.countplot(x=column_to_plot, data=df_2)
-    plt.title(title2)
+    plt.title(title2+" {}".format(model_version))
     plt.xlabel(column_to_plot)
-    plt.ylabel("Conteo")
+    plt.ylabel("Conunt")
     for p in ax2.patches:
         ax2.annotate(f'{int(p.get_height())}', 
                      (p.get_x() + p.get_width() / 2., p.get_height()), 
@@ -265,21 +265,25 @@ def distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="eda
 def main():
     # Cargar datos
 
-    file_path = "/home/pajaro/compu_Pipe_V3/data_transformation/data_t_20250520_053753.csv"
+    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250520_053753.csv"
     df = load_data(file_path)
-    df.info()
+    #df.info()
+    df_explo = df[["fecha_diagnostico", "last_appointment", "prediction_window_start", "end_observation_window"]]
+    print(df_explo.head())
+
+    model_version = "lstm_v80"
 
     # Graficar eventos y guardar figura
-    graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_pacientes.png")
+    #graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_paciente_{}.png".format(model_version), model_version=model_version)
 
     # Graficar frecuencias con leyenda y guardar figura
-    graficar_frecuencias_label(df, "label_apnea", save_fig=True, fig_name="frecuencias_label_apnea.png")
+    #graficar_frecuencias_label(df, "label", save_fig=True, fig_name="frecuencias_label_apnea_{}.png".format(model_version), model_version=model_version)
 
     # Graficar distribución por sexo y guardar figura
-    distribucion_por_sexo(df, column_to_split="label_apnea", column_to_plot="Sexo", save_fig=True, fig_name="distribucion_por_sexo.png")
+    #distribucion_por_sexo(df, column_to_split="label", column_to_plot="Sexo", save_fig=True, fig_name="distribucion_por_sexo_{}.png".format(model_version), model_version=model_version)
 
     # Graficar distribución por edad y guardar figura
-    distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="edad_poli", bins=5, save_fig=True, fig_name="distribucion_por_edad.png")
+    #distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="edad_poli", bins=5, save_fig=True, fig_name="distribucion_por_edad_{}.png".format(model_version))
 
 if __name__ == "__main__":
     main()
