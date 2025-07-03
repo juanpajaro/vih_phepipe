@@ -24,7 +24,7 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #RUN DATA TRANSFORMATION STEP
 # Define paths
 DAYSPW=180
-DAYSOW=730
+DAYSOW=180#
 PATH_RAW_DATA="/zine/data/salud/vih_phepipe/base_datos/"
 DATA_NAME="Variables_HC.txt"
 LABEL_NAME='Etiqueta.txt'
@@ -54,7 +54,7 @@ LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
 #mkdir -p logs
 
 # Run the pipeline
-srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
+#srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL"
 #python3 clinical_concept_extraction_pipeline_v2.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS_TO_ICD_PATH $QUMLS_PATH $NUM_PROCESSES "$CURRENT_DATE" $SIMILARITY_THRESHOLD "$LIST_AS_STRING"
 
 #RUN DATA SPLITTING STEP
@@ -63,7 +63,7 @@ srun python3 clinical_concept_extraction.py $PATH_DATA_TRAIN $CURRENT_PATH $UMLS
 #PATH_DATA="/home/pajaro/compu_Pipe_V3/"
 FILENAME="/concepts/clinical_concepts_${CURRENT_DATE}.json"
 TRAIN_SIZE=0.8
-srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
+#srun python3 split_data.py "$CURRENT_PATH" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 #python3 split_data_pipeline.py "$PATH_DATA" "$FILENAME" $TRAIN_SIZE "$CURRENT_DATE"
 
 #RUN LSTM TRAINING STEP
@@ -81,11 +81,11 @@ MAX_LEN=$DAYSOW
 # Run the model
 #p_report=$(python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
 #p_report=$(srun python3 train_lstm.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN)
-srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
+#srun python3 train_lstm_loop.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
 #python3 train_lstm_loop.py "$CURRENT_DATE" "$PATH_DATA" $MAX_TOKEN $MAX_LEN
 
 # Run the attention model
-srun python3 train_attention.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
+#srun python3 train_attention.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_TOKEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
 
 #Run logistic regression model
-srun python3 train_logistic.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
+#srun python3 train_logistic.py "$CURRENT_DATE" "$CURRENT_PATH" $MAX_LEN "$LIST_AS_STRING" "$DICTIONARY_ICD_LOCAL" $DAYSPW $DAYSOW
