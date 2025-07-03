@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import utils_reports
 import ast
 import pandas as pd
@@ -6,6 +7,7 @@ import utils_general_porpose
 import json
 import matplotlib.pyplot as plt
 #import seaborn as sns
+import sys
 
 def cargar_json_result(file_path):
     """
@@ -66,7 +68,7 @@ def obtener_dataframe_modelos(ruta_performance):
     resultados = []
     print("lista_modelos:", lista_modelos)
     
-    """
+    
     for modelo in lista_modelos:
         result = utils_reports.buscar_performance_por_version(
             ruta_performance, "model_name", modelo)
@@ -177,7 +179,7 @@ def obtener_dataframe_modelos(ruta_performance):
                 #print(modelo)
 
     return pd.DataFrame(resultados)
-    """
+    
     
 
 def comparacion_OW_desempenio(df, patient_col="p_dt_len", fscore_col="f_score", save_fig=False, fig_name="comparacion_OW_desempenio.png"):
@@ -248,13 +250,113 @@ def comparacion_maxlen_vs_pdtlen(df, maxlen_col="max_len", pdtlen_col="p_dt_len"
     else:
         plt.show()
 
+
+def cargar_dataframe(ruta_csv):
+    """
+    Carga un DataFrame desde un archivo CSV.
+
+    Parámetros:
+    - ruta_csv (str): Ruta al archivo CSV.
+
+    Retorna:
+    - df (DataFrame): DataFrame cargado desde el archivo, o None si ocurre un error.
+    """
+    
+    try:
+        df = pd.read_csv(ruta_csv, sep=",", encoding="utf-8")
+        return df
+    except Exception as e:
+        print(f"Error al cargar el archivo CSV: {e}")
+        return None
+    
+def top_20_por_f1(df, f1_col="f1_test"):
+    """
+    Retorna un nuevo DataFrame con los 20 registros con mayor valor en la columna f1_test.
+
+    Parámetros:
+    - df: DataFrame original.
+    - f1_col: Nombre de la columna con el valor de f1_test.
+
+    Retorna:
+    - DataFrame con los 20 mejores registros según f1_test.
+    """
+    df_sorted = df.sort_values(by=f1_col, ascending=False)
+    return df_sorted.head(20)
+
+def grafica_top20_f1(df_top20, f1_col="f1_test", model_col="model_name", loss_col="loss", save_fig=False, fig_name="top20_f1.png"):
+    """
+    Genera una gráfica de línea donde el eje X es el nombre del modelo y el eje Y muestra dos líneas:
+    una para f1_test y otra para loss (aproximando loss a cero si es NaN o N/a).
+
+    Parámetros:
+    - df_top20: DataFrame con los 20 mejores modelos según f1.
+    - f1_col: Nombre de la columna con el valor de f1.
+    - model_col: Nombre de la columna con el nombre del modelo.
+    - loss_col: Nombre de la columna con el valor de loss.
+    - save_fig: Si True, guarda la figura en 'g_p_reports'.
+    - fig_name: Nombre del archivo de la figura.
+    """
+
+    # Ordenar para que el mejor quede a la derecha
+    df_plot = df_top20.sort_values(by=f1_col, ascending=True).copy()
+
+    # Procesar loss para asegurar que sea numérico y reemplazar NaN/N/a por 0
+    def safe_loss(val):
+        try:
+            if pd.isna(val) or str(val).lower() in ["n/a", "nan"]:
+                return 0.0
+            return float(val)
+        except Exception:
+            return 0.0
+
+    df_plot["loss_clean"] = df_plot[loss_col].apply(safe_loss)
+
+    plt.figure(figsize=(12, 6))
+    x_labels = df_plot[model_col].astype(str)
+
+    plt.plot(x_labels, df_plot[f1_col], marker='o', color='royalblue', linewidth=2, label='f1_test')
+    plt.plot(x_labels, df_plot["loss_clean"], marker='o', color='tomato', linewidth=2, label='loss')
+
+    plt.xticks(rotation=90, ha='right', fontsize=14)
+    plt.xlabel("Model name")
+    plt.ylabel("Value")
+    plt.title("Top model performance in HIV: f1 vs loss")
+    plt.legend()
+    plt.tight_layout()
+
+    # Mostrar el valor de f1 y loss en cada punto
+    for x, y, loss in zip(x_labels, df_plot[f1_col], df_plot["loss_clean"]):
+        plt.text(x, y, f"{y:.3f}", ha='center', va='top', fontsize=12, rotation=90, color='royalblue')
+        plt.text(x, loss, f"{loss:.3f}", ha='center', va='bottom', fontsize=12, rotation=90, color='tomato')
+
+    if save_fig:
+        output_dir = "g_p_reports"
+        os.makedirs(output_dir, exist_ok=True)
+        fig_path = os.path.join(output_dir, fig_name)
+        plt.savefig(fig_path, dpi=300, bbox_inches='tight')
+        print(f"Figura guardada en: {fig_path}")
+    else:
+        plt.show()
+
 def main():
-    ruta_performance = "/home/pajaro/compu_Pipe_V3/performance_zine/performance_report.csv"
-    df_modelos = obtener_dataframe_modelos(ruta_performance)
+
+    if len(sys.argv) != 2:
+        print("Uso: python tab_resume.py <ruta_al_archivo_performance>")
+        sys.exit(1)
+    #ruta_performance = "/home/pajaro/compu_Pipe_V3/performance_zine/performance_report.csv"
+
+    ruta_performance = sys.argv[1]
+    #df_modelos = obtener_dataframe_modelos(ruta_performance)
     #print(df_modelos)
     #df_modelos.to_csv("df_modelos.csv", index=False)
     #comparacion_OW_desempenio(df_modelos, save_fig=True, fig_name="comparacion_OW_desempenio.png")
     #comparacion_maxlen_vs_pdtlen(df_modelos, save_fig=True, fig_name="comparacion_maxlen_vs_pdtlen.png")
+    df_modelos = cargar_dataframe(ruta_performance)
+    #print(df_modelos.info())
+    df_top20 = top_20_por_f1(df_modelos)
+    print(df_top20["model_name"])
+    grafica_top20_f1(df_top20, save_fig=True, fig_name="performance_models_hiv.png")
+
     
 if __name__ == "__main__":
     main()
