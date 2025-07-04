@@ -24,7 +24,7 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #RUN DATA TRANSFORMATION STEP
 # Define paths
 DAYSPW=180
-DAYSOW=180
+DAYSOW=365
 PATH_RAW_DATA="/zine/data/salud/vih_phepipe/base_datos/"
 DATA_NAME="Variables_HC.txt"
 LABEL_NAME='Etiqueta.txt'
