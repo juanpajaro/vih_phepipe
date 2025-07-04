@@ -26,7 +26,7 @@ def graficar_frecuencias_columna(df, columna, save_fig=False, output_dir="g_repo
         titulo = f"Frecuencia de valores en '{columna}'"
     plt.title(titulo)
     plt.xlabel(columna)
-    plt.ylabel("Frecuencia")
+    plt.ylabel("Frecuency")
     plt.tight_layout()
 
     # Agregar los números encima de las barras

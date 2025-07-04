@@ -104,11 +104,11 @@ def imprimir_top_words(df, column="entities", top_n=20, exclude_words=None, save
 def main():
     # Load the 
     
-    model_version = "lstm_v234"
+    model_version = "lstm_v490"
     current_dir = os.getcwd()
     #print("Current directory:", current_dir)
     #data = utils_general_porpose.load_json(current_dir, "/concepts/clinical_concepts_20250404_171428.json")
-    data = utils_general_porpose.load_json(current_dir, "/concepts/clinical_concepts_20250701_043601.json")
+    data = utils_general_porpose.load_json(current_dir, "/concepts/clinical_concepts_20250704_115703.json")
     df = pd.DataFrame(data)
     print(df.info())
 
@@ -118,9 +118,9 @@ def main():
     tipo = "neg"
     imprimir_top_words(neg, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_"+tipo+"_"+model_version+".png", tipo="neg")
 
-    incon = utils_general_porpose.load_json(current_dir, "/concepts/inconsistencies_20250701_043601.json")
-    incon = pd.DataFrame(incon)
-    print(incon.info())
+    #incon = utils_general_porpose.load_json(current_dir, "/concepts/inconsistencies_20250701_043601.json")
+    #incon = pd.DataFrame(incon)
+    #print(incon.info())
 
     #utils_reports.graficar_frecuencias_columna(incon, columna="label", save_fig=True, output_dir="g_consistency", fig_name="frecuencias_pacientes_inconsistencia_"+model_version+".png", titulo="Number of patients diagnosed with sleep apnea before polysomnography_"+model_version)
     utils_reports.graficar_frecuencias_columna(df, columna="label", save_fig=True, output_dir="g_consistency", fig_name="frecuencias_pacientes_sin_inconsistencias_"+model_version+".png", titulo="Number of patients diagnosed with HIV without inconsistencies_"+model_version)
