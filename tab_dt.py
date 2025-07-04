@@ -265,7 +265,7 @@ def distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="eda
 def main():
     # Cargar datos
 
-    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250704_053810.csv"
+    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250704_074236.csv"
     df = load_data(file_path)
     #df.info()
     df_explo = df[["fecha_diagnostico", "last_appointment", "prediction_window_start", "end_observation_window"]]
@@ -274,10 +274,10 @@ def main():
     model_version = "lstm_v80_2"
 
     # Graficar eventos y guardar figura
-    #graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_paciente_{}.png".format(model_version), model_version=model_version)
+    graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_paciente_{}.png".format(model_version), model_version=model_version)
 
     # Graficar frecuencias con leyenda y guardar figura
-    #graficar_frecuencias_label(df, "label", save_fig=True, fig_name="frecuencias_label_apnea_{}.png".format(model_version), model_version=model_version)
+    graficar_frecuencias_label(df, "label", save_fig=True, fig_name="frecuencias_label_apnea_{}.png".format(model_version), model_version=model_version)
 
     # Graficar distribución por sexo y guardar figura
     #distribucion_por_sexo(df, column_to_split="label", column_to_plot="Sexo", save_fig=True, fig_name="distribucion_por_sexo_{}.png".format(model_version), model_version=model_version)
