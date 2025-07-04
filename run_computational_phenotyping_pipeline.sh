@@ -24,7 +24,7 @@ echo "El ambiente activado es: "$CONDA_DEFAULT_ENV
 #RUN DATA TRANSFORMATION STEP
 # Define paths
 DAYSPW=180
-DAYSOW=730
+DAYSOW=180
 PATH_RAW_DATA="/zine/data/salud/vih_phepipe/base_datos/"
 DATA_NAME="Variables_HC.txt"
 LABEL_NAME='Etiqueta.txt'
@@ -43,7 +43,7 @@ NUM_PROCESSES=8
 SIMILARITY_THRESHOLD=0.8
 LISTA_CAT=("Disease or Syndrome")
 #LISTA_CAT=("Disease or Syndrome", "Sign or Symptom")
-##DICTIONARY_ICD_LOCAL="icd"
+DICTIONARY_ICD_LOCAL="icd"
 
 # Convierte la lista en una cadena separada por comas
 LIST_AS_STRING=$(IFS=,; echo "${LISTA_CAT[*]}")
