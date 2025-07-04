@@ -122,7 +122,7 @@ def balanced_subsample(patient_in):
     id_pos = []
     id_neg = []
 
-    pos_patient_selected = []
+    neg_patient_selected = []
 
     #xs_pos = []
     #xs_neg = []    
@@ -147,7 +147,8 @@ def balanced_subsample(patient_in):
         else:
             #x_neg.append(patient.get("seq"))
             #y_neg.append(patient.get("label"))
-            id_neg.append(patient.get("id_cliente"))
+            #id_neg.append(patient.get("id_cliente"))
+            id_neg.append(patient)
         
         #x.append(patient.get("seq"))
         #y.append(patient.get("label"))
@@ -166,7 +167,7 @@ def balanced_subsample(patient_in):
     min_ci = min(count_y[1])
     print("min_class: {}".format(min_ci))
 
-    random_index = random.sample(range(0, len(id_pos)), min_ci)
+    random_index = random.sample(range(0, len(id_neg)), min_ci)
     #print("len radom_index {}".format(len(random_index)))
 
     #class_xs_selected = None
@@ -176,20 +177,22 @@ def balanced_subsample(patient_in):
         id_selected = [id_pos[i] for i in random_index]"""
     
     for i in random_index:
-        pos_patient_selected.append(id_pos[i])
+        neg_patient_selected.append(id_neg[i])
 
-    print("ten random index to select positive patients: {}".format(random_index[:10]))
+    print("ten random index to select neg patients: {}".format(random_index[:10]))
     #pos_patient_selected = [patient for patient in patient_in if patient.get("id_cliente") == id_pos_selected]
     
-    print("len positive patients: {}".format(len(pos_patient_selected)))
+    print("len neg patients: {}".format(len(neg_patient_selected)))
     
     #xs_pos_selected.append((y_selected, x_selected))
 
-    neg_patient_selected = [patient for patient in patient_in if patient.get("label") == 0]
-    print("len negative patients: {}".format(len(neg_patient_selected)))
+    pos_patient_selected = [patient for patient in patient_in if patient.get("label") == 1]
+    print("len pos patients: {}".format(len(pos_patient_selected)))
 
     #y, x = y_selected + y_neg, x_selected + x_neg
-    all_patientes = pos_patient_selected + neg_patient_selected
+    all_patientes = neg_patient_selected + pos_patient_selected
+    print("type all_patientes {}".format(type(all_patientes)))
+    #print("ten all patients: {}".format(all_patientes[0]))
     #two_classes.append((y, x))
 
     """list_index = list(range(len(y)))
@@ -210,6 +213,8 @@ def balanced_subsample(patient_in):
     
     for i in list_index:
         patient_selected = all_patientes[i]
+        print("patient_{}, selected {}".format(i, patient_selected))
+        #print("patient_selected {}".format(patient_selected))
         #dict_result = {"id_cliente": patient_selected.get("id_cliente"), "label": patient_selected.get("label"), "seq": patient_selected.get("seq")}
         dict_result = {"id_cliente": patient_selected.get("id_cliente"), "label": patient_selected.get("label"), "seq": patient_selected.get("entities")}
         balanced_patients.append(dict_result)

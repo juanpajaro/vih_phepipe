@@ -96,7 +96,7 @@ def graficar_eventos_pacientes_df(df, n_pacientes=10, paciente_label_col="label_
     else:
         plt.show()
 
-def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencias_label_apnea.png", model_version=""):
+def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencias_label_HIV.png", model_version=""):
     """
     Cuenta los valores únicos de una columna y dibuja una gráfica de frecuencias, 
     agregando una leyenda solo con el valor total.
@@ -112,7 +112,7 @@ def graficar_frecuencias_label(df, columna, save_fig=False, fig_name="frecuencia
 
     plt.figure(figsize=(10, 5))
     ax = conteo.plot(kind='bar')
-    plt.title("Frequency of Patients with/without Apnea {}".format(model_version))
+    plt.title("Frequency of Patients with/without HIV {}".format(model_version))
     plt.xlabel(columna)
     plt.ylabel("Frequency")
     plt.tight_layout()
@@ -265,19 +265,19 @@ def distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="eda
 def main():
     # Cargar datos
 
-    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250704_074236.csv"
+    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250701_043601.csv"
     df = load_data(file_path)
     #df.info()
     df_explo = df[["fecha_diagnostico", "last_appointment", "prediction_window_start", "end_observation_window"]]
     print(df_explo.head())
 
-    model_version = "lstm_v80_2"
+    model_version = "lstm_v234"
 
     # Graficar eventos y guardar figura
     graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_paciente_{}.png".format(model_version), model_version=model_version)
 
     # Graficar frecuencias con leyenda y guardar figura
-    graficar_frecuencias_label(df, "label", save_fig=True, fig_name="frecuencias_label_apnea_{}.png".format(model_version), model_version=model_version)
+    graficar_frecuencias_label(df, "label", save_fig=True, fig_name="frecuencias_label_HIV_{}.png".format(model_version), model_version=model_version)
 
     # Graficar distribución por sexo y guardar figura
     #distribucion_por_sexo(df, column_to_split="label", column_to_plot="Sexo", save_fig=True, fig_name="distribucion_por_sexo_{}.png".format(model_version), model_version=model_version)

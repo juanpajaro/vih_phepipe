@@ -51,7 +51,7 @@ def dividir_pos_neg_df(df, label_col="label"):
     print(f"Positivos apnea: {pos_apnea.shape}")
     return neg_apnea, pos_apnea
 
-def imprimir_top_words(df, column="entities", top_n=20, exclude_words=None, save_fig=False, fig_name="top_words.png", tipo=""):
+def imprimir_top_words(df, column="entities", top_n=20, exclude_words=None, save_fig=False, fig_name="top_words.png", tipo="", model_version=""):
     """
     Imprime las top N palabras más frecuentes en una columna de texto de un DataFrame y guarda la gráfica si se indica.
 
@@ -77,12 +77,12 @@ def imprimir_top_words(df, column="entities", top_n=20, exclude_words=None, save
 
     plt.figure(figsize=(12, 6))
     bars = plt.barh(words, counts)
-    titulo = f"Top {top_n} conceptos clinicos más frecuentes en '{column}'"
+    titulo = f"Top {top_n} clinical concepts clinicos in '{column}'"
     if tipo:
         titulo += f" ({tipo})"
-    plt.title(titulo)
-    plt.xlabel("Frecuencia")
-    plt.ylabel("Conceptos")
+    plt.title(titulo + f" - {model_version}")
+    plt.xlabel("Frecuency")
+    plt.ylabel("Concepts")
     plt.tight_layout()
 
     # Agregar los valores al final de cada barra
@@ -102,28 +102,30 @@ def imprimir_top_words(df, column="entities", top_n=20, exclude_words=None, save
 
 
 def main():
-    # Load the dataset
+    # Load the 
+    
+    model_version = "lstm_v234"
     current_dir = os.getcwd()
     #print("Current directory:", current_dir)
     #data = utils_general_porpose.load_json(current_dir, "/concepts/clinical_concepts_20250404_171428.json")
-    data = utils_general_porpose.load_json(current_dir, "/concepts/clinical_concepts_20250520_053753.json")
+    data = utils_general_porpose.load_json(current_dir, "/concepts/clinical_concepts_20250701_043601.json")
     df = pd.DataFrame(data)
     print(df.info())
 
     neg, pos = dividir_pos_neg_df(df, label_col="label")
     tipo = "pos"
-    imprimir_top_words(pos, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_"+tipo+".png", tipo="pos")
+    imprimir_top_words(pos, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_"+tipo+"_"+model_version+".png", tipo="pos")
     tipo = "neg"
-    imprimir_top_words(neg, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_"+tipo+".png", tipo="neg")
+    imprimir_top_words(neg, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_"+tipo+"_"+model_version+".png", tipo="neg")
 
-    incon = utils_general_porpose.load_json(current_dir, "/concepts/inconsistencies_20250520_053753.json")
+    incon = utils_general_porpose.load_json(current_dir, "/concepts/inconsistencies_20250701_043601.json")
     incon = pd.DataFrame(incon)
     print(incon.info())
 
-    utils_reports.graficar_frecuencias_columna(incon, columna="label", save_fig=True, output_dir="g_consistency", fig_name="frecuencias_pacientes_inconsistencia.png", titulo="numero de pacientes con diagnostico Apnea antes de la polisomnografia")
-    utils_reports.graficar_frecuencias_columna(df, columna="label", save_fig=True, output_dir="g_consistency", fig_name="frecuencias_pacientes_sin_inconsistencias.png", titulo="numero de pacientes con diagnostico Apnea antes de la polisomnografia sin inconsistencias")
+    #utils_reports.graficar_frecuencias_columna(incon, columna="label", save_fig=True, output_dir="g_consistency", fig_name="frecuencias_pacientes_inconsistencia_"+model_version+".png", titulo="Number of patients diagnosed with sleep apnea before polysomnography_"+model_version)
+    utils_reports.graficar_frecuencias_columna(df, columna="label", save_fig=True, output_dir="g_consistency", fig_name="frecuencias_pacientes_sin_inconsistencias_"+model_version+".png", titulo="Number of patients diagnosed with HIV without inconsistencies_"+model_version)
 
-    imprimir_top_words(incon, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_inconsistencias.png", tipo="inconsistencias")
+    #imprimir_top_words(incon, column="entities", top_n=20, exclude_words={"enfermedad", "paciente"}, save_fig=True, fig_name="top_concepts_inconsistencies_"+model_version+".png", tipo="inconsistencies", model_version=model_version)
 
 if __name__ == "__main__":
     main()
