@@ -265,7 +265,7 @@ def distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="eda
 def main():
     # Cargar datos
 
-    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250703_172424.csv"
+    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250704_053810.csv"
     df = load_data(file_path)
     #df.info()
     df_explo = df[["fecha_diagnostico", "last_appointment", "prediction_window_start", "end_observation_window"]]

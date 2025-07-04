@@ -39,7 +39,8 @@ def observar_seq_label(datos, name_paciente, name_fecha, name_label, name_seq):
         print("----------------------------------")        
         print("pacient: {}, fecha_dx: {}, label: {}".format(value[name_paciente], value[name_fecha], value[name_label]))
         for i in value[name_seq]:
-            print("diag: {}, concept: {}, fecha: {}".format(i.get("Dx"), i.get("Análisis_y_Plan_de_Manejo"), i.get("FechaConsulta")))
+            #print("diag: {}, concept: {}, fecha: {}".format(i.get("Dx"), i.get("Análisis_y_Plan_de_Manejo"), i.get("FechaConsulta")))
+            print("fecha: {}".format(i.get("FechaConsulta")))
         #print("paciente {}".format(datos[name_paciente]))    
     
     return None
@@ -50,7 +51,8 @@ def observar_seq_label_after_cut(datos, name_paciente, name_fecha, name_label, n
         print("----------------------------------")        
         print("pacient: {}, fecha_dx: {}, label: {}".format(value[name_paciente], value[name_fecha], value[name_label]))
         for i in value[name_seq]:
-            print("diag: {}, concept: {}, fecha: {}".format(i.get("Diagnosticos_Consulta"), i.get("DesPlanYConcepto"), i.get("FechaConsulta")))
+            #print("diag: {}, concept: {}, fecha: {}".format(i.get("Diagnosticos_Consulta"), i.get("DesPlanYConcepto"), i.get("FechaConsulta")))
+            print("fecha: {}".format(i.get("FechaConsulta")))
         #print("paciente {}".format(datos[name_paciente]))    
     
     return None
@@ -121,7 +123,7 @@ def main(days_pw, days_ow, timestamp, data_path, data_name, label_name):
     datos_ehr_pacientes = agregar_variable_objetivo(datos_ehr_pacientes, "Pte_VIH")
     print(datos_ehr_pacientes.info())
 
-    data = datos_ehr_pacientes    
+    data = datos_ehr_pacientes
 
     #observar_seq_label(data, "NumeroContrato", "Fecha_Dx_Prueba", "label", "seq_diag")    
 
@@ -134,7 +136,7 @@ def main(days_pw, days_ow, timestamp, data_path, data_name, label_name):
 
     #observar_seq_label_after_cut(data, "NumeroContrato", "Fecha_Dx_Prueba", "label", "secuencia_recortada")
     
-
+    
     data["vacios"] = data["secuencia_recortada"].apply(lambda x: "not empty" if len(x) > 0 else "empty")
     data = data[data["vacios"] == "not empty"]
     #print("Patients without EHR data before the prediction window removed")
@@ -154,6 +156,7 @@ def main(days_pw, days_ow, timestamp, data_path, data_name, label_name):
 
     save_dataset(data, "./data_transformation", "data_t", timestamp)
     print("Dataset transformation step finished successfully")
+    
        
 if __name__ == "__main__":
     if len(sys.argv) != 7:

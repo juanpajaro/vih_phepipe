@@ -371,7 +371,8 @@ def view_cut_patient(data, id_patient, num_dias):
     secuencia_paciente = sample_data["seq_diag"].iloc[0]    
     lista_consultas = imprimir_fechas_consulta(secuencia_paciente)
     #lista_consultas = sorted(lista_consultas)
-    ultima_consulta = lista_consultas[-1]
+    #ultima_consulta = lista_consultas[-1]
+    ultima_consulta = fecha_poli
 
     secuencia_recortada = sample_data["secuencia_recortada"].iloc[0]            
     lista_recorte = imprimir_fechas_consulta(secuencia_recortada)
