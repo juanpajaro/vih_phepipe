@@ -2,6 +2,7 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.feature_extraction.text import CountVectorizer
 import os
 import utils_general_porpose
 import joblib
@@ -63,15 +64,31 @@ def save_tokens(current_path, timestamp, X_train_enc, X_test_enc, y_train, y_tes
 
 def one_hot_encode_sequences(X_train, X_test):
     # Concatenar para ajustar el encoder a todos los posibles tokens
-    all_sequences = np.concatenate((X_train, X_test), axis=0)
-    encoder = OneHotEncoder(handle_unknown='ignore')
+    #all_sequences = np.concatenate((X_train, X_test), axis=0)
+    #encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
     # Suponemos que cada muestra es una secuencia de enteros (tokens)
     # Convertimos cada secuencia en una cadena para que OneHotEncoder trate cada token como una categoría
-    X_all = np.array([' '.join(map(str, seq)) for seq in all_sequences]).reshape(-1, 1)
-    encoder.fit(X_all)
-    X_train_enc = encoder.transform(np.array([' '.join(map(str, seq)) for seq in X_train]).reshape(-1, 1))
-    X_test_enc = encoder.transform(np.array([' '.join(map(str, seq)) for seq in X_test]).reshape(-1, 1))
-    return X_train_enc, X_test_enc, encoder
+    #X_all = np.array([' '.join(map(str, seq)) for seq in all_sequences]).reshape(-1, 1)
+    #X_train_enc = encoder.fit_transform(np.array([' '.join(map(str, seq)) for seq in X_train]).reshape(-1, 1))
+    #X_train_enc = encoder.fit_transform(X_train).reshape(-1, 1)
+    #X_train_enc = encoder.transform(np.array([' '.join(map(str, seq)) for seq in X_train]).reshape(-1, 1))
+    #X_test_enc = encoder.transform(np.array([' '.join(map(str, seq)) for seq in X_test]).reshape(-1, 1))
+    #X_test_enc = encoder.transform(X_test).reshape(-1, 1)
+
+    #join tokens in a string
+    #X_train_str = [' '.join(seq) for seq in X_train]
+    #X_test_str = [' '.join(seq) for seq in X_test]
+
+    vectorizer = CountVectorizer(binary=True)
+
+    #Fit the vectorizer on the training data
+    X_train_enc = vectorizer.fit_transform(X_train).toarray()
+
+    #Transform the test data
+    X_test_enc = vectorizer.transform(X_test).toarray()
+
+
+    return X_train_enc, X_test_enc, vectorizer
 
 def train_logistic_regression(X_train_enc, y_train, penaltize_, max_iter_):
     clf = LogisticRegression(penalty = penaltize_, max_iter = max_iter_)
@@ -113,8 +130,8 @@ if __name__ == "__main__":
     max_len = int(sys.argv[3])  # Maximum length of sequences, not used in this script but can be useful for future modifications    
     semantic_cat = sys.argv[4].split(",")
     dic_local = sys.argv[5]
-    days_pw = int(sys.argv[6])  # Days prior to the event
-    days_ow = int(sys.argv[7])  # Days after the event
+    days_pw = int(sys.argv[6])  # Days predictive window
+    days_ow = int(sys.argv[7])  # Days observational window
 
     semantic_cat.append(dic_local)
     print("semantic categories {}".format(semantic_cat))
@@ -139,7 +156,7 @@ if __name__ == "__main__":
 
     train_string = get_data_to_tensor_string(train)
     test_string = get_data_to_tensor_string(test)
-    print("train_string sample: {}".format(train_string[:1]))
+    print("train_string sample: {}".format(train_string[:2]))
     print("train_string type: {}".format(type(train_string)))
 
     # convertir los datos a one-hot encoding
@@ -179,9 +196,9 @@ if __name__ == "__main__":
 
     #Get the metrics test
     precision_test, recall_test, f1_test = utils_performance_analysis.get_model_metrics(y_test, y_pred_test, num_classes)
-    print("precision_train: {}".format(precision_train))
-    print("recall_train: {}".format(recall_train))
-    print("f1_train: {}".format(f1_train))
+    print("precision_test: {}".format(precision_test))
+    print("recall_test: {}".format(recall_test))
+    print("f1_test: {}".format(f1_test))
 
     #calculate accuracy
     acc = utils_performance_analysis.accuracy(y_test, model.predict(X_test_enc))
@@ -193,7 +210,4 @@ if __name__ == "__main__":
     #chage the format of the timestamp
     timestamp_s = datetime.datetime.strptime(timestamp, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
     utils_performance_analysis.save_model_info(timestamp_s, str(semantic_cat), num_classes, "one-hot", {"max_len":max_len,"n_feature":X_train_enc.shape[1]}, path_token_save, model_name, {"penalties":penaltize_, "max_iter":max_iter_}, acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save, days_pw, days_ow)
-
-    
-
 

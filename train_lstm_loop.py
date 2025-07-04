@@ -255,12 +255,14 @@ if __name__ == "__main__":
     #print("Vocabulary size:", len(vocab))
     vocab = get_vocab_size(encoder)
     print("Vocabulary size:", vocab_size_g)
-    get_X_train(encoder, train_string)    
+    get_X_train(encoder, train_string)
+    print("X_train shape: {}".format(X_train_g.shape))    
     filename_test = d_filename[1] + "/" + d_filename[1] +"_" + timestamp + ".json"
     test = load_data(current_path, filename_test)
     #print(len(test))
     test_s = get_data_to_tensor_string(test)    
     get_X_test(encoder, test_s)
+    print("X_test shape: {}".format(X_test_g.shape))
     get_labels(train, test)
     path_token_save = save_tokens(current_path, timestamp, vocab)
     guardar_text_vectorization(encoder, path_token_save + "/" + "vectorizer_obj.pkl")
@@ -303,7 +305,7 @@ if __name__ == "__main__":
         path_pr_save = current_path + "/" + "performance_report.csv"
         #chage the format of the timestamp
         timestamp_s = datetime.datetime.strptime(timestamp, "%Y%m%d_%H%M%S").strftime("%Y-%m-%d %H:%M:%S")
-        utils_performance_analysis.save_model_info(timestamp_s, str(semantic_cat), num_classes, "keras-vectorizer", {"max_tokens":max_tokens, "max_len":max_len, "vectorize_technique":"other-sequence"}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save, days_pw, days_ow)
+        utils_performance_analysis.save_model_info(timestamp_s, str(semantic_cat), num_classes, "keras-vectorizer", {"max_tokens":max_tokens, "max_len":max_len, "n_feature":len(vocab), "vectorize_technique":"other-sequence"}, path_token_save, model_name, list_seq_params[i], acc, loss, precision_train, recall_train, f1_train, precision_test, recall_test, f1_test, path_pr_save, days_pw, days_ow)
     
     """
     hyper_paramts_lstm = load_hyperparameters(current_path + "/models_parameters/hyper_params_lstm.json")
