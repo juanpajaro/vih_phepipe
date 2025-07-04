@@ -265,13 +265,13 @@ def distribucion_por_edad(df, column_to_split="label_apnea", column_to_plot="eda
 def main():
     # Cargar datos
 
-    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250520_053753.csv"
+    file_path = "/home/pajaro/vih_phepipe/data_transformation/data_t_20250703_172424.csv"
     df = load_data(file_path)
     #df.info()
     df_explo = df[["fecha_diagnostico", "last_appointment", "prediction_window_start", "end_observation_window"]]
     print(df_explo.head())
 
-    model_version = "lstm_v80"
+    model_version = "lstm_v80_2"
 
     # Graficar eventos y guardar figura
     #graficar_eventos_pacientes_df(df, n_pacientes=10, save_fig=True, fig_name="eventos_paciente_{}.png".format(model_version), model_version=model_version)
